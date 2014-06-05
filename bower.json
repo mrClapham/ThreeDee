@@ -1,0 +1,27 @@
+{
+  "name": "three_d",
+  "version": "0.0.0",
+  "authors": [
+    "Graham Clapham <graham.clapham@thomsonreuters.com>"
+  ],
+  "description": "An experiment in three.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "Three.js"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "threejs": "*"
+  }
+}
