@@ -17,7 +17,11 @@
 </body>
 </html>
         <script type="text/javascript">
-            var _scene, _camera, _renderer, _light;
+            var _scene, _camera, _renderer, _light, _lightAmbient;
+
+            var _loadTraget = null;
+
+
             //Control vars
             var _controls;
             // Camera vars
@@ -25,13 +29,14 @@
             var _aspect   =  null;             //— Camera frustum aspect ratio.
             var _near     =  0.1;              //— Camera frustum near plane.
             var _far      =  20000;            //— Camera frustum far plane.
-            //Environment
-            var _backgroundColour = 0xffff00;
 
-            var _loadTraget = null;
+            //Environment
+            var _backgroundColour = 0x454545;
+
             // Model
-            var _model = "models/monkey1.js",
-                _lambertColour = 0x00ffff;
+            var _model = "models/test1.js",
+                _lambertColour = 0x00ffff,
+                    _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33,];
 
             // Store for the monkeys I created
             var _monkeys = []
@@ -83,10 +88,16 @@
                 _light.position.set(-100,200,100);
                 _scene.add(_light);
 
+                // ..and now te ambient light
+
+                _lightAmbient   = new THREE.DirectionalLight(0xff00ff,1);
+                _lightAmbient.position.set(100,-700,-300);
+                _scene.add(_lightAmbient);
+
                 // Load in the mesh and add it to the scene.
                 var loader = new THREE.JSONLoader();
                 loader.load( _model, function(geometry){
-                    var material = new THREE.MeshLambertMaterial({color: _lambertColour});
+                    var material = new THREE.MeshLambertMaterial({color: 0xffffff});
                     mesh = new THREE.Mesh(geometry, material);
                     _scene.add(mesh);
 
@@ -94,8 +105,9 @@
                     // ADD A BUNCH OF MONKEYS...
 
                         for ( var i = 0; i < 5; i ++ ) {
+                        var __material = new THREE.MeshLambertMaterial({color: _lambertArr[i]});
 
-                        var __mesh = new THREE.Mesh( geometry, material );
+                        var __mesh = new THREE.Mesh( geometry, __material );
 //                            __mesh.position.x = ( Math.random() - 0.5 ) * 10;
 //                            __mesh.position.y = ( Math.random() - 0.5 ) * 10;
 //                            __mesh.position.z = ( Math.random() - 0.5 ) * 10;
@@ -103,7 +115,7 @@
                             __mesh.position.x = i * 2;
                             __mesh.position.y = i * 2;
                             __mesh.position.z = i * 2;
-                            __mesh.rotation.x = i * 10;
+                            __mesh.rotation.z = i * 10;
                             __mesh.updateMatrix();
                             __mesh.matrixAutoUpdate = true;
                         _scene.add( __mesh );
@@ -122,19 +134,23 @@
 
                 // Renders the scene and updates the render as needed.
                 function animate() {
-                    _monkeys[1].position.x += .002;
-                    _monkeys[1].rotation.y -= _clock.getDelta();
-                    _monkeys[2].rotation.x -= _clock.getDelta();
-                    _monkeys[3].rotation.z -= _clock.getDelta();
+                    //_monkeys[1].position.x += .002;
+                    _monkeys[2].rotation.z -= _clock.getDelta();
 
-                    //console.log(_monkeys[1].position.x)
-                    // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-                    requestAnimationFrame(animate);
+                    _monkeys[1].rotation.z -= .03;
+
+                    _monkeys[3].rotation.x -= .03;
+                    _monkeys[3].rotation.z -= .03;;
+
+                    for(var mnk in _monkeys){
+                        _monkeys[mnk].updateMatrix()
+                    }
 
                     // Render the scene.
                     _renderer.render(_scene, _camera);
                     _controls.update();
-
+                    // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+                    requestAnimationFrame(animate);
                 }
             }
 
