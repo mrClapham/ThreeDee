@@ -33,6 +33,14 @@
             var _model = "models/monkey1.js",
                 _lambertColour = 0x00ffff;
 
+            // Store for the monkeys I created
+            var _monkeys = []
+
+            //
+            var _clock = new THREE.Clock;
+
+
+
 //
             function onLoaded(){
                 _init();
@@ -82,6 +90,29 @@
                     mesh = new THREE.Mesh(geometry, material);
                     _scene.add(mesh);
 
+
+                    // ADD A BUNCH OF MONKEYS...
+
+                        for ( var i = 0; i < 5; i ++ ) {
+
+                        var __mesh = new THREE.Mesh( geometry, material );
+//                            __mesh.position.x = ( Math.random() - 0.5 ) * 10;
+//                            __mesh.position.y = ( Math.random() - 0.5 ) * 10;
+//                            __mesh.position.z = ( Math.random() - 0.5 ) * 10;
+
+                            __mesh.position.x = i * 2;
+                            __mesh.position.y = i * 2;
+                            __mesh.position.z = i * 2;
+                            __mesh.rotation.x = i * 10;
+                            __mesh.updateMatrix();
+                            __mesh.matrixAutoUpdate = true;
+                        _scene.add( __mesh );
+                            _monkeys.push(__mesh)
+                    }
+
+
+
+
                     // Add OrbitControls so that we can pan around with the mouse.
                     _controls = new THREE.OrbitControls(_camera, _renderer.domElement);
 
@@ -91,6 +122,12 @@
 
                 // Renders the scene and updates the render as needed.
                 function animate() {
+                    _monkeys[1].position.x += .002;
+                    _monkeys[1].rotation.y -= _clock.getDelta();
+                    _monkeys[2].rotation.x -= _clock.getDelta();
+                    _monkeys[3].rotation.z -= _clock.getDelta();
+
+                    //console.log(_monkeys[1].position.x)
                     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
                     requestAnimationFrame(animate);
 
