@@ -4,6 +4,7 @@
     <title></title>
     <script src="components/threejs/build/three.min.js"></script>
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
+    <script src="components/gsap/src/minified/TweenLite.min.js"></script>
     <style type="text/css">
         #monkeyHolder{
             width:90%;
@@ -21,6 +22,17 @@
 
             var _loadTraget = null;
 
+            // Mouse and interaction
+
+            var _mouse              =       new THREE.Vector2()
+            var _projector          =       new THREE.Projector();
+            var _raycaster          =       new THREE.Raycaster();
+            var _bufferGeometry     =       new THREE.BufferGeometry();
+
+            _bufferGeometry.addAttribute( 'position', new Float32Array( 4 * 3 ), 3 );
+            var _lineMaterial = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2, transparent: false } );
+
+            var _line = new THREE.Line( _bufferGeometry, _lineMaterial );
 
             //Control vars
             var _controls;
@@ -34,9 +46,10 @@
             var _backgroundColour = 0x454545;
 
             // Model
-            var _model = "models/test1.js",
+//            var _model = "models/monkey1.js",
+            var _model = "models/Suzanne.js",
                 _lambertColour = 0x00ffff,
-                    _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33,];
+                _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33,];
 
             // Store for the monkeys I created
             var _monkeys = []
@@ -59,6 +72,9 @@
                 _scene = new THREE.Scene();
                 var WIDTH = window.innerWidth,
                     HEIGHT = window.innerHeight;
+            /// For the hit test
+                _scene.add( _line );
+
 
                 //Renderer
                 _renderer = new THREE.WebGLRenderer({antialias:true});
@@ -68,7 +84,7 @@
 
                 // Create a camera, zoom it out from the model a bit, and add it to the scene.
                 _camera = new THREE.PerspectiveCamera(_fov, _aspect, _near, _far);
-                _camera.position.set(0,6,0);
+                _camera.position.set(-50,6,0);
                 _scene.add(_camera);
 
                 // Create an event listener that resizes the renderer with the browser window.
@@ -97,17 +113,36 @@
                 // Load in the mesh and add it to the scene.
                 var loader = new THREE.JSONLoader();
                 loader.load( _model, function(geometry){
-                    var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+
+                    // geometry.computeTangents();
+
+
+                   // var material = new THREE.MeshLambertMaterial({color: 0xffffff});
+                    var material = new THREE.MeshPhongMaterial({color: 0xffffff});
                     mesh = new THREE.Mesh(geometry, material);
                     _scene.add(mesh);
 
-
+                    var imgTexture = THREE.ImageUtils.loadTexture( 'models/map1.jpg' )
+                    imgTexture.repeat.set( 4, 2 );
+                    imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
+                    imgTexture.anisotropy = 16;
+                    console.log(imgTexture)
                     // ADD A BUNCH OF MONKEYS...
 
                         for ( var i = 0; i < 5; i ++ ) {
-                        var __material = new THREE.MeshLambertMaterial({color: _lambertArr[i]});
+
+
+
+                        var __material = new THREE.MeshPhongMaterial({color: _lambertArr[i]});
+
+                            __material.needsUpdate = true;
+                            geometry.buffersNeedUpdate = true;
+                            geometry.uvsNeedUpdate = true;
+//                            __material.side = THREE.DoubleSide
 
                         var __mesh = new THREE.Mesh( geometry, __material );
+
+
 //                            __mesh.position.x = ( Math.random() - 0.5 ) * 10;
 //                            __mesh.position.y = ( Math.random() - 0.5 ) * 10;
 //                            __mesh.position.z = ( Math.random() - 0.5 ) * 10;
@@ -122,6 +157,42 @@
                             _monkeys.push(__mesh)
                     }
 
+            /*
+            ADD A BOG STANDARD CUBE
+
+
+             */
+
+
+
+
+                    var boxGeometry = new THREE.BoxGeometry(100,1,100);
+                        boxGeometry.computeBoundingSphere()
+
+                    /*
+                     color — geometry color in hexadecimal. Default is 0xffffff.
+                     wireframe — render geometry as wireframe. Default is false.
+                     wireframeLinewidth — Line thickness. Default is 1.
+                     wireframeLinecap — Define appearance of line ends. Default is 'round'.
+                     wireframeLinejoin — Define appearance of line joints. Default is 'round'.
+                     shading — Define shading type. Default is THREE.SmoothShading.
+                     vertexColors — Define how the vertices gets colored. Default is THREE.NoColors.
+                     fog — Define whether the material color is affected by global fog settings. Default is true.
+                     lightMap — Set light map. Default is null.
+                     specularMap — Set specular map. Default is null.
+                     envMap — Set env map. Default is null.
+                     skinning — Define whether the material uses skinning. Default is false.
+                     morphTargets — Define whether the material uses morphTargets. Default is false.
+                     */
+                    var boxMaterial = new THREE.MeshBasicMaterial( { color: 0xcccccc,
+                        wireframe:false,
+                        shading:THREE.SmoothShading,
+                        map:imgTexture
+
+                    } );
+
+                    var cube = new THREE.Mesh( boxGeometry, boxMaterial );
+                    _scene.add( cube );
 
 
 
@@ -136,11 +207,48 @@
                 function animate() {
                     //_monkeys[1].position.x += .002;
                     _monkeys[2].rotation.z -= _clock.getDelta();
-
                     _monkeys[1].rotation.z -= .03;
-
                     _monkeys[3].rotation.x -= .03;
-                    _monkeys[3].rotation.z -= .03;;
+                    _monkeys[3].rotation.z -= .03;
+
+                    _vector = new THREE.Vector3( _mouse.x, _mouse.y, 1 );
+                    _projector.unprojectVector( _vector, _camera );
+                    _raycaster.set( _camera.position, _vector.sub( _camera.position ).normalize() );
+
+                    var mesh = _monkeys[4]
+
+                    var intersects = _raycaster.intersectObject( mesh );
+
+
+                    if ( intersects.length > 0 ) {
+
+                        var intersect = intersects[ 0 ];
+
+
+                        var color = new THREE.Color( 1, 0, 0 );
+
+                        console.log("intersects  ",intersects);
+
+                        var material = new THREE.MeshPhongMaterial();
+                        //material.color = color
+                        material.emissive = color;
+                        material.shininess = 100;
+                        material.shading = THREE.SmoothShading;
+
+                        if( intersect  ) console.log(intersect.object.material);
+                        intersect.object.material = material;
+                        var object = intersect.object;
+                        mesh.rotation.z -= .04;
+
+                        mesh.updateMatrix();
+
+                       _line.geometry.applyMatrix( mesh.matrix );
+
+                        _line.visible = true;
+
+                    }
+
+
 
                     for(var mnk in _monkeys){
                         _monkeys[mnk].updateMatrix()
@@ -152,6 +260,25 @@
                     // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
                     requestAnimationFrame(animate);
                 }
+
+
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
             }
+            ///////////////////////////////
+
+            /*
+            Test for the mouse position
+             */
+
+            function onDocumentMouseMove( event ) {
+
+                event.preventDefault();
+
+                _mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                _mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            }
+
+
 
         </script>

@@ -1,8 +1,35 @@
 /**
  * Created by grahamclapham on 05/06/2014.
+ * Dependencies ThreeJs (http://threejs.org/)
  */
-function ThreeDScene(){
+ThreeDScene = (function (){
+    this._private = {
 
-    _scope
+    }
 
-}
+    var _scope = function(){
+        _setUp.call(this)
+    };
+
+    function _setUp(){
+
+    }
+
+    function _init(){
+
+    }
+
+    _scope.prototype = {
+
+    }
+    /*
+    Business logic
+    */
+
+
+    return _scope
+
+})();
+/*
+    STATIC FUNCTIONS
+ */
