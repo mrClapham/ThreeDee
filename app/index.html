@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <script src="components/threejs/build/three.min.js"></script>
+    <script src="js/vendor/three/loaders/ColladaLoader.js"></script>
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script src="components/gsap/src/minified/TweenLite.min.js"></script>
     <style type="text/css">
@@ -47,7 +48,7 @@
 
             // Model
 //            var _model = "models/monkey1.js",
-            var _model = "models/Suzanne.js",
+            var _model = "models/LeePerrySmith.js",
                 _lambertColour = 0x00ffff,
                 _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33,];
 
@@ -57,6 +58,12 @@
             //
             var _clock = new THREE.Clock;
 
+            /*
+              COLLADA
+            */
+
+            var dae = null;
+
 
 
 //
@@ -64,6 +71,23 @@
                 _init();
             }
 //
+//            function loadCollada(){
+//
+//                var loader = new THREE.ColladaLoader();
+//                loader.options.convertUpAxis = true;
+//                loader.load( 'models/collada/monster/monster.dae', function ( collada ) {
+//
+//                    dae = collada.scene;
+//                    skin = collada.skins[ 0 ];
+//
+//                    dae.scale.x = dae.scale.y = dae.scale.z = 0.002;
+//                    dae.position.x = -1;
+//                    dae.updateMatrix();
+//
+//                } );
+//            }
+
+
             function _init(){
                 // This is where I'm going to add the monkey
                 _loadTraget = document.getElementById('monkeyHolder');
@@ -102,6 +126,10 @@
                 // Create a light, set its position, and add it to the scene.
                 _light = new THREE.PointLight(0xffffff);
                 _light.position.set(-100,200,100);
+                _light.castShadow = true;
+                _light.shadowMapWidth = 2048;
+                _light.shadowMapHeight = 2048;
+                _light.shadowCameraFov = 45;
                 _scene.add(_light);
 
                 // ..and now te ambient light
@@ -113,20 +141,20 @@
                 // Load in the mesh and add it to the scene.
                 var loader = new THREE.JSONLoader();
                 loader.load( _model, function(geometry){
+                    var imgTexture = THREE.ImageUtils.loadTexture( 'models/camo.png' )
+                    imgTexture.repeat.set( 4, 2 );
+                    imgTexture.wrapS = imgTexture.wrapT = THREE.ClampToEdgeWrapping;
+                    imgTexture.anisotropy = 16;
 
-                    // geometry.computeTangents();
+                     geometry.computeTangents();
 
 
                    // var material = new THREE.MeshLambertMaterial({color: 0xffffff});
-                    var material = new THREE.MeshPhongMaterial({color: 0xffffff});
+                    var material = new THREE.MeshPhongMaterial({color: 0xffffff, map:imgTexture});
                     mesh = new THREE.Mesh(geometry, material);
                     _scene.add(mesh);
 
-                    var imgTexture = THREE.ImageUtils.loadTexture( 'models/map1.jpg' )
-                    imgTexture.repeat.set( 4, 2 );
-                    imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
-                    imgTexture.anisotropy = 16;
-                    console.log(imgTexture)
+
                     // ADD A BUNCH OF MONKEYS...
 
                         for ( var i = 0; i < 5; i ++ ) {
@@ -135,17 +163,12 @@
 
                         var __material = new THREE.MeshPhongMaterial({color: _lambertArr[i]});
 
-                            __material.needsUpdate = true;
-                            geometry.buffersNeedUpdate = true;
-                            geometry.uvsNeedUpdate = true;
+//                            __material.needsUpdate = true;
+//                            geometry.buffersNeedUpdate = true;
+//                            geometry.uvsNeedUpdate = true;
 //                            __material.side = THREE.DoubleSide
 
-                        var __mesh = new THREE.Mesh( geometry, __material );
-
-
-//                            __mesh.position.x = ( Math.random() - 0.5 ) * 10;
-//                            __mesh.position.y = ( Math.random() - 0.5 ) * 10;
-//                            __mesh.position.z = ( Math.random() - 0.5 ) * 10;
+                        var __mesh = new THREE.Mesh( geometry, material );
 
                             __mesh.position.x = i * 2;
                             __mesh.position.y = i * 2;
@@ -162,9 +185,6 @@
 
 
              */
-
-
-
 
                     var boxGeometry = new THREE.BoxGeometry(100,1,100);
                         boxGeometry.computeBoundingSphere()
@@ -185,10 +205,8 @@
                      morphTargets — Define whether the material uses morphTargets. Default is false.
                      */
                     var boxMaterial = new THREE.MeshBasicMaterial( { color: 0xcccccc,
-                        wireframe:false,
+                        wireframe:true,
                         shading:THREE.SmoothShading,
-                        map:imgTexture
-
                     } );
 
                     var cube = new THREE.Mesh( boxGeometry, boxMaterial );
