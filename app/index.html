@@ -19,6 +19,20 @@
 </body>
 </html>
         <script type="text/javascript">
+
+
+            var fakeData =  function(w , h){
+                var arr = [];
+                for(var i=0; i<h; i++){
+                    arr[i] = []
+                    for(var j=0; j<w; j++){
+                        arr[i].push(parseInt(Math.random()*300 ))
+                    }
+                }
+                return arr
+            }
+
+
             var _scene, _camera, _renderer, _light, _lightAmbient;
 
             var _loadTraget = null;
@@ -44,14 +58,14 @@
             var _far      =  20000;            //— Camera frustum far plane.
 
             //Environment
-            var _backgroundColour = 0x454545;
+            var _backgroundColour = 0xcccccc;
 
             // Model
 //            var _model = "models/monkey1.js",
             var _model = "models/LeePerrySmith.js",
                 _lambertColour = 0x00ffff,
-                _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33,];
-
+                _lambertArr = [0x00ccff,0x00ffcc,0x066fff,0x00ff33, 0x00ccff,0x00ffcc,0x066fff,0x00ff33,0x00ccff,0x00ffcc,0x066fff,0x00ff33, ],
+                _mainMaterial = null;
             // Store for the monkeys I created
             var _monkeys = []
 
@@ -121,7 +135,7 @@
                 });
 
                 // Set the background color of the scene.
-                _renderer.setClearColor(_backgroundColour, .1);
+                _renderer.setClearColor(_backgroundColour,.01);
 
                 // Create a light, set its position, and add it to the scene.
                 _light = new THREE.PointLight(0xffffff);
@@ -141,24 +155,20 @@
                 // Load in the mesh and add it to the scene.
                 var loader = new THREE.JSONLoader();
                 loader.load( _model, function(geometry){
-                    var imgTexture = THREE.ImageUtils.loadTexture( 'models/camo.png' )
-                    imgTexture.repeat.set( 4, 2 );
-                    imgTexture.wrapS = imgTexture.wrapT = THREE.ClampToEdgeWrapping;
-                    imgTexture.anisotropy = 16;
-
-                     geometry.computeTangents();
-
+                    var imgTexture = THREE.ImageUtils.loadTexture( 'models/Map-COL.jpg' )
+                    //imgTexture.repeat.set( 4, 2 );
+//                    imgTexture.wrapS = imgTexture.wrapT = THREE.ClampToEdgeWrapping;
+                    imgTexture.anisotropy = 1;
+                    geometry.computeTangents();
 
                    // var material = new THREE.MeshLambertMaterial({color: 0xffffff});
-                    var material = new THREE.MeshPhongMaterial({color: 0xffffff, map:imgTexture});
-                    mesh = new THREE.Mesh(geometry, material);
+                    _mainMaterial = new THREE.MeshPhongMaterial({color: 0xffffff, map:imgTexture});
+                    mesh = new THREE.Mesh(geometry, _mainMaterial);
                     _scene.add(mesh);
-
 
                     // ADD A BUNCH OF MONKEYS...
 
                         for ( var i = 0; i < 5; i ++ ) {
-
 
 
                         var __material = new THREE.MeshPhongMaterial({color: _lambertArr[i]});
@@ -168,8 +178,7 @@
 //                            geometry.uvsNeedUpdate = true;
 //                            __material.side = THREE.DoubleSide
 
-                        var __mesh = new THREE.Mesh( geometry, material );
-
+                        var __mesh = new THREE.Mesh( geometry, _mainMaterial );
                             __mesh.position.x = i * 2;
                             __mesh.position.y = i * 2;
                             __mesh.position.z = i * 2;
@@ -180,43 +189,49 @@
                             _monkeys.push(__mesh)
                     }
 
-            /*
-            ADD A BOG STANDARD CUBE
+            /* PLANE */
+
+                    var planeGeometry = new THREE.PlaneGeometry( 50, 20, 8, 8 );
+                    var planeMaterial = new THREE.MeshPhongMaterial( {color: 0xffffff,
+                            side: THREE.DoubleSide,
+                            wireframe:false,
+                            shading:THREE.SmoothShading} );
+                    planeGeometry.computeTangents();
+
+                    var plane = new THREE.Mesh( planeGeometry , planeMaterial);
+                    plane.rotateX(.03);
+
+                    var material3 = new THREE.MeshPhongMaterial( {color: 0xff00ff,
+                        side: THREE.DoubleSide,
+                        wireframe:false,
+                        shading:THREE.SmoothShading} );
+                    var material4 = new THREE.MeshPhongMaterial( {color: 0xff00ff,
+                        side: THREE.DoubleSide,
+                        wireframe:false,
+                        shading:THREE.SmoothShading} );
+
+                    for (var i = 0, l = planeGeometry.vertices.length; i < l; i++) {
+                        planeGeometry.vertices[i].z = Math.random() * 2;
+                        var col = i%2 ? material3 : material4;
+                        console.log(col)
+                       // planeGeometry.faces[ i ].materials = [ material4 ] ;
+
+                    }
+                    console.log(planeGeometry.faces)
+                    //planeGeometry.faces[ i ].materials[0] = material4 ;
 
 
-             */
+                    _scene.add( plane );
 
-                    var boxGeometry = new THREE.BoxGeometry(100,1,100);
-                        boxGeometry.computeBoundingSphere()
 
-                    /*
-                     color — geometry color in hexadecimal. Default is 0xffffff.
-                     wireframe — render geometry as wireframe. Default is false.
-                     wireframeLinewidth — Line thickness. Default is 1.
-                     wireframeLinecap — Define appearance of line ends. Default is 'round'.
-                     wireframeLinejoin — Define appearance of line joints. Default is 'round'.
-                     shading — Define shading type. Default is THREE.SmoothShading.
-                     vertexColors — Define how the vertices gets colored. Default is THREE.NoColors.
-                     fog — Define whether the material color is affected by global fog settings. Default is true.
-                     lightMap — Set light map. Default is null.
-                     specularMap — Set specular map. Default is null.
-                     envMap — Set env map. Default is null.
-                     skinning — Define whether the material uses skinning. Default is false.
-                     morphTargets — Define whether the material uses morphTargets. Default is false.
-                     */
-                    var boxMaterial = new THREE.MeshBasicMaterial( { color: 0xcccccc,
-                        wireframe:true,
-                        shading:THREE.SmoothShading,
-                    } );
 
-                    var cube = new THREE.Mesh( boxGeometry, boxMaterial );
-                    _scene.add( cube );
 
 
 
                     // Add OrbitControls so that we can pan around with the mouse.
                     _controls = new THREE.OrbitControls(_camera, _renderer.domElement);
-
+                    var fd = new fakeData(50,20)
+                    console.log(fd);
                     requestAnimationFrame(animate);
                 });
                 ///
@@ -229,46 +244,9 @@
                     _monkeys[3].rotation.x -= .03;
                     _monkeys[3].rotation.z -= .03;
 
-                    _vector = new THREE.Vector3( _mouse.x, _mouse.y, 1 );
-                    _projector.unprojectVector( _vector, _camera );
-                    _raycaster.set( _camera.position, _vector.sub( _camera.position ).normalize() );
-
-                    var mesh = _monkeys[4]
-
-                    var intersects = _raycaster.intersectObject( mesh );
-
-
-                    if ( intersects.length > 0 ) {
-
-                        var intersect = intersects[ 0 ];
-
-
-                        var color = new THREE.Color( 1, 0, 0 );
-
-                        console.log("intersects  ",intersects);
-
-                        var material = new THREE.MeshPhongMaterial();
-                        //material.color = color
-                        material.emissive = color;
-                        material.shininess = 100;
-                        material.shading = THREE.SmoothShading;
-
-                        if( intersect  ) console.log(intersect.object.material);
-                        intersect.object.material = material;
-                        var object = intersect.object;
-                        mesh.rotation.z -= .04;
-
-                        mesh.updateMatrix();
-
-                       _line.geometry.applyMatrix( mesh.matrix );
-
-                        _line.visible = true;
-
-                    }
-
-
 
                     for(var mnk in _monkeys){
+                        hitTest(mnk)
                         _monkeys[mnk].updateMatrix()
                     }
 
@@ -282,7 +260,40 @@
 
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+            function hitTest(index){
+                _vector = new THREE.Vector3( _mouse.x, _mouse.y, 1 );
+                _projector.unprojectVector( _vector, _camera );
+                _raycaster.set( _camera.position, _vector.sub( _camera.position ).normalize() );
+
+                var mesh = _monkeys[index]
+                var intersects = _raycaster.intersectObject( mesh );
+
+                if ( intersects.length > 0 ) {
+
+                    var intersect = intersects[ 0 ];
+                    var color = new THREE.Color( 1, 0, 0 );
+                    var material = new THREE.MeshPhongMaterial();
+                    //material.color = color
+                    material.emissive = color;
+                    material.shininess = 100;
+                    material.shading = THREE.SmoothShading;
+
+                    mesh.material = material;
+                    var object = intersect.object;
+                    mesh.rotation.z -= .04;
+
+                    mesh.updateMatrix();
+
+                    _line.geometry.applyMatrix( mesh.matrix );
+
+                    _line.visible = true;
+
+                }else{
+                    mesh.material = _mainMaterial;
+                }
             }
+
+
             ///////////////////////////////
 
             /*
@@ -297,6 +308,6 @@
                 _mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
             }
 
-
+            }
 
         </script>
