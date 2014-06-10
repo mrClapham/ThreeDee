@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "threejs": "*",
-     "gsap": "1.11.8"
+      "noisejs": "*",
+      "gsap": "1.11.8"
   }
 }
