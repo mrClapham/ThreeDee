@@ -36,7 +36,8 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             _projector          : new THREE.Projector(),
             _raycaster          : new THREE.Raycaster(),
             _bufferGeometry     : new THREE.BufferGeometry(),
-            _renderer           : new THREE.WebGLRenderer({antialias:true})
+            _renderer           : new THREE.WebGLRenderer({antialias:true}),
+            _orbitControl       : null
         }
         _setUp.apply(this, arguments)
     };
@@ -86,7 +87,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     function _initCamera(){
         // Create a camera, zoom it out from the model a bit, and add it to the scene.
         this._private._camera = new THREE.PerspectiveCamera(this.getFov(), this._private._aspect, this.getNear(), this.getFar());
-        this.getCamera().position.set(-50,6,0);
+        //this.getCamera().position.set(-50,6,0);
         this._private._scene.add( this.getCamera() );
     }
 /////
@@ -118,9 +119,12 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     function _initTester(){
 
         var geometry = new THREE.BoxGeometry(3,3,3,6,6,6);
+        this._private._camera.position.z = 5;
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         this.cube = new THREE.Mesh(geometry, material);
         this._private._scene.add(this.cube);
+        this._private._orbitControl  = new THREE.OrbitControls(this._private._camera, this._private._renderer.domElement);
+
         requestAnimationFrame(this.animate.bind(this));
     }
 
@@ -135,7 +139,6 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         animate:function(){
             this._private._renderer.render(this._private._scene, this._private._camera);
             this.cube.rotation.y += 0.1;
-            console.log(this.cube)
             requestAnimationFrame(this.animate.bind(this));
         },
         getTarget:function(){return this._private.target},
