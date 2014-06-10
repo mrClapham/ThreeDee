@@ -132,6 +132,8 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
     }
 
+
+
     // Renders the scene and updates the render as needed.
 
 
@@ -140,6 +142,15 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             this._private._renderer.render(this._private._scene, this._private._camera);
             this.cube.rotation.y += 0.1;
             requestAnimationFrame(this.animate.bind(this));
+        },
+        addSprite:function(value){
+            var alreadyAdded = false;
+            for(var sp in this._private._sprites ){
+                if(this._private._sprites[sp] == value){
+                    alreadyAdded = true
+                }
+            }
+            if( !alreadyAdded ) this._private._sprites.push(value) ;
         },
         getTarget:function(){return this._private.target},
         setTarget:function(value){ this._private.target = value, _onTargetSet.apply(this)},
@@ -172,7 +183,8 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     STATIC FUNCTIONS
  */
 
-ThreeDSprite = (function(opt_initialiser){
+ThreeDSprite = (function(mesh, material, opt_initialiser, opt_controller){
+
     this._model = opt_initialiser ? opt_initialiser : {};
     this._data = null;
     this._material = null;

@@ -22,8 +22,10 @@
     "tests"
   ],
   "dependencies": {
-    "threejs": "*",
+      "threejs": "*",
       "noisejs": "*",
-      "gsap": "1.11.8"
+      "gsap": "1.11.8",
+      "jasmine": "~1.3.1"
+
   }
 }
