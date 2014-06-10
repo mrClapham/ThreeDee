@@ -135,7 +135,7 @@
                 });
 
                 // Set the background color of the scene.
-                _renderer.setClearColor(_backgroundColour,.01);
+                _renderer.setClearColor(_backgroundColour,.0);
 
                 // Create a light, set its position, and add it to the scene.
                 _light = new THREE.PointLight(0xffffff);
@@ -168,7 +168,7 @@
 
                     // ADD A BUNCH OF MONKEYS...
 
-                        for ( var i = 0; i < 5; i ++ ) {
+                        for ( var i = 0; i < 15; i ++ ) {
 
 
                         var __material = new THREE.MeshPhongMaterial({color: _lambertArr[i]});
@@ -179,9 +179,9 @@
 //                            __material.side = THREE.DoubleSide
 
                         var __mesh = new THREE.Mesh( geometry, _mainMaterial );
-                            __mesh.position.x = i * 2;
-                            __mesh.position.y = i * 2;
-                            __mesh.position.z = i * 2;
+                            __mesh.position.x = i * 4+10;
+                            __mesh.position.y = i * 4;
+                            __mesh.position.z = i * 4;
                             __mesh.rotation.z = i * 10;
                             __mesh.updateMatrix();
                             __mesh.matrixAutoUpdate = true;
@@ -190,16 +190,21 @@
                     }
 
             /* PLANE */
+                    var planeMaterials = [];
 
-                    var planeGeometry = new THREE.PlaneGeometry( 50, 20, 8, 8 );
+                    planeMaterials.push( new THREE.MeshLambertMaterial( { color: 0xdddddd, shading: THREE.SmoothShading } ) );
+                    planeMaterials.push( new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } ) );
+                    planeMaterials.push( new THREE.MeshNormalMaterial( {color:0xff00ff, shading: THREE.SmoothShading } ) );
+                    planeMaterials.push( new THREE.MeshBasicMaterial( { color: 0xffaa00, wireframe: false } ) );
+                    // face materials is an array of materials.
+                    var planeFACEMaterials = new THREE.MeshFaceMaterial(planeMaterials)
+
+                    var planeGeometry = new THREE.PlaneGeometry( 50, 20, 80, 80 );
                     var planeMaterial = new THREE.MeshPhongMaterial( {color: 0xffffff,
                             side: THREE.DoubleSide,
                             wireframe:false,
                             shading:THREE.SmoothShading} );
-                    planeGeometry.computeTangents();
-
-                    var plane = new THREE.Mesh( planeGeometry , planeMaterial);
-                    plane.rotateX(.03);
+                            planeGeometry.computeTangents();
 
                     var material3 = new THREE.MeshPhongMaterial( {color: 0xff00ff,
                         side: THREE.DoubleSide,
@@ -210,22 +215,27 @@
                         wireframe:false,
                         shading:THREE.SmoothShading} );
 
+                    planeGeometry.materials = planeMaterials // it has four different materials in it
+
+                    for(var i= 0, j = planeGeometry.faces.length; i<j; i++){
+                        /*
+                         there is an array of materials 'planeGeometry.materials'.
+                         This stores the materials which may be applied.
+                         */
+                        planeGeometry.faces[ i ].materialIndex = Math.floor( Math.random() * 4 );
+                    }
+                    var plane = new THREE.Mesh( planeGeometry , planeFACEMaterials);
+                    plane.rotateX(.03);
                     for (var i = 0, l = planeGeometry.vertices.length; i < l; i++) {
                         planeGeometry.vertices[i].z = Math.random() * 2;
                         var col = i%2 ? material3 : material4;
-                        console.log(col)
                        // planeGeometry.faces[ i ].materials = [ material4 ] ;
-
                     }
                     console.log(planeGeometry.faces)
                     //planeGeometry.faces[ i ].materials[0] = material4 ;
 
 
                     _scene.add( plane );
-
-
-
-
 
 
                     // Add OrbitControls so that we can pan around with the mouse.
@@ -243,6 +253,7 @@
                     _monkeys[1].rotation.z -= .03;
                     _monkeys[3].rotation.x -= .03;
                     _monkeys[3].rotation.z -= .03;
+
 
 
                     for(var mnk in _monkeys){

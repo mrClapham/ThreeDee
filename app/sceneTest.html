@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="components/threejs/build/three.min.js"></script>
+
+    <script src="js/vendor/three/loaders/ColladaLoader.js"></script>
+    <script src="js/vendor/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
+
+
+</head>
+<body onload="onLoaded()">
+<div id ="holder">
+
+</div>
+
+</body>
+</html>
+        <script type="text/javascript">
+
+            function onLoaded(){
+                var _targ = document.getElementById("holder")
+             var three = new ThreeDScene(_targ, {width:1200, height:900});
+            }
+
+        </script>
