@@ -186,6 +186,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 ThreeDSprite = (function(mesh, material, opt_initialiser, opt_controller){
 
     this._model = opt_initialiser ? opt_initialiser : {};
+    this._
     this._data = null;
     this._material = null;
 
