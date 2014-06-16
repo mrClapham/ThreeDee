@@ -4,7 +4,7 @@
     <title></title>
     <script src="components/threejs/build/three.min.js"></script>
 
-    <script src="js/vendor/three/loaders/ColladaLoader.js"></script>
+    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
 
@@ -20,8 +20,11 @@
         <script type="text/javascript">
 
             function onLoaded(){
-                var _targ = document.getElementById("holder")
+            var _targ = document.getElementById("holder")
              var three = new ThreeDScene(_targ, {width:1200, height:900});
+             var _model = "models/LeePerrySmith.js";
+             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+             var scprite = new ThreeDSprite(_model, _planeMaterials, three);
             }
 
         </script>

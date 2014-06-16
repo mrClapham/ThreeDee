@@ -170,6 +170,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         setLightColour:function(value){this._private.lightColour = value},
         getAmbientLightColour:function(){return this._private.ambientColour},
         setAmbientLightColour:function(value){this._private.ambientColour = value},
+        getScene:function(){return this._private._scene}
     }
     /*
     Business logic
@@ -183,13 +184,44 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     STATIC FUNCTIONS
  */
 
-ThreeDSprite = (function(mesh, material, opt_initialiser, opt_controller){
+var standardController = function(sprite){
+    console.log()
+}
 
-    this._model = opt_initialiser ? opt_initialiser : {};
-    this._
-    this._data = null;
-    this._material = null;
+ThreeDSprite = (function(modelURL, material, scene, opt_initialiser, opt_controller){
+
+
+    var _scope = function(modelURL, material, scene, opt_initialiser, opt_controller){
+    this._private = opt_initialiser ? opt_initialiser : {};
+    this._private._scene = scene;
+    this._private._modelURL = modelURL;
+    this._private._material = material;
+    this._contoller = opt_controller ? opt_controller : new standardController(this);
+    this._loader  = new THREE.JSONLoader();
+        console.log(modelURL)
+        var scope = this
+    this._loader.load( this._private._modelURL, function(geometry){
+        console.log("LOADED ",scope)
+        var imgTexture = THREE.ImageUtils.loadTexture( 'models/Map-COL.jpg' )
+        imgTexture.anisotropy = 1;
+        geometry.computeTangents();
+        scope._private._mesh = new THREE.Mesh(geometry, scope._private._material);
+        scope._private._scene.getScene().add(scope._private._mesh);
+
+
+
+    })
+    }
+
+    _scope.prototype = {
+
+    }
+
+    return _scope
 
 
 })();
+
+
+
 
