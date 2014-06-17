@@ -311,7 +311,7 @@ var __count = 0
         addToScene:function(){
             this._private.scene.getScene().add(this._private._mesh);
             this._private.scene.listen("FRAME_EVENT", function(){
-                standardController.call(this)
+                this._contoller.call(this)
                //if( this.getMesh() ) this.getMesh().rotation.x +=3
                // if( this.getController() ) this.getController.call(this);
 

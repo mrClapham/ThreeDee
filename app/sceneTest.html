@@ -51,13 +51,27 @@
 </body>
 </html>
         <script type="text/javascript">
+
+
+            var fancyController = function(){
+
+                if( this.getMesh() ){
+                    console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
+                    this.getMesh().rotation.y +=.05
+                }
+
+
+            }
+
+
+
             function onLoaded(){
             var _targ = document.getElementById("holder")
             var three = new ThreeDScene(_targ, {width:1200, height:900});
             var _model = "models/LeePerrySmith.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var scprite = new ThreeDSprite(_model, _planeMaterials, {position:{x:2,y:2,z:2}});
-            var scprite2 = new ThreeDSprite(_model, _planeMaterials, {position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}});
+            var scprite2 = new ThreeDSprite(_model, _planeMaterials, {position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
 
                 three.addSprite(scprite)
