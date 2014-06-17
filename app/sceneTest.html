@@ -11,6 +11,39 @@
 
 </head>
 <body onload="onLoaded()">
+
+<!--
+        getTarget:function(){return this._private.target},
+        setTarget:function(value){ this._private.target = value, _onTargetSet.apply(this)},
+        getWidth:function(){return this._private.width},
+        getHeight:function(){return this._private.height},
+        getCamera:function(){return this._private._camera},
+        getRenderer:function(){return this._private._renderer},
+        getFov:function(){return this._private.fov},
+        setFov:function(value){ this._private.fov = value},
+        getNear:function(){ return this._private.near},
+        setNear:function(value){ this._private.near = value},
+        getFar:function(){ return this._private.far},
+        setFar:function(value){ this._private.far = value},
+        getBackgroundColour:function(){return this._private.backgroundColour},
+        setBackgroundColour:function(value){this._private.backgroundColour = value},
+        getLightColour:function(){return this._private.lightColour},
+        setLightColour:function(value){this._private.lightColour = value},
+        getAmbientLightColour:function(){return this._private.ambientColour},
+        setAmbientLightColour:function(value){this._private.ambientColour = value},
+        getScene:function(){return this._private._scene},
+        getFullScreen:function(){return this._private.fullscreen},
+        setFullScreen:function(value){ this._private.fullscreen = value}
+-->
+
+
+
+<div id="controllers">
+    <label>Far</label><input id="far" type="text" value="5"/>
+    <label>Camera x</label> <input id="cameraX" type="text" value="15"/>
+    <button id="submitValues">update</button>
+
+</div>
 <div id ="holder">
 
 </div>
@@ -18,13 +51,36 @@
 </body>
 </html>
         <script type="text/javascript">
-
             function onLoaded(){
             var _targ = document.getElementById("holder")
-             var three = new ThreeDScene(_targ, {width:1200, height:900});
-             var _model = "models/LeePerrySmith.js";
-             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
-             var scprite = new ThreeDSprite(_model, _planeMaterials, three);
+            var three = new ThreeDScene(_targ, {width:1200, height:900});
+            var _model = "models/LeePerrySmith.js";
+            var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var scprite = new ThreeDSprite(_model, _planeMaterials, {position:{x:2,y:2,z:2}});
+            var scprite2 = new ThreeDSprite(_model, _planeMaterials, {position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}});
+
+
+                three.addSprite(scprite)
+                three.addSprite(scprite2)
+
+
+                document.getElementById('submitValues').addEventListener('click', function(){
+                    updateScene()
+                })
+
+                updateScene = function(){
+
+                    var _far = document.getElementById('far').value
+                    var _cameraX = document.getElementById('cameraX').value
+
+                    three.setFar(_far)
+                    three.setCameraX(_cameraX)
+                }
+
+
             }
+
+
+
 
         </script>
