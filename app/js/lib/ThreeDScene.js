@@ -42,7 +42,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             _projector          : new THREE.Projector(),
             _raycaster          : new THREE.Raycaster(),
             _bufferGeometry     : new THREE.BufferGeometry(),
-            _renderer           : new THREE.WebGLRenderer({antialias:true}),
+            _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true}),
             _orbitControl       : null,
             orbit               : true, // is the scene controlled by an mouse controlled orbiter?
             _dispatcher         : null,
@@ -83,7 +83,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 /////
     var _init = function(){
-        this.getRenderer().setClearColor(this.getBackgroundColour(),.0);
+        //this.getRenderer().setClearColor(this.getBackgroundColour(),.0);
 
         this._private._dispatcher = document.createElement("div")
         this._private._frameEvent = new CustomEvent(_scope.FRAME_EVENT, { 'detail': "frameEntered" });
@@ -221,12 +221,12 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 //            _line.visible = true;
 
         }else{
+            __sprite.setHit(false)
             try{
                 mesh.material = __sprite.getMaterial();
             }catch(e){
-                __sprite.setHit(false)
+                //---
             }
-
         }
     }
 
@@ -350,6 +350,8 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         skin:null,
         _imgTexture:null,
         bumpMap:null,
+        bumpScale:.02,
+        _imgBump:null,
         data:{name:"The name of the sprite is"}
     }
     this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
@@ -389,11 +391,18 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             for(var prop in scope._private._opt_initialiser){
                 mesh[prop] = scope._private._opt_initialiser[prop];
             }
-            // rotation transforms need to be applied individually
+            // rotation transforms need to be applied individually...
             if(scope._private._opt_initialiser.rotation){
                 mesh.rotation.x = scope._private._opt_initialiser.rotation.x;
                 mesh.rotation.y = scope._private._opt_initialiser.rotation.y;
                 mesh.rotation.z = scope._private._opt_initialiser.rotation.z;
+            }
+
+            // ...and scale transforms need to be applied individually too
+            if(scope._private._opt_initialiser.scale){
+                mesh.scale.x = scope._private._opt_initialiser.scale.x;
+                mesh.scale.y = scope._private._opt_initialiser.scale.y;
+                mesh.scale.z = scope._private._opt_initialiser.scale.z;
             }
 
             try{
@@ -405,13 +414,14 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _initSkin = function(){
-            console.log("INIT SKIN ")
         this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
         this._private._material.map = this._private._imgTexture;
     }
 
     var _initBumpmap = function(){
-        console.log("INIT BUMP ")
+        this._private._imgBump = THREE.ImageUtils.loadTexture( this._private.bumpMap )
+        this._private._material.bumpScale = this._private.bumpScale;
+        this._private._material.bumpMap = this._private._imgBump;
     }
 
     var _onSceneSet = function(){
