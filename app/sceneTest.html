@@ -72,8 +72,21 @@
             var three = new ThreeDScene(_targ, {width:1200, height:900});
             var _model = "models/LeePerrySmith.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
-            var scprite = new ThreeDSprite(_model, _planeMaterials, {position:{x:2,y:2,z:2}, data:{name:"This is the new name"}});
-            var scprite2 = new ThreeDSprite(_model, _planeMaterials, {position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+
+
+                var spriteObject = {
+                    position:{x:2,y:2,z:2},
+                    data:{name:"This is the new name"},
+                    skin: 'models/Map-COL.jpg',
+                    bumpMap:"TO DO"
+                }
+
+                var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
+
+
+
+            var scprite2 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
                 console.log(ThreeDScene.CLICKED)
                 three.listen(ThreeDScene.CLICKED, function(e){

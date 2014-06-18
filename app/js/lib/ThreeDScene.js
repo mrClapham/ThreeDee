@@ -348,6 +348,7 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     this._private = {
         hit:false,
         skin:null,
+        _imgTexture:null,
         bumpMap:null,
         data:{name:"The name of the sprite is"}
     }
@@ -362,34 +363,57 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     this._private._modelURL = modelURL;
     this._private._material = material;
     this._loader  = new THREE.JSONLoader();
-    var scope = this
 
 
-    this._loader.load( this._private._modelURL, function(geometry){
-        var imgTexture = THREE.ImageUtils.loadTexture( 'models/Map-COL.jpg' )
-        imgTexture.anisotropy = 1;
-        geometry.computeTangents();
+        _init.call(this)
 
-        var mesh;
-        scope._private._mesh = mesh = new THREE.Mesh(geometry, scope._private._material);
-        for(var prop in scope._private._opt_initialiser){
-            mesh[prop] = scope._private._opt_initialiser[prop];
-        }
-        // rotation transforms need to be applied individually
-        if(scope._private._opt_initialiser.rotation){
-            mesh.rotation.x = scope._private._opt_initialiser.rotation.x;
-            mesh.rotation.y = scope._private._opt_initialiser.rotation.y;
-            mesh.rotation.z = scope._private._opt_initialiser.rotation.z;
-        }
-
-        try{
-            scope.addToScene();
-        }catch(e){
-            ///
-        }
-    })
     }
     // internal business logic
+
+    var _init = function(){
+       if(this._private._modelURL) _intModel.call(this);
+       if(this._private.skin) _initSkin.call(this);
+       if(this._private.bumpMap) _initBumpmap.call(this);
+    }
+
+    var _intModel = function(){
+        var scope = this
+
+        this._loader.load( this._private._modelURL, function(geometry){
+            var imgTexture = THREE.ImageUtils.loadTexture( 'models/Map-COL.jpg' )
+            imgTexture.anisotropy = 1;
+            geometry.computeTangents();
+
+            var mesh;
+            scope._private._mesh = mesh = new THREE.Mesh(geometry, scope._private._material);
+            for(var prop in scope._private._opt_initialiser){
+                mesh[prop] = scope._private._opt_initialiser[prop];
+            }
+            // rotation transforms need to be applied individually
+            if(scope._private._opt_initialiser.rotation){
+                mesh.rotation.x = scope._private._opt_initialiser.rotation.x;
+                mesh.rotation.y = scope._private._opt_initialiser.rotation.y;
+                mesh.rotation.z = scope._private._opt_initialiser.rotation.z;
+            }
+
+            try{
+                scope.addToScene();
+            }catch(e){
+                ///
+            }
+        })
+    }
+
+    var _initSkin = function(){
+            console.log("INIT SKIN ")
+        this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
+        this._private._material.map = this._private._imgTexture;
+    }
+
+    var _initBumpmap = function(){
+        console.log("INIT BUMP ")
+    }
+
     var _onSceneSet = function(){
         //  Due to the asynchronous way the models load this mesh may not yet be defined.
         //  If so the mesh should be added during the callback from the loader (this._loader.load... etc)
