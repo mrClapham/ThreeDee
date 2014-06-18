@@ -14,15 +14,14 @@
         left:5px;
     }
     body{
+background-color: #454545;
 
-        background: #1e5799; /* Old browsers */
-        background: -moz-linear-gradient(top,  #1e5799 32%, #aecde5 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(32%,#1e5799), color-stop(100%,#aecde5)); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  #1e5799 32%,#aecde5 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  #1e5799 32%,#aecde5 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  #1e5799 32%,#aecde5 100%); /* IE10+ */
-        background: linear-gradient(to bottom,  #1e5799 32%,#aecde5 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#aecde5',GradientType=0 ); /* IE6-9 */
+    }
+
+    #holder{
+        position: absolute;
+        top: 0;
+        left: 0;
 
     }
 </style>
@@ -100,7 +99,7 @@
 
             var scprite2 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite4 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
                 console.log(ThreeDScene.CLICKED)
