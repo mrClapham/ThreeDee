@@ -337,7 +337,8 @@ var standardController = function(){
 }
 
 
-
+var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0x009900, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
+var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
 ////////////// THE SPRITE CLASS ////////////////////////////////////////////////////
 /* AS THEY ARE INTRINSICALLY LINKED I'VE KEPT THE SPRITE AND THE SCENE IN THE SAME JS FILE */
@@ -346,6 +347,8 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
     var _scope = function(modelURL, material, opt_initialiser, opt_controller){
     this._private = {
+        material:null,
+        blenderModel:null,
         hit:false,
         skin:null,
         _imgTexture:null,
@@ -354,6 +357,11 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         _imgBump:null,
         data:{name:"The name of the sprite is"}
     }
+
+
+    this._private.material = material ? material :  defaultMaterial;
+    this._private.material = material ? material :  defaultMaterial;
+
     this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
 
         for(var value in this._private._opt_initialiser){
@@ -362,8 +370,8 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         }
 
     this._contoller = opt_controller ? opt_controller :  standardController;
-    this._private._modelURL = modelURL;
-    this._private._material = material;
+        this._private.modelURL = modelURL ? modelURL : null;
+//    this._private._material = material;
     this._loader  = new THREE.JSONLoader();
 
 
@@ -373,55 +381,67 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     // internal business logic
 
     var _init = function(){
-       if(this._private._modelURL) _intModel.call(this);
        if(this._private.skin) _initSkin.call(this);
        if(this._private.bumpMap) _initBumpmap.call(this);
+       this._private.modelURL ?  _intModel.call(this) : _initDefaultModel.call(this);
+
     }
 
     var _intModel = function(){
+        console.log("INIT MODEL CALLED>>>")
         var scope = this
 
-        this._loader.load( this._private._modelURL, function(geometry){
-            var imgTexture = THREE.ImageUtils.loadTexture( 'models/Map-COL.jpg' )
-            imgTexture.anisotropy = 1;
-            geometry.computeTangents();
-
-            var mesh;
-            scope._private._mesh = mesh = new THREE.Mesh(geometry, scope._private._material);
-            for(var prop in scope._private._opt_initialiser){
-                mesh[prop] = scope._private._opt_initialiser[prop];
-            }
-            // rotation transforms need to be applied individually...
-            if(scope._private._opt_initialiser.rotation){
-                mesh.rotation.x = scope._private._opt_initialiser.rotation.x;
-                mesh.rotation.y = scope._private._opt_initialiser.rotation.y;
-                mesh.rotation.z = scope._private._opt_initialiser.rotation.z;
-            }
-
-            // ...and scale transforms need to be applied individually too
-            if(scope._private._opt_initialiser.scale){
-                mesh.scale.x = scope._private._opt_initialiser.scale.x;
-                mesh.scale.y = scope._private._opt_initialiser.scale.y;
-                mesh.scale.z = scope._private._opt_initialiser.scale.z;
-            }
-
-            try{
-                scope.addToScene();
-            }catch(e){
-                ///
-            }
+        this._loader.load( this._private.modelURL, function(geometry){
+            _onGeometrySet.call(scope, geometry)
         })
+    }
+
+    var _initDefaultModel = function(){
+        console.log("INIT DEFAULT MODEL CALLED>>>")
+
+        this._private._mesh = mesh = new THREE.Mesh(defaultGeometry, this._private.material);
+        _onGeometrySet.call(this, defaultGeometry)
+    }
+
+
+    var _onGeometrySet = function(geometry){
+        geometry.computeTangents();
+
+        var mesh;
+        this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
+        for(var prop in this._private._opt_initialiser){
+            mesh[prop] = this._private._opt_initialiser[prop];
+        }
+        // rotation transforms need to be applied individually...
+        if(this._private._opt_initialiser.rotation){
+            mesh.rotation.x = this._private._opt_initialiser.rotation.x;
+            mesh.rotation.y = this._private._opt_initialiser.rotation.y;
+            mesh.rotation.z = this._private._opt_initialiser.rotation.z;
+        }
+
+        // ...and scale transforms need to be applied individually too
+        if(this._private._opt_initialiser.scale){
+            mesh.scale.x = this._private._opt_initialiser.scale.x;
+            mesh.scale.y = this._private._opt_initialiser.scale.y;
+            mesh.scale.z = this._private._opt_initialiser.scale.z;
+        }
+
+        try{
+            this.addToScene();
+        }catch(e){
+            ///
+        }
     }
 
     var _initSkin = function(){
         this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
-        this._private._material.map = this._private._imgTexture;
+        this._private.material.map = this._private._imgTexture;
     }
 
     var _initBumpmap = function(){
         this._private._imgBump = THREE.ImageUtils.loadTexture( this._private.bumpMap )
-        this._private._material.bumpScale = this._private.bumpScale;
-        this._private._material.bumpMap = this._private._imgBump;
+        this._private.material.bumpScale = this._private.bumpScale;
+        this._private.material.bumpMap = this._private._imgBump;
     }
 
     var _onSceneSet = function(){
@@ -460,10 +480,10 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return this._private._mesh
         },
         setMaterial:function(value){
-            this._private._material = value;
+            this._private.material = value;
         },
         getMaterial:function(){
-            return this._private._material;
+            return this._private.material;
         },
         getHit:function(){
             return this._private.hit

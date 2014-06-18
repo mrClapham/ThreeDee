@@ -98,10 +98,10 @@
 
 
 
-            var scprite2 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite3 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite5 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite2 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite4 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
                 console.log(ThreeDScene.CLICKED)
                 three.listen(ThreeDScene.CLICKED, function(e){
