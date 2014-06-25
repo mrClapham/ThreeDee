@@ -84,6 +84,7 @@ background-color: #454545;
             var _model = "models/LeePerrySmith.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
 
                 var spriteObject = {
@@ -113,6 +114,29 @@ background-color: #454545;
                 three.addSprite(scprite4)
                 three.addSprite(scprite5)
 
+
+
+
+                var inty = setInterval(function(){addSprite()}, 1)
+                var i =0;
+                function addSprite(){
+
+                    if(  i<50000){
+
+
+                        for(var j = 0; j<10; j++){
+                            var sp = new ThreeDSprite(null, _basicMaterial, {scale:{x:.25, y:.25, z:.25}, position:{x:-200+(Math.random()*200),y:-200+(Math.random()*200),z:-200+(Math.random()*200)}});
+                            three.addSprite(sp)
+                            i ++
+                        }
+
+
+                    }else{
+                        alert("done")
+                        clearInterval(inty);
+                    }
+
+                }
 
                 document.getElementById('submitValues').addEventListener('click', function(){
                     updateScene()
