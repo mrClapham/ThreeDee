@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="components/threejs/build/three.min.js"></script>
+
+    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
+    <script src="js/vendor/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
+
+    /* THe Shaders go here */
+
+    <script type="x-shader/x-vertex" id="vertexShader">
+            /**
+             * Multiply each vertex by the
+             * model-view matrix and the
+             * projection matrix (both provided
+             * by Three.js) to get a final
+             * vertex position
+             */
+
+            varying vec2 vUv;
+            void main() {
+
+              vUv = uv;
+
+              gl_Position = projectionMatrix *
+                            modelViewMatrix *
+                            vec4(position,1.0);
+            }
+    </script>
+
+    <script type="x-shader/x-vertex" id="fragmentShader">
+            /**
+             * Set the colour to a lovely pink.
+             * Note that the color is a 4D Float
+             * Vector, R,G,B and A and each part
+             * runs from 0.0 to 1.0
+             */
+
+             varying vec2 vUv;
+            void main() {
+            // colour is RGBA: u, v, 0, 1
+            gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+            }
+    </script>
+
+    <script type="text/javascript" id="mainCode">
+        // Put the main code here
+    </script>
+
+
+
+
+
+    <style>
+    .controllers{
+        position: absolute;
+        top:5px;
+        left:5px;
+    }
+    body{
+background-color: #454545;
+
+    }
+
+    #holder{
+        position: absolute;
+        top: 0;
+        left: 0;
+
+    }
+</style>
+
+</head>
+<body onload="onLoaded()">
+
+
+
+
+
+<div id="controllers">
+    <label>Far</label><input id="far" type="text" value="5"/>
+    <label>Camera x</label> <input id="cameraX" type="text" value="15"/>
+    <button id="submitValues">update</button>
+
+</div>
+<div id ="holder">
+
+</div>
+
+</body>
+</html>
+        <script type="text/javascript">
+
+            var fancyController = function(){
+                if( this.getMesh() ){
+                   // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
+                    this.getMesh().rotation.y +=.05
+                }
+            }
+
+
+
+            function onLoaded(){
+            var _targ = document.getElementById("holder")
+            var three = new ThreeDScene(_targ, {width:1200, height:900});
+            var _model = "models/LeePerrySmith.js";
+            var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
+
+            var _ShaderMaterial = new THREE.ShaderMaterial( {
+                vertexShader: document.getElementById( 'vertexShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            } );
+
+
+                var spriteObject = {
+                    position:{x:2,y:2,z:2},
+                    data:{name:"This is the new name"},
+                    skin: 'models/Map-COL.jpg',
+                    bumpMap:"models/camo.png"
+                }
+
+                var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
+
+
+
+            var scprite2 = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+
+                three.listen(ThreeDScene.CLICKED, function(e){
+                    console.log(e);
+                })
+
+                three.addSprite(scprite)
+                three.addSprite(scprite2)
+                three.addSprite(scprite3)
+                three.addSprite(scprite4)
+                three.addSprite(scprite5)
+
+                var i =0;
+                function addSprite(){
+
+                    if(  i<50000){
+
+
+                        for(var j = 0; j<10; j++){
+                            var sp = new ThreeDSprite(null, _basicMaterial, {scale:{x:.25, y:.25, z:.25}, position:{x:-200+(Math.random()*200),y:-200+(Math.random()*200),z:-200+(Math.random()*200)}});
+                            three.addSprite(sp)
+                            i ++
+                        }
+
+
+                    }else{
+                        alert("done")
+                        clearInterval(inty);
+                    }
+
+                }
+
+                document.getElementById('submitValues').addEventListener('click', function(){
+                    updateScene()
+                })
+
+                updateScene = function(){
+
+                    var _far = document.getElementById('far').value
+                    var _cameraX = document.getElementById('cameraX').value
+
+                    three.setFar(_far)
+                    three.setCameraX(_cameraX)
+                }
+
+
+            }
+
+
+
+
+        </script>
