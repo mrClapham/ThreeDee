@@ -7,7 +7,53 @@
     <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
-<style>
+
+    /* THe Shaders go here */
+
+    <script type="x-shader/x-vertex" id="vertexShader">
+            /**
+             * Multiply each vertex by the
+             * model-view matrix and the
+             * projection matrix (both provided
+             * by Three.js) to get a final
+             * vertex position
+             */
+
+            varying vec2 vUv;
+            void main() {
+
+              vUv = uv;
+
+              gl_Position = projectionMatrix *
+                            modelViewMatrix *
+                            vec4(position,1.0);
+            }
+    </script>
+
+    <script type="x-shader/x-vertex" id="fragmentShader">
+            /**
+             * Set the colour to a lovely pink.
+             * Note that the color is a 4D Float
+             * Vector, R,G,B and A and each part
+             * runs from 0.0 to 1.0
+             */
+
+             varying vec2 vUv;
+            void main() {
+            // colour is RGBA: u, v, 0, 1
+            gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+            }
+    </script>
+
+    <script type="text/javascript" id="mainCode">
+        // Put the main code here
+    </script>
+
+
+
+
+
+    <style>
     .controllers{
         position: absolute;
         top:5px;
@@ -29,29 +75,7 @@ background-color: #454545;
 </head>
 <body onload="onLoaded()">
 
-<!--
-        getTarget:function(){return this._private.target},
-        setTarget:function(value){ this._private.target = value, _onTargetSet.apply(this)},
-        getWidth:function(){return this._private.width},
-        getHeight:function(){return this._private.height},
-        getCamera:function(){return this._private._camera},
-        getRenderer:function(){return this._private._renderer},
-        getFov:function(){return this._private.fov},
-        setFov:function(value){ this._private.fov = value},
-        getNear:function(){ return this._private.near},
-        setNear:function(value){ this._private.near = value},
-        getFar:function(){ return this._private.far},
-        setFar:function(value){ this._private.far = value},
-        getBackgroundColour:function(){return this._private.backgroundColour},
-        setBackgroundColour:function(value){this._private.backgroundColour = value},
-        getLightColour:function(){return this._private.lightColour},
-        setLightColour:function(value){this._private.lightColour = value},
-        getAmbientLightColour:function(){return this._private.ambientColour},
-        setAmbientLightColour:function(value){this._private.ambientColour = value},
-        getScene:function(){return this._private._scene},
-        getFullScreen:function(){return this._private.fullscreen},
-        setFullScreen:function(value){ this._private.fullscreen = value}
--->
+
 
 
 
@@ -86,25 +110,28 @@ background-color: #454545;
             var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
+            var _ShaderMaterial = new THREE.ShaderMaterial( {
+                vertexShader: document.getElementById( 'vertexShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            } );
+
 
                 var spriteObject = {
                     position:{x:2,y:2,z:2},
                     data:{name:"This is the new name"},
                     skin: 'models/Map-COL.jpg',
-                   // bumpMap:"models/camo.png"
-                    bumpMap:"models/map-spec3.jpg"
+                    bumpMap:"models/camo.png"
                 }
 
                 var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
 
 
 
-            var scprite2 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite2 = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
-                console.log(ThreeDScene.CLICKED)
                 three.listen(ThreeDScene.CLICKED, function(e){
                     console.log(e);
                 })
@@ -115,10 +142,6 @@ background-color: #454545;
                 three.addSprite(scprite4)
                 three.addSprite(scprite5)
 
-
-
-
-                var inty = setInterval(function(){addSprite()}, 1)
                 var i =0;
                 function addSprite(){
 
