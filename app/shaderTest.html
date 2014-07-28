@@ -8,7 +8,7 @@
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
 
-    /* THe Shaders go here */
+    <!-- The Shaders go here -->
 
     <script type="x-shader/x-vertex" id="vertexShader">
             /**
@@ -26,7 +26,7 @@
 
               gl_Position = projectionMatrix *
                             modelViewMatrix *
-                            vec4(position,1.0);
+                            vec4(position,0.20);
             }
     </script>
 
@@ -44,6 +44,46 @@
             gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
             }
     </script>
+
+
+
+    <script type="x-shader/x-vertex" id="vertexShader2">
+            /**
+             * Multiply each vertex by the
+             * model-view matrix and the
+             * projection matrix (both provided
+             * by Three.js) to get a final
+             * vertex position
+             */
+
+            varying vec2 vUv;
+            void main() {
+
+              vUv = uv;
+
+              gl_Position = projectionMatrix *
+                            modelViewMatrix *
+                            vec4(position,0.20);
+            }
+    </script>
+
+    <script type="x-shader/x-vertex" id="fragmentShader2">
+            /**
+             * Set the colour to a lovely pink.
+             * Note that the color is a 4D Float
+             * Vector, R,G,B and A and each part
+             * runs from 0.0 to 1.0
+             */
+
+             varying vec2 vUv;
+            void main() {
+            // colour is RGBA: u, v, 0, 1
+            gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+            }
+    </script>
+
+
+
 
     <script type="text/javascript" id="mainCode">
         // Put the main code here
@@ -110,6 +150,7 @@ background-color: #454545;
             var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
+
             var _ShaderMaterial = new THREE.ShaderMaterial( {
                 vertexShader: document.getElementById( 'vertexShader' ).textContent,
                 fragmentShader: document.getElementById( 'fragmentShader' ).textContent
@@ -129,7 +170,7 @@ background-color: #454545;
 
             var scprite2 = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+                var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
                 three.listen(ThreeDScene.CLICKED, function(e){
