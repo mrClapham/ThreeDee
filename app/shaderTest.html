@@ -125,6 +125,7 @@ background-color: #454545;
     <label>Camera x</label> <input id="cameraX" type="text" value="15"/>
     <button id="submitValues">update</button>
     <button id="bumpChange">bumpChange</button>
+    <button id="bumpChangeMinus">bumpChangeMinus</button>
 
 </div>
 <div id ="holder">
@@ -203,16 +204,20 @@ background-color: #454545;
                 }
 
                document.getElementById('bumpChange').addEventListener('click', function(){
-                    bumpMapChange()
+                   bumpMapChangePlus()
                 })
 
-                bumpMapChange = function(){
-                    scprite.setBumpScale(scprite.getBumpScale()+0.1)
+                document.getElementById('bumpChangeMinus').addEventListener('click', function(){
+                    bumpMapChangeMinus()
+                })
+
+                bumpMapChangePlus = function(){
+                    scprite.setBumpScale(scprite.getBumpScale()+0.05)
                 }
 
-
-
-
+                bumpMapChangeMinus = function(){
+                    scprite.setBumpScale(scprite.getBumpScale()-0.05)
+                }
 
             }
 
