@@ -388,21 +388,16 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _intModel = function(){
-        console.log("INIT MODEL CALLED>>>")
         var scope = this
-
         this._loader.load( this._private.modelURL, function(geometry){
             _onGeometrySet.call(scope, geometry)
         })
     }
 
     var _initDefaultModel = function(){
-        console.log("INIT DEFAULT MODEL CALLED>>>")
-
         this._private._mesh = mesh = new THREE.Mesh(defaultGeometry, this._private.material);
         _onGeometrySet.call(this, defaultGeometry)
     }
-
 
     var _onGeometrySet = function(geometry){
         geometry.computeTangents();
@@ -499,6 +494,17 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         },
         setData:function(value){
             this._private.data = value;
+        },
+        getBumpScale:function(){
+            return this._private.bumpScale;
+        },
+        setBumpScale:function(value){
+            this._private.bumpScale = value;
+            _initBumpmap.call(this);
+            //var mesh = this.getMesh()
+           // mesh.material = this.getMaterial();
+            //mesh.updateMatrix();
+
         }
     }
 

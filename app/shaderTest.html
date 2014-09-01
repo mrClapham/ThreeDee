@@ -94,10 +94,11 @@
 
 
     <style>
-    .controllers{
+    #controllers{
         position: absolute;
         top:5px;
         left:5px;
+        z-index: 1000;
     }
     body{
 background-color: #454545;
@@ -123,6 +124,8 @@ background-color: #454545;
     <label>Far</label><input id="far" type="text" value="5"/>
     <label>Camera x</label> <input id="cameraX" type="text" value="15"/>
     <button id="submitValues">update</button>
+    <button id="bumpChange">bumpChange</button>
+    <button id="bumpChangeMinus">bumpChangeMinus</button>
 
 </div>
 <div id ="holder">
@@ -137,6 +140,8 @@ background-color: #454545;
                 if( this.getMesh() ){
                    // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
                     this.getMesh().rotation.y +=.05
+                    this.getMesh().bumpScale +=.5
+
                 }
             }
 
@@ -161,7 +166,8 @@ background-color: #454545;
                     position:{x:2,y:2,z:2},
                     data:{name:"This is the new name"},
                     skin: 'models/Map-COL.jpg',
-                    bumpMap:"models/camo.png"
+                    bumpMap:"models/camo.png",
+                    bumpScale: .1
                 }
 
                 var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
@@ -170,7 +176,7 @@ background-color: #454545;
 
             var scprite2 = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
-                var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
 
                 three.listen(ThreeDScene.CLICKED, function(e){
@@ -184,38 +190,34 @@ background-color: #454545;
                 three.addSprite(scprite5)
 
                 var i =0;
-                function addSprite(){
 
-                    if(  i<50000){
-
-
-                        for(var j = 0; j<10; j++){
-                            var sp = new ThreeDSprite(null, _basicMaterial, {scale:{x:.25, y:.25, z:.25}, position:{x:-200+(Math.random()*200),y:-200+(Math.random()*200),z:-200+(Math.random()*200)}});
-                            three.addSprite(sp)
-                            i ++
-                        }
-
-
-                    }else{
-                        alert("done")
-                        clearInterval(inty);
-                    }
-
-                }
 
                 document.getElementById('submitValues').addEventListener('click', function(){
                     updateScene()
                 })
 
                 updateScene = function(){
-
                     var _far = document.getElementById('far').value
                     var _cameraX = document.getElementById('cameraX').value
-
                     three.setFar(_far)
                     three.setCameraX(_cameraX)
                 }
 
+               document.getElementById('bumpChange').addEventListener('click', function(){
+                   bumpMapChangePlus()
+                })
+
+                document.getElementById('bumpChangeMinus').addEventListener('click', function(){
+                    bumpMapChangeMinus()
+                })
+
+                bumpMapChangePlus = function(){
+                    scprite.setBumpScale(scprite.getBumpScale()+0.05)
+                }
+
+                bumpMapChangeMinus = function(){
+                    scprite.setBumpScale(scprite.getBumpScale()-0.05)
+                }
 
             }
 
