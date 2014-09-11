@@ -373,8 +373,6 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this._private.modelURL = modelURL ? modelURL : null;
 //    this._private._material = material;
     this._loader  = new THREE.JSONLoader();
-
-
         _init.call(this)
 
     }
@@ -400,7 +398,14 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _onGeometrySet = function(geometry){
-        geometry.computeTangents();
+        try{
+            geometry.computeTangents();
+            console.log("Vertex tangents")
+
+        }catch(err){
+            geometry.computeVertexNormals();
+            console.log("Vertex normals")
+        }
 
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="components/threejs/build/three.min.js"></script>
+
+    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
+    <script src="js/vendor/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
+
+    <!-- The Shaders go here -->
+
+
+
+
+    <style>
+    #controllers{
+        position: absolute;
+        top:5px;
+        left:5px;
+        z-index: 1000;
+    }
+    body{
+background-color: #454545;
+
+    }
+
+    #holder{
+        position: absolute;
+        top: 0;
+        left: 0;
+
+    }
+</style>
+
+</head>
+<body onload="onLoaded()">
+
+
+
+
+
+<div id="controllers">
+    <label>Far</label><input id="far" type="text" value="5"/>
+    <label>Camera x</label> <input id="cameraX" type="text" value="15"/>
+    <button id="submitValues">update</button>
+    <button id="bumpChange">bumpChange</button>
+    <button id="bumpChangeMinus">bumpChangeMinus</button>
+
+</div>
+<div id ="holder">
+
+</div>
+
+</body>
+</html>
+        <script type="text/javascript">
+
+            var fancyController = function(){
+                if( this.getMesh() ){
+                   // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
+                    this.getMesh().rotation.y +=.05
+                    this.getMesh().bumpScale +=.5
+
+                }
+            }
+
+
+
+            function onLoaded(){
+            var _targ = document.getElementById("holder")
+            var three = new ThreeDScene(_targ, {width:1200, height:900});
+            var _model = "models/LeePerrySmith.js";
+            var _monkeyModel = "models/monkey1.js";
+            var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
+
+
+
+
+            var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite_man = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:5,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+
+
+
+//                three.listen(ThreeDScene.CLICKED, function(e){
+//                    console.log(e);
+//                })
+
+
+                three.addSprite(scprite_monkey)
+                three.addSprite(scprite_man)
+
+
+            }
+
+
+
+
+        </script>
