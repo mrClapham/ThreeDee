@@ -398,14 +398,14 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _onGeometrySet = function(geometry){
-        try{
-            geometry.computeTangents();
-            console.log("Vertex tangents")
-
-        }catch(err){
-            geometry.computeVertexNormals();
-            console.log("Vertex normals")
-        }
+//        try{
+//            geometry.computeTangents();
+//            console.log("Vertex tangents")
+//
+//        }catch(err){
+//            geometry.computeVertexNormals();
+//            console.log("Vertex normals")
+//        }
 
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
@@ -509,7 +509,13 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             //var mesh = this.getMesh()
            // mesh.material = this.getMaterial();
             //mesh.updateMatrix();
-
+        },
+        setBumpMap:function(value ){
+            this._private.bumpMap = value;
+            _initBumpmap.call(this);
+        },
+        getBumpMap:function(){
+            return  this._private.bumpMap;
         }
     }
 
