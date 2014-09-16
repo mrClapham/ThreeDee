@@ -19,7 +19,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             _light             : null,
             lightColour        : 0xffffff,
             _lightAmbient      : null,
-            ambientColour      : 0xff00ff,
+            ambientColour      : 0x0000ff,
             _lights            :[],
 
 
@@ -54,7 +54,6 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     /* Constants */
     _scope.HOVERED          = "hovered"
     _scope.CLICKED          = "clicked"
-    _scope.SPRITE_CLICKED   = "sprite_clicked"
     _scope.FRAME_EVENT      = "frameEvent"
 
     var _setUp = function(){
@@ -103,7 +102,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             this.getRenderer().setSize(this.getWidth() , this.getHeight());
             this._private._aspect = this.getWidth() / this.getHeight()
         }
-        console.log("I N I T ", this)
+
         var scope = this
         document.addEventListener( 'mousemove', function(e){
             scope.documentMouseMove(e)
@@ -181,16 +180,12 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 
     var _onDocumentMouseMove = function(){
-        // console.log(this._private._sprites)
         for(var i=0; i<this._private._sprites.length; i++){
             _hitTest.call(this, i);
         }
     }
 
     var _hitTest = function(index){
-       //    console.log("Hit +"+index)
-//        var  _projector      = new THREE.Projector()
-//        var   _raycaster     = new THREE.Raycaster()
         this._private._vector = new THREE.Vector3( this._private._mouse.x, this._private._mouse.y, 1 );
         this._private._projector.unprojectVector( this._private._vector, this._private._camera );
         this._private._raycaster.set( this._private._camera.position, this._private._vector.sub( this._private._camera.position ).normalize() );
@@ -202,34 +197,11 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
         if ( intersects.length > 0 ) {
             var intersect = intersects[ 0 ];
-            var color = new THREE.Color( 1, 0, 0 );
-            var material = new THREE.MeshPhongMaterial();
-            //material.color = color
-            material.emissive = color;
-            material.shininess = 100;
-            material.shading = THREE.SmoothShading;
-
-            mesh.material = material;
-            var object = intersect.object;
-            mesh.rotation.z -= .04;
-
-            mesh.updateMatrix();
             __sprite.setHit(true)
-
-//            _line.geometry.applyMatrix( mesh.matrix );
-//
-//            _line.visible = true;
-
         }else{
             __sprite.setHit(false)
-            try{
-                mesh.material = __sprite.getMaterial();
-            }catch(e){
-                //---
-            }
         }
     }
-
 
 
     var _onWindowResize = function(){
@@ -321,33 +293,88 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     return _scope
 
 })();
-/*
-    STATIC FUNCTIONS
- */
-var standardController = function(){
 
-    if( this.getMesh() ){
-       // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
-        this.getMesh().rotation.x +=.005
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+////////////// THE SPRITE CLASS ////////////////////////////////////////////////////
+/* AS THEY ARE INTRINSICALLY LINKED I'VE KEPT THE SPRITE AND THE SCENE IN THE SAME JS FILE */
+
+
+
+
+var standardController = function(){
+    console.log("I have a standard controller");
+
+    var _this = this
+    this.listen(this.SPRITE_HIT_CHANGED, function(e){
+        _onHitEvent.call(_this, e);
+
+        })
+
 //   if(sprite) this.sprite = sprite;
 //    console.log("SPRITE ", this.sprite.getMesh())
 //    if( this.sprite.getMesh() ) this.sprite.getMesh().rotation.x +=.5
+    _onRolled.call(this);
 
 }
 
+var _onHitEvent = function(e){
+    this.getHit() ? _onMouseIn.call(this, e) : _onMouseOut.call(this, e) ;
+}
+
+var _onMouseIn = function(e){
+    console.log("_onMouseIn")
+//    var color = new THREE.Color( 1, 0, 0 );
+//    var material = new THREE.MeshPhongMaterial();
+//    material.emissive = color;
+//    material.shininess = 100;
+//    material.shading = THREE.SmoothShading;
+
+    this.setMaterial( this.getHoverMaterial() );
+    // this.getMesh().rotation.z -= .04;
+
+//    this.getMesh().updateMatrix();
+}
+
+var _onMouseOut = function(e){
+    console.log("_onMouseOut")
+    //this.setMaterial( this.getMaterial() );
+    this.setMaterial(  this.getDefaultMaterial() );
+}
+
+var _onRolled = function(){
+    console.log("I AM THE STANDARD ON ROLLED FUNCTION")
+}
 
 var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0x009900, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
-////////////// THE SPRITE CLASS ////////////////////////////////////////////////////
-/* AS THEY ARE INTRINSICALLY LINKED I'VE KEPT THE SPRITE AND THE SCENE IN THE SAME JS FILE */
+
+
+
+
+
+
+
+
 
 ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
     var _scope = function(modelURL, material, opt_initialiser, opt_controller){
     this._private = {
         material:null,
+        materialDefault:null,
+        materialHover:null,
         blenderModel:null,
         hit:false,
         skin:null,
@@ -355,26 +382,44 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         bumpMap:null,
         bumpScale:.02,
         _imgBump:null,
-        data:{name:"The name of the sprite is"}
+        _spriteEventDispatcher: null,
+        data:{name:"The name of the sprite is default"}
     }
+    /* Statics */
 
+    this.SPRITE_HIT_CHANGED   = "spriteHitChanged"
 
-    this._private.material = material ? material :  defaultMaterial;
-    this._private.material = material ? material :  defaultMaterial;
+    this._private._spriteEventDispatcher = document.createElement("div");
+
+    this._private.materialDefault = material ? material :  defaultMaterial;
+    this._private.material = this._private.materialDefault;
 
     this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
 
         for(var value in this._private._opt_initialiser){
             //Underscore properties are not to be changed.
             if(String(value).charAt(0) != '_') this._private[value] = this._private._opt_initialiser[value];
+            console.log("Setting config to ", this._private[value])
         }
 
     this._contoller = opt_controller ? opt_controller :  standardController;
-        this._private.modelURL = modelURL ? modelURL : null;
-//    this._private._material = material;
+    this._contoller.call(this);
+    this._private.modelURL = modelURL ? modelURL : null;
+    //    this._private._material = material;
     this._loader  = new THREE.JSONLoader();
-        _init.call(this)
+    // was a default hover material set in the config?
+        if(!this.getHoverMaterial()){
 
+            var color = new THREE.Color( 1, 0, 0 );
+            var material = new THREE.MeshPhongMaterial();
+            material.emissive = color;
+            material.shininess = 100;
+            material.shading = THREE.SmoothShading;
+
+            this.setHoverMaterial(material);
+        }
+
+        _init.call(this);
     }
     // internal business logic
 
@@ -383,6 +428,7 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
        if(this._private.bumpMap) _initBumpmap.call(this);
        this._private.modelURL ?  _intModel.call(this) : _initDefaultModel.call(this);
 
+      // this._private._hitEvent =  new CustomEvent(_scope.SPRITE_HIT_CHANGED, { 'detail': this.getData() , target:this });
     }
 
     var _intModel = function(){
@@ -456,6 +502,7 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
     var _onHitChanged = function(){
         console.log("I'VE BEEN HIT ", this.getData().name);
+        this.getDispatcher().dispatchEvent( this.getEvent(this.SPRITE_HIT_CHANGED, {data:this.getData(), target:this}) );
     }
 
     /* Methods */
@@ -476,14 +523,35 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
             }.bind(this));
         },
+        listen:function(event, opt_callback){
+            this._private._spriteEventDispatcher.addEventListener(event, opt_callback)
+        },
         getMesh:function(){
             return this._private._mesh
         },
         setMaterial:function(value){
             this._private.material = value;
+            try{
+                this.getMesh().material = this.getMaterial();
+            }catch(err){
+                //--
+            }
         },
         getMaterial:function(){
             return this._private.material;
+        },
+
+        setDefaultMaterial:function(value){
+            this._private.materialDefault = value;
+        },
+        getDefaultMaterial:function(){
+            return this._private.materialDefault;
+        },
+        setHoverMaterial:function(value){
+            this._private.materialHover = value;
+        },
+        getHoverMaterial:function(){
+            return this._private.materialHover;
         },
         getHit:function(){
             return this._private.hit
@@ -516,6 +584,16 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         },
         getBumpMap:function(){
             return  this._private.bumpMap;
+        },
+        getDispatcher:function(){
+            return this._private._spriteEventDispatcher
+        },
+        getEvent:function(eventName, payload){
+            //var evt = new CustomEvent(this.SPRITE_HIT_CHANGED, {'target':{'test':'hellooo'}, 'detail': { data: this.getData() }  });
+           // console.log("EVENT DISP", evt)
+            //return  evt
+            return  new CustomEvent(eventName, { 'detail': payload  });
+
         }
     }
 
