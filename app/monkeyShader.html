@@ -119,7 +119,7 @@ background-color: #454545;
 
                 setAmbientLightColour.onChange(function(value) {
                     // Fires on every change, drag, keypress, etc.
-                    three.setAmbientLightColour(rgbToZeroX( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                    three.setAmbientLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
                     console.log(value)
                     console.log(three.getAmbientLightColour())
                 });
@@ -133,6 +133,10 @@ background-color: #454545;
 
             function rgbToZeroX(r, g, b) {
                 return "0x" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
+
+            function rgbToRGB(r, g, b) {
+                return "rgb(" + String(r) +","+ String(g)+"," + String(b)+")";
             }
 
 

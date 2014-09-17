@@ -283,7 +283,15 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         getLightColour:function(){return this._private.lightColour},
         setLightColour:function(value){this._private.lightColour = value},
         getAmbientLightColour:function(){return this._private.ambientColour},
-        setAmbientLightColour:function(value){this._private.ambientColour = value},
+        setAmbientLightColour:function(value){
+            this._private.ambientColour = value;
+            try{
+                this._private._lightAmbient.color = new THREE.Color(value)
+            }catch(err){
+
+            }
+
+        },
         getScene:function(){return this._private._scene},
         getFullScreen:function(){return this._private.fullscreen},
         setFullScreen:function(value){ this._private.fullscreen = value}
