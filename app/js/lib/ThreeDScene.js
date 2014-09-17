@@ -281,14 +281,24 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         getBackgroundColour:function(){return this._private.backgroundColour},
         setBackgroundColour:function(value){this._private.backgroundColour = value},
         getLightColour:function(){return this._private.lightColour},
-        setLightColour:function(value){this._private.lightColour = value},
+        setLightColour:function(value){
+            this._private.lightColour = value;
+            console.log("NEw col : ",value)
+
+            try{
+            this._private._light.color = new THREE.Color(value)
+            }catch(err){
+                console.log(err)
+
+            }
+        },
         getAmbientLightColour:function(){return this._private.ambientColour},
         setAmbientLightColour:function(value){
             this._private.ambientColour = value;
             try{
                 this._private._lightAmbient.color = new THREE.Color(value)
             }catch(err){
-
+                console.log(err)
             }
 
         },
