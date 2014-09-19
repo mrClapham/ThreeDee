@@ -24,7 +24,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
 
             //CAMERA
-            fov                : 45,       //— Camera frustum vertical field of view.
+            fov                : 15,       //— Camera frustum vertical field of view.
             near               : 0.1,      //— Camera frustum near plane.
             far                : 20000,    //— Camera frustum far plane.
             _camera            : null,
@@ -169,7 +169,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 
     var  _initSprites = function(){
-
+        //TODO: This may not be needed as they may just init themselves
     }
 
     var _initWindowResize = function(){
@@ -270,7 +270,13 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         },
         getRenderer:function(){return this._private._renderer},
         getFov:function(){return this._private.fov},
-        setFov:function(value){ this._private.fov = value},
+        setFov:function(value){
+            this._private.fov = value;
+            this._private._camera.fov= this.getFov();
+            this._private._camera.updateProjectionMatrix()
+
+
+        },
         getNear:function(){ return this._private.near},
         setNear:function(value){ this._private.near = value},
         getFar:function(){ return this._private.far},

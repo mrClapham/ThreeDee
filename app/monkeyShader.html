@@ -73,7 +73,7 @@ background-color: #454545;
 
             function onLoaded(){
             var _targ = document.getElementById("holder")
-            var three = new ThreeDScene(_targ, {width:1200, height:900});
+            var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false});
             var _model = "models/LeePerrySmith.js";
             var _monkeyModel = "models/monkey1.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
@@ -105,6 +105,7 @@ background-color: #454545;
                     , setAmbientLightColour: [ 255, 0, 255 ]
                     , mainColor: [ 0, 128, 255 ]
                     , setLightColour : [ 200, 128, 255 ]
+                    , setFov : 45
                 };
 
                 // String field
@@ -114,6 +115,7 @@ background-color: #454545;
                 var controller1 = _gui.add(obj, "radius1").min(20).max(550).step(10);
                 var controller2 = _gui.add(obj, "radius2").min(20).max(550).step(10);
                 var controller3 = _gui.add(obj, "radius3").min(-500).max(500).step(10);
+                var setFov = _gui.add(obj, "setFov").min(3).max(50).step(1);
                 var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
                 var setLightColour = _gui.addColor(obj, "setLightColour");
 
@@ -122,10 +124,16 @@ background-color: #454545;
                     three.setAmbientLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
                 });
 
+
+
                 setLightColour.onChange(function(value) {
                     console.log("GUI ",value)
                     // Fires on every change, drag, keypress, etc.
                     three.setLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                });
+
+                setFov.onChange(function(value) {
+                    three.setFov(value);
                 });
 
 
