@@ -405,6 +405,12 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         _imgTexture:null,
         bumpMap:null,
         bumpScale:.02,
+        _x:1,
+        _y:1,
+        _z:1,
+        _xRotation:0,
+        _yRotation:0,
+        _zRotation:0,
         _imgBump:null,
         _spriteEventDispatcher: null,
         data:{name:"The name of the sprite is default"}
@@ -482,11 +488,27 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         for(var prop in this._private._opt_initialiser){
             mesh[prop] = this._private._opt_initialiser[prop];
         }
+
+        // rotation transforms need to be applied individually...
+        if(this._private._opt_initialiser.position){
+            this._private._x = this._private._opt_initialiser.position.x
+            this._private._y = this._private._opt_initialiser.position.y
+            this._private._z = this._private._opt_initialiser.position.z
+
+            mesh.position.x = this._private._x;
+            mesh.position.y = this._private._y;
+            mesh.position.z = this._private._z;
+        }
+
         // rotation transforms need to be applied individually...
         if(this._private._opt_initialiser.rotation){
-            mesh.rotation.x = this._private._opt_initialiser.rotation.x;
-            mesh.rotation.y = this._private._opt_initialiser.rotation.y;
-            mesh.rotation.z = this._private._opt_initialiser.rotation.z;
+            this._private._x = this._private._opt_initialiser.rotation.x
+            this._private._y = this._private._opt_initialiser.rotation.y
+            this._private._z = this._private._opt_initialiser.rotation.z
+
+            mesh.rotation.x = this._private._xRotation;
+            mesh.rotation.y = this._private._yRotation;
+            mesh.rotation.z = this._private._zRotation;
         }
 
         // ...and scale transforms need to be applied individually too
@@ -501,6 +523,19 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         }catch(e){
             ///
         }
+    }
+
+    var _updatePosition = function(){
+        var mesh = this._private._mesh
+        mesh.position.x = this._private._x;
+        mesh.position.y = this._private._y;
+        mesh.position.z = this._private._z;
+        //
+
+        mesh.rotation.x = this._private._xRotation;
+        mesh.rotation.y = this._private._yRotation;
+        mesh.rotation.z = this._private._zRotation;
+
     }
 
     var _initSkin = function(){
@@ -586,6 +621,55 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
                 _onHitChanged.call(this)
             }
         },
+        setX:function(value){
+            this._private._x = value;
+            _updatePosition.call(this);
+        },
+        getX:function(){
+            return this._x;
+        },
+        setY:function(value){
+            this._private._y = value;
+            _updatePosition.call(this);
+
+        },
+        getY:function(){
+            return this._y;
+        },
+        setZ:function(value){
+            this._private._z = value;
+            _updatePosition.call(this);
+
+        },
+        getZ:function(){
+            return this._z;
+        },
+
+        setXrotation:function(value){
+            this._private._xRotation = value;
+            _updatePosition.call(this);
+        },
+        getXrotation:function(value){
+            return this._private._xRotation;
+        },
+        setYrotation:function(value){
+            this._private._yRotation = value;
+            _updatePosition.call(this);
+        },
+        getYrotation:function(value){
+            return this._private._yRotation;
+        },
+        setZrotation:function(value){
+            this._private._zRotation = value;
+            _updatePosition.call(this);
+        },
+        getZrotation:function(value){
+            return this._private._zRotation;
+        },
+
+
+
+
         getData:function(){
           return   this._private.data;
         },

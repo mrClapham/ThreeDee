@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="components/threejs/build/three.min.js"></script>
+
+    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
+    <script src="js/vendor/three/controls/OrbitControls.js"></script>
+    <script type="text/javascript" src="js/lib/ThreeDScene.js"></script>
+    <script type="text/javascript" src="js/vendor/dat.gui.min.js"></script>
+    <!-- The Shaders go here -->
+
+
+
+
+    <style>
+    #controllers{
+        position: absolute;
+        top:5px;
+        left:5px;
+        z-index: 1000;
+    }
+    body{
+background-color: #454545;
+
+    }
+
+    #holder{
+        position: absolute;
+        top: 0;
+        left: 0;
+
+    }
+</style>
+
+</head>
+<body onload="onLoaded()">
+
+
+
+
+
+<div id="controllers">
+
+
+</div>
+<div id ="holder">
+
+</div>
+
+</body>
+</html>
+        <script type="text/javascript">
+
+            var fancyController = function(){
+                if( this.getMesh() ){
+                   // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
+                    this.getMesh().rotation.y +=.05
+                    this.getMesh().bumpScale +=.5
+                }
+                console.log("ThreeDSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
+                this.listen(this.SPRITE_HIT_CHANGED, function(e){
+                    console.log("Fancy controller ",e);
+                    console.log("Fancy controller target", e.detail.target.getHit());
+                })
+            }
+
+
+
+            function onLoaded(){
+
+            var _model = "models/LeePerrySmith.js";
+            var _monkeyModel = "models/monkey1.js";
+            var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
+
+                var texture1   = "models/map-SPEC.jpg"
+                var texture2   = "models/texture1.png"
+
+
+
+// GUI
+
+                var _gui = new dat.GUI({ autoPlace: false });
+                var customContainer = document.getElementById("controllers")
+                customContainer.appendChild(_gui.domElement);
+
+
+
+
+                var obj = {
+                    name: "Three Example"
+                    , num: 23
+                    , bump: true
+                    , bumpScale: 1
+                    , x: 0
+                    , y: 0
+                    , z: 0
+                    , xRot: 0
+                    , yRot: 0
+                    , zRot: 0
+
+                    , setAmbientLightColour: [ 255, 0, 255 ]
+                    , mainColor: [ 0, 128, 255 ]
+                    , setLightColour : [ 200, 128, 255 ]
+                    , setFov : 145
+                };
+                // converts degrees to radians
+                var de2ra = function(degree)   { return degree*(Math.PI/180); }
+
+                // Add the sprites...
+
+                var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"},  scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
+
+                // var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}}, fancyController);
+                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, bumpMap:texture1, bumpScale: .01});
+
+                var _targ = document.getElementById("holder")
+                var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
+
+
+                three.addSprite(scprite_monkey)
+                three.addSprite(scprite_man)
+
+                // String field
+                _gui.add(obj, "name");
+                // Number field with slider
+
+                var _x = _gui.add(obj, "x").min(-20).max(20).step(.2);
+                var _y = _gui.add(obj, "y").min(-20).max(20).step(.2);
+                var _z = _gui.add(obj, "z").min(-20).max(20).step(.2);
+
+                var _xRot = _gui.add(obj, "xRot").min(0).max(180).step(.02);
+                var _yRot = _gui.add(obj, "yRot").min(0).max(180).step(.02);
+                var _zRot = _gui.add(obj, "zRot").min(1).max(180).step(.02);
+
+                var _bump = _gui.add(obj, "bump")
+                var _bumpScale = _gui.add(obj, "bumpScale").min(0).max(30).step(.02);
+
+
+                var setFov = _gui.add(obj, "setFov").min(3).max(150).step(1);
+                var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
+                var setLightColour = _gui.addColor(obj, "setLightColour");
+
+                setAmbientLightColour.onChange(function(value) {
+                    // Fires on every change, drag, keypress, etc.
+                    three.setAmbientLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                });
+
+
+
+                setLightColour.onChange(function(value) {
+                    console.log("GUI ",value)
+                    // Fires on every change, drag, keypress, etc.
+                    three.setLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                });
+                setFov.onChange(function(value) {
+                    three.setFov(value);
+                });
+
+                _x.onChange(function(value) {
+                    scprite_man.setX(value);
+                });
+                _y.onChange(function(value) {
+                    scprite_man.setY(value);
+                });
+                _z.onChange(function(value) {
+                    scprite_man.setZ(value);
+                });
+
+
+
+
+                _bump.onChange(function(value) {
+                    value ? scprite_man.setBumpMap("models/texture1.png") : scprite_man.setBumpMap("models/map-SPEC.jpg")
+
+                });
+
+                _bumpScale.onChange(function(value) {
+                    scprite_man.bumpScale = value;
+                });
+
+
+                _xRot.onChange(function(value) {
+                    scprite_man.setXrotation( de2ra(value) );
+                });
+
+                _yRot.onChange(function(value) {
+                    scprite_man.setYrotation( de2ra(value) );
+                });
+
+
+                _zRot.onChange(function(value) {
+                    scprite_man.setZrotation( de2ra(value) );
+                });
+
+
+
+            }
+
+            function componentToHex(c) {
+                var hex = c.toString(16);
+                return hex.length == 1 ? "0" + hex : hex;
+            }
+
+            function rgbToZeroX(r, g, b) {
+                return "0x" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+            }
+
+            function rgbToRGB(r, g, b) {
+                return "rgb(" + String(r) +","+ String(g)+"," + String(b)+")";
+            }
+
+
+        </script>
