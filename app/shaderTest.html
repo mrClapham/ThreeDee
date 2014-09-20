@@ -19,6 +19,12 @@
              * vertex position
              */
 
+
+             // create a shared variable for the
+             // Vertex and Fragment Shaders, containing the 'normal'
+                varying vec3 vNormal;
+
+
             varying vec2 vUv;
             void main() {
 
@@ -26,11 +32,11 @@
 
               gl_Position = projectionMatrix *
                             modelViewMatrix *
-                            vec4(position,0.20);
+                            vec4(position,0.2);
             }
     </script>
 
-    <script type="x-shader/x-vertex" id="fragmentShader">
+    <script type="x-shader/x-fragment" id="fragmentShader">
             /**
              * Set the colour to a lovely pink.
              * Note that the color is a 4D Float
@@ -38,10 +44,18 @@
              * runs from 0.0 to 1.0
              */
 
-             varying vec2 vUv;
+
+             /* The varying below has the same name and type as in the
+                Vertex Shader above as it is shared between the two. */
+                varying vec3 vNormal;
+
+            varying vec2 vUv;
             void main() {
             // colour is RGBA: u, v, 0, 1
-            gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+            //gl_FragColor = vec4( vec3( vUv, 0. ), 1. );
+
+            gl_FragColor = vec4(1.0, 0.50, 1.0, 1.0);
+
             }
     </script>
 
@@ -56,11 +70,12 @@
              * vertex position
              */
 
+
+
             varying vec2 vUv;
             void main() {
 
               vUv = uv;
-
               gl_Position = projectionMatrix *
                             modelViewMatrix *
                             vec4(position,0.20);
@@ -163,18 +178,16 @@ background-color: #454545;
 
 
                 var spriteObject = {
-                    position:{x:2,y:2,z:2},
+                    position:{x:1,y:2,z:2},
                     data:{name:"This is the new name"},
                     skin: 'models/Map-COL.jpg',
                     bumpMap:"models/camo.png",
                     bumpScale: .1
                 }
 
-                var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
+            var scprite_head1 = new ThreeDSprite(_model, _planeMaterials, spriteObject);
 
-
-
-            var scprite2 = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+            var scprite2_shader = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:6,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:8,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
             var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
@@ -183,13 +196,12 @@ background-color: #454545;
                     console.log(e);
                 })
 
-                three.addSprite(scprite)
-                three.addSprite(scprite2)
+                three.addSprite(scprite_head1)
+                three.addSprite(scprite2_shader)
                 three.addSprite(scprite3)
                 three.addSprite(scprite4)
                 three.addSprite(scprite5)
 
-                var i =0;
 
 
                 document.getElementById('submitValues').addEventListener('click', function(){
@@ -212,11 +224,15 @@ background-color: #454545;
                 })
 
                 bumpMapChangePlus = function(){
-                    scprite.setBumpScale(scprite.getBumpScale()+0.05)
+                    scprite_head1.setBumpScale(scprite_head1.getBumpScale()+0.05)
                 }
 
                 bumpMapChangeMinus = function(){
-                    scprite.setBumpScale(scprite.getBumpScale()-0.05)
+                    scprite_head1.setBumpScale(scprite_head1.getBumpScale()-0.05)
+                }
+
+                function addASprite(spriteName){
+                    three.addSprite(spriteName)
                 }
 
             }
