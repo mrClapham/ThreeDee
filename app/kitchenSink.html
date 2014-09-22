@@ -54,7 +54,6 @@ background-color: #454545;
 
             var fancyController = function(){
                 if( this.getMesh() ){
-                   // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
                     this.getMesh().rotation.y +=.05
                     this.getMesh().bumpScale +=.5
                 }
@@ -87,8 +86,6 @@ background-color: #454545;
                 customContainer.appendChild(_gui.domElement);
 
 
-
-
                 var obj = {
                     name: "Three Example"
                     , num: 23
@@ -106,7 +103,7 @@ background-color: #454545;
                     , setLightColour : [ 200, 128, 255 ]
                     , setFov : 145
                 };
-                // converts degrees to radians
+                // converts degrees to radians helper
                 var de2ra = function(degree)   { return degree*(Math.PI/180); }
 
                 // Add the sprites...
@@ -114,7 +111,7 @@ background-color: #454545;
                 var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"},  scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
 
                 // var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}}, fancyController);
-                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, bumpMap:texture1, bumpScale: .01});
+                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, bumpMap:texture1, bumpScale: .01}, fancyController);
 
                 var _targ = document.getElementById("holder")
                 var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
