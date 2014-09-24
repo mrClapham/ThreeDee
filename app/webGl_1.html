@@ -31,7 +31,7 @@ gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
             canvas = document.getElementById("my-canvas");
             try{
                 gl = canvas.getContext("webgl") ||
-                        canvas.getContext("webgl");
+                        canvas.getContext("experimental-webgl");
             }catch(e){
             }
 9

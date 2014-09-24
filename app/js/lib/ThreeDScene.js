@@ -24,7 +24,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             _light             : null,
             lightColour        : 0xffffff,
             _lightAmbient      : null,
-            ambientColour      : 0x0000ff,
+            ambientColour      : 0xffffff,
             _lights            :[],
 
 
@@ -415,7 +415,7 @@ var _onRolled = function(){
     console.log("I AM THE STANDARD ON ROLLED FUNCTION")
 }
 
-var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0x009900, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
+var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0xffffff, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
 
