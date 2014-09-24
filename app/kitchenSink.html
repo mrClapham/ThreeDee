@@ -59,7 +59,7 @@ background-color: #454545;
                 }
                 console.log("ThreeDSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
                 this.listen(this.SPRITE_HIT_CHANGED, function(e){
-                    console.log("Fancy controller ",e);
+                    //console.log("Fancy controller ",e);
                     console.log("Fancy controller target", e.detail.target.getHit());
                 })
             }
@@ -102,6 +102,11 @@ background-color: #454545;
                     , mainColor: [ 0, 128, 255 ]
                     , setLightColour : [ 200, 128, 255 ]
                     , setFov : 145
+                    , setNear : 0.1
+                    , setFar : 2000
+                    , setCameraX : 5
+                    , setCameraY : 5
+                    , setCameraZ : 5
                 };
                 // converts degrees to radians helper
                 var de2ra = function(degree)   { return degree*(Math.PI/180); }
@@ -111,7 +116,7 @@ background-color: #454545;
                 var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"},  scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
 
                 // var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}}, fancyController);
-                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, bumpMap:texture1, bumpScale: .01}, fancyController);
+                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, position:{x:obj.x,y:obj.y,z:obj.z}, bumpMap:texture1, bumpScale: .01}, fancyController);
 
                 var _targ = document.getElementById("holder")
                 var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
@@ -135,26 +140,60 @@ background-color: #454545;
                 var _bump = _gui.add(obj, "bump")
                 var _bumpScale = _gui.add(obj, "bumpScale").min(0).max(30).step(.02);
 
-
                 var setFov = _gui.add(obj, "setFov").min(3).max(150).step(1);
-                var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
+                var setNear = _gui.add(obj, "setNear").min(0.1).max(30).step(1);
+                var setFar = _gui.add(obj, "setFar").min(300).max(2000).step(20);
+
+                var setCameraX = _gui.add(obj, "setCameraX").min(-20).max(20).step(1);
+                var setCameraY = _gui.add(obj, "setCameraY").min(-20).max(20).step(1);
+                var setCameraZ = _gui.add(obj, "setCameraZ").min(-20).max(20).step(1);
+
+
+
                 var setLightColour = _gui.addColor(obj, "setLightColour");
+                var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
 
                 setAmbientLightColour.onChange(function(value) {
                     // Fires on every change, drag, keypress, etc.
-                    three.setAmbientLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                    console.log("GUI AmbientCol",value)
+                    console.log("RGB ===========", ThreeDScene.hexToRgb(value) );
+
+                    three.setAmbientLightColour(rgbToRGB( Math.round(value[0]), Math.round(value[1]), Math.round(value[2]) ));
                 });
 
 
 
                 setLightColour.onChange(function(value) {
-                    console.log("GUI ",value)
-                    // Fires on every change, drag, keypress, etc.
-                    three.setLightColour(rgbToRGB( Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2]) ));
+                    console.log("GUI Lightcol",value)
+                     three.setLightColour(rgbToRGB( Math.round(value[0]), Math.round(value[1]), Math.round(value[2]) ));
                 });
+
+
                 setFov.onChange(function(value) {
                     three.setFov(value);
                 });
+
+                setNear.onChange(function(value) {
+                    three.setNear(value);
+                });
+
+                setFar.onChange(function(value) {
+                    three.setFar(value);
+                });
+
+
+                setCameraX.onChange(function(value) {
+                    three.setCameraX(value);
+                });
+
+                setCameraY.onChange(function(value) {
+                    three.setCameraY(value);
+                });
+
+                setCameraZ.onChange(function(value) {
+                    three.setCameraZ(value);
+                });
+
 
                 _x.onChange(function(value) {
                     scprite_man.setX(value);

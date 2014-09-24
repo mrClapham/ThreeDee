@@ -1,3 +1,8 @@
+/*Get requestAnimationFrame working for all browsers */
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.oRequestAnimationFrame;
+
+
 /**
  * Created by grahamclapham on 05/06/2014.
  * Dependencies ThreeJs (http://threejs.org/) and Three.js OrbitControls.js (https://github.com/mrdoob/three.js/blob/master/examples/js/controls/OrbitControls.js)
@@ -129,6 +134,10 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         this._private._camera.position.x = this._private.cameraX;
         this._private._camera.position.y = this._private.cameraY;
         this._private._camera.position.z = this._private.cameraZ;
+        this._private._camera.near = this._private.near;
+        this._private._camera.far = this._private.far;
+        this._private._camera.fov = this._private.fov;
+
         this._private._camera.updateProjectionMatrix();
     }
 /////
@@ -246,7 +255,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
             _onDocumentMouseMove.call(this);
         },
         documentMouseDown:function(){
-            console.log("Mouse Down", this.getHovered());
+           // console.log("Mouse Down", this.getHovered());
             this._private._dispatcher.dispatchEvent( this._private._clickEvent )
         },
         getHovered:function(){
@@ -264,43 +273,69 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         getWidth:function(){return this._private.width},
         getHeight:function(){return this._private.height},
         getCamera:function(){return this._private._camera},
+
         getCameraX:function(){return this._private.cameraX},
         setCameraX:function(value){
             this._private.cameraX = value
+            _refreshCamera.call(this);
         },
+
+        getCameraY:function(){return this._private.cameraY},
+        setCameraY:function(value){
+            this._private.cameraY = value
+            _refreshCamera.call(this);
+        },
+
+        getCameraZ:function(){return this._private.cameraZ},
+        setCameraZ:function(value){
+            this._private.cameraZ = value
+            _refreshCamera.call(this);
+        },
+
         getRenderer:function(){return this._private._renderer},
         getFov:function(){return this._private.fov},
         setFov:function(value){
             this._private.fov = value;
-            this._private._camera.fov= this.getFov();
-            this._private._camera.updateProjectionMatrix()
-
-
+            _refreshCamera.call(this);
         },
         getNear:function(){ return this._private.near},
-        setNear:function(value){ this._private.near = value},
+        setNear:function(value){
+            this._private.near = value;
+            _refreshCamera.call(this);
+        },
         getFar:function(){ return this._private.far},
         setFar:function(value){
             this._private.far = value
             _refreshCamera.call(this);
+        },
+
+        // in the short tern, just to ensure all number passed are not NaNs...
+        colourHelper:function(value){
+            var _passed = true;
+            if(value.length){
+              for(var i=0; i<value.length; i++){
+                  if(isNaN( value[i]) ) _passed = false;
+              }
+            }
+            return _passed
         },
         getBackgroundColour:function(){return this._private.backgroundColour},
         setBackgroundColour:function(value){this._private.backgroundColour = value},
         getLightColour:function(){return this._private.lightColour},
         setLightColour:function(value){
             this._private.lightColour = value;
-            console.log("NEw col : ",value)
-
+                console.log("New light col : ",value)
             try{
-            this._private._light.color = new THREE.Color(value)
+                this._private._light.color = new THREE.Color(value)
             }catch(err){
                 console.log(err)
-
             }
         },
         getAmbientLightColour:function(){return this._private.ambientColour},
         setAmbientLightColour:function(value){
             this._private.ambientColour = value;
+            console.log("New ambient col : ",value)
+
             try{
                 this._private._lightAmbient.color = new THREE.Color(value)
             }catch(err){
@@ -474,14 +509,14 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _onGeometrySet = function(geometry){
-//        try{
-//            geometry.computeTangents();
-//            console.log("Vertex tangents")
-//
-//        }catch(err){
-//            geometry.computeVertexNormals();
-//            console.log("Vertex normals")
-//        }
+        try{
+            geometry.computeTangents();
+            console.log("Vertex tangents")
+
+        }catch(err){
+            geometry.computeVertexNormals();
+            console.log("Vertex normals")
+        }
 
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
@@ -711,6 +746,17 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
 
 })();
+///Static functions
+ThreeDScene.hexToRgb =  function (hex) {
+    console.log("HEX INPUT ",hex)
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 
 
 
