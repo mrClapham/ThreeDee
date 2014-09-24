@@ -75,7 +75,7 @@ background-color: #454545;
             var _targ = document.getElementById("holder")
             var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false});
             var _model = "models/LeePerrySmith.js";
-            var _monkeyModel = "models/monkey1.js";
+            var _monkeyModel = "models/pointyMonkeyblend.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
@@ -83,8 +83,8 @@ background-color: #454545;
 
 
 
-            var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"}, scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
-            var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, scale:{x:.5, y:.5, z:.5}, position:{x:0,y:-1,z:-.2}, rotation:{x:0,y:0,z:0}}, fancyController);
+            var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"}, scale:{x:1, y:1, z:1}, position:{x:0,y:-1.5,z:0}, rotation:{x:0,y:0,z:0}});
+            var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, scale:{x:.25, y:.25, z:.25}, position:{x:3,y:-1,z:-.2}, rotation:{x:0,y:0,z:0}}, fancyController);
 
 
                 three.addSprite(scprite_monkey)
@@ -112,9 +112,7 @@ background-color: #454545;
                 _gui.add(obj, "name");
                 // Number field with slider
 
-                var controller1 = _gui.add(obj, "radius1").min(20).max(550).step(10);
-                var controller2 = _gui.add(obj, "radius2").min(20).max(550).step(10);
-                var controller3 = _gui.add(obj, "radius3").min(-500).max(500).step(10);
+
                 var setFov = _gui.add(obj, "setFov").min(3).max(50).step(1);
                 var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
                 var setLightColour = _gui.addColor(obj, "setLightColour");

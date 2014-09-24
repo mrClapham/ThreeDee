@@ -21,7 +21,7 @@
         z-index: 1000;
     }
     body{
-background-color: #454545;
+background-color: #222222;
 
     }
 
@@ -29,6 +29,7 @@ background-color: #454545;
         position: absolute;
         top: 0;
         left: 0;
+        width: 400px;
 
     }
 </style>
@@ -81,7 +82,7 @@ background-color: #454545;
 
 // GUI
 
-                var _gui = new dat.GUI({ autoPlace: false });
+                var _gui = new dat.GUI({ autoPlace: true });
                 var customContainer = document.getElementById("controllers")
                 customContainer.appendChild(_gui.domElement);
 
