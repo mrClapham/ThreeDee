@@ -22,15 +22,14 @@
     "tests"
   ],
   "dependencies": {
-      "threejs": "*",
-      "noisejs": "*",
-      "gsap": "1.11.8",
-      "jasmine": "~1.3.1",
-       "gulp": "*",
-       "gulp-uglify": "*"
+    "threejs": "*",
+    "noisejs": "*",
+    "gsap": "1.11.8",
+    "gulp": "*"
   },
-    "devDependencies": {
-        "chai": "*",
-        "mocha": "*"
-    }
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*",
+    "jasmine": "~2.0.4"
+  }
 }
