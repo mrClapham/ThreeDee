@@ -1,0 +1,19 @@
+{
+  "devtools_port": 9090,
+  "startup_app": {
+    "name": "OpenFin 3D",
+    "description": "Testin webGl in OpenFin",
+    "url": "http://localhost:5050",
+    "uuid": "openfin-three-d-demo",
+    "autoShow": true
+  },
+  "runtime": {
+    "arguments": "",
+    "version": "beta"
+  },
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "OpenFin 3D",
+    "name": "OpenFin 3D"
+  }
+}
