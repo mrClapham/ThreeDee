@@ -47,7 +47,7 @@
             this.getMesh().rotation.y += .05
             this.getMesh().bumpScale += .5
         }
-        console.log("ThreeDSprite.SPRITE_HIT_CHANGED " + this.SPRITE_HIT_CHANGED)
+        console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED " + this.SPRITE_HIT_CHANGED)
         this.listen(this.SPRITE_HIT_CHANGED, function (e) {
             console.log("Fancy controller ", e);
             console.log("Fancy controller target", e.detail.target.getHit());
@@ -79,13 +79,13 @@
         var _basicMaterial = new THREE.MeshBasicMaterial({color: 0xff8800});
 
 
-        var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {
+        var scprite_monkey = new ThreeDeeSprite(_monkeyModel, _planeMaterials2, {
             data: {name: "Monkey"},
             scale: {x: 1, y: 1, z: 1},
             position: {x: 0, y: -1.5, z: 0},
             rotation: {x: 0, y: 0, z: 0}
         });
-        var scprite_man = new ThreeDSprite(_model, _planeMaterials, {
+        var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {
             skin: 'models/Map-COL.jpg',
             data: {name: "man"},
             scale: {x: .25, y: .25, z: .25},
