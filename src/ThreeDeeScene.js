@@ -701,9 +701,6 @@ ThreeDSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return this._private._zRotation;
         },
 
-
-
-
         getData:function(){
             return   this._private.data;
         },

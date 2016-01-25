@@ -1,7 +1,7 @@
 module.exports = {
     entry: './src/ThreeDeeScene.js',
     output: {
-        path: __dirname+"/dist",
+        path: __dirname+"/demo",
         filename: 'ThreeDeeScene.js'
     },
     module: {
