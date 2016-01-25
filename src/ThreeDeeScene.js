@@ -758,5 +758,9 @@ ThreeDScene.hexToRgb =  function (hex) {
 }
 
 
+module.exports = ThreeDScene;
+
+
+
 
 

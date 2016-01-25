@@ -1,8 +1,16 @@
 {
   "name": "three_d",
   "version": "0.0.1",
+  "main":"./src/ThreeDeeScene.js",
+  "scripts":{
+    "build": "webpack --config webpack.config.js",
+    "build-demo": "webpack --config demo.config.js"
+  },
   "dependencies": {
-    "express": "4.1.1"
+    "express": "4.1.1",
+    "webpack": "^1.12.12",
+    "babel-cli": "6.4.0",
+    "babel-loader": "6.2.1"
   },
   "config": {
     "commitizen": {
@@ -10,10 +18,12 @@
     }
   },
   "devDependencies": {
-    "jasmine": "2.4.1",
+    "jasmine": "^2.4.1",
+    "jasmine-core": "^2.4.1",
     "karma": "0.13.19",
     "karma-chrome-launcher": "0.2.2",
-    "karma-jasmine": "0.3.6",
+    "karma-cli": "^0.1.2",
+    "karma-jasmine": "^0.3.6",
     "semantic-release": "4.3.5"
   }
 }

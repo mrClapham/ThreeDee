@@ -2,7 +2,7 @@
   "name": "three_d",
   "version": "0.0.0",
   "authors": [
-    "Graham Clapham <graham.clapham@thomsonreuters.com>"
+    "Graham Clapham <clapham.graham@gmail.com>"
   ],
   "description": "An experiment in three.js",
   "moduleType": [
@@ -28,8 +28,5 @@
     "gulp": "*"
   },
   "devDependencies": {
-    "chai": "*",
-    "mocha": "*",
-    "jasmine": "~2.0.4"
   }
 }
