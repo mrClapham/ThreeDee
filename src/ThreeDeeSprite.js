@@ -1,3 +1,5 @@
+var THREE = require('three')
+
 var standardController = function(){
     console.log("I have a standard controller");
 
@@ -44,10 +46,6 @@ var _onRolled = function(){
 
 var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0xffffff, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
-
-
-
-
 
 
 

@@ -14,8 +14,12 @@ describe("A ThreeDee scene may be instatiated", function() {
 
 describe("Api", function() {
     var _three = new ThreeDScene();
-    it("A ThreeDScene should be able to ne instatiated.", function() {
-        expect(_three).not.toBe(null);
+    var _targ = document.createElement('div');
+    _three.setTarget(_targ)
+    it("getTarget should return the element set by setTarget(value).", function() {
+        expect(_three.getTarget()).toEqual(_targ);
     });
+
+
 });
 

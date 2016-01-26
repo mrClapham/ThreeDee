@@ -1,4 +1,6 @@
 var ThreeDeeSprite = require("./ThreeDeeSprite")
+var THREE = require('three')
+var OrbitControls = require('three-orbit-controls')(THREE)
 
 
 /*Get requestAnimationFrame working for all browsers */
@@ -46,7 +48,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
             _scene              : new THREE.Scene(),
             _mouse              : new THREE.Vector2(),
-            _projector          : new THREE.Projector(),
+            //_projector          : new THREE.Projector(),
             _raycaster          : new THREE.Raycaster(),
             _bufferGeometry     : new THREE.BufferGeometry(),
             _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true}),
@@ -169,7 +171,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 
     var _initAnimation = function(){
-        if(this._private.orbit) this._private._orbitControl = new THREE.OrbitControls(this._private._camera, this._private._renderer.domElement);
+        if(this._private.orbit) this._private._orbitControl = new OrbitControls(this._private._camera, this._private._renderer.domElement);
 
         requestAnimationFrame(this.animate.bind(this));
     }
@@ -198,7 +200,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
     var _hitTest = function(index){
         this._private._vector = new THREE.Vector3( this._private._mouse.x, this._private._mouse.y, 1 );
-        this._private._projector.unprojectVector( this._private._vector, this._private._camera );
+       // this._private._projector.unprojectVector( this._private._vector, this._private._camera );
         this._private._raycaster.set( this._private._camera.position, this._private._vector.sub( this._private._camera.position ).normalize() );
 
         var __sprite = this._private._sprites[index]
@@ -358,32 +360,6 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
 
 
-
-
-
-
-
-
-
-
-
-////////////// THE SPRITE CLASS ////////////////////////////////////////////////////
-/* AS THEY ARE INTRINSICALLY LINKED I'VE KEPT THE SPRITE AND THE SCENE IN THE SAME JS FILE */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ///Static functions
 ThreeDScene.hexToRgb =  function (hex) {
     console.log("HEX INPUT ",hex)
@@ -397,7 +373,7 @@ ThreeDScene.hexToRgb =  function (hex) {
 }
 
 
-module.exports = ThreeDScene;
+module.exports = {ThreeDScene:ThreeDScene, THREE:THREE};
 
 
 
