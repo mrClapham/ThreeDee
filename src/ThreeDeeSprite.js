@@ -44,7 +44,7 @@ var _onRolled = function(){
     console.log("I AM THE STANDARD ON ROLLED FUNCTION")
 }
 
-var defaultMaterial = new THREE.MeshPhongMaterial( { ambient: 0xcccccc, color: 0xffffff, specular: 0xffffff, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
+var defaultMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
 
@@ -70,8 +70,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             _zRotation:0,
             _imgBump:null,
             _spriteEventDispatcher: null,
+            _texturLoader: null,
             data:{name:"The name of the sprite is default"}
-        }
+        };
+
         /* Statics */
 
         this.SPRITE_HIT_CHANGED   = "spriteHitChanged"
@@ -177,8 +179,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         try{
             this.addToScene();
-        }catch(e){
+        }catch(err){
             ///
+            console.log(err)
         }
     }
 
@@ -196,7 +199,27 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _initSkin = function(){
-        this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
+        this._private._texturLoader = new THREE.TextureLoader();
+        this._private._texturLoader.load(
+            // resource URL
+            this._private.skin,
+            // Function when resource is loaded
+            function ( texture ) {
+                // do something with the texture
+                var material = new THREE.MeshBasicMaterial( {
+                    map: texture
+                } );
+            },
+            // Function called when download progresses
+            function ( xhr ) {
+                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+            },
+            // Function called when download errors
+            function ( xhr ) {
+                console.log( 'An error happened' );
+            }
+        );
+        //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
         this._private.material.map = this._private._imgTexture;
     }
 
@@ -231,6 +254,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return this._contoller
         },
         addToScene:function(){
+            console.log("Sprite : Scen e = ",this._private.scene.getScene());
+            console.log("Sprite : this._private._mesh = ",this._private._mesh);
+
             this._private.scene.getScene().add(this._private._mesh);
             this._private.scene.listen(_scope.FRAME_EVENT, function(){
                 this._contoller.call(this)

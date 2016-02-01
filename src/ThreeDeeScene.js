@@ -199,9 +199,21 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 
     var _hitTest = function(index){
+
+
+        /*
+
+         var vector = point.clone().unproject( camera );
+         var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( camera.matrixWorld );
+         raycaster.set( vector, direction );
+         var intersects = raycaster.intersectObjects( objects );
+
+         */
         this._private._vector = new THREE.Vector3( this._private._mouse.x, this._private._mouse.y, 1 );
+       //  console.log("Mouse Y -- ", this._private._mouse.y)
+        var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( this._private._camera.matrixWorld );
        // this._private._projector.unprojectVector( this._private._vector, this._private._camera );
-        this._private._raycaster.set( this._private._camera.position, this._private._vector.sub( this._private._camera.position ).normalize() );
+        this._private._raycaster.set( this._private._vector, direction );
 
         var __sprite = this._private._sprites[index]
 
