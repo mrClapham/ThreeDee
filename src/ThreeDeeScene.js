@@ -213,7 +213,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
        //  console.log("Mouse Y -- ", this._private._mouse.y)
         var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( this._private._camera.matrixWorld );
        // this._private._projector.unprojectVector( this._private._vector, this._private._camera );
-        this._private._raycaster.set( this._private._vector, direction );
+        this._private._raycaster.setFromCamera( this._private._mouse, this._private._camera );
 
         var __sprite = this._private._sprites[index]
 

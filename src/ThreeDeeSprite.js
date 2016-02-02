@@ -107,7 +107,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         // was a default hover material set in the config?
         if(!this.getHoverMaterial()){
 
-            var color = new THREE.Color( 1, 0, 0 );
+            var color = new THREE.Color( 1, 1, 0 );
             var material = new THREE.MeshPhongMaterial();
             material.emissive = color;
             material.shininess = 100;
