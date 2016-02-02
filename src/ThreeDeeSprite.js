@@ -38,13 +38,21 @@ var _onMouseOut = function(e){
     console.log("_onMouseOut")
     //this.setMaterial( this.getMaterial() );
     this.setMaterial(  this.getDefaultMaterial() );
+
+
 }
 
 var _onRolled = function(){
     console.log("I AM THE STANDARD ON ROLLED FUNCTION")
 }
+var defaultColour = new THREE.Color( 1, 0, 0 );
 
-var defaultMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 10, shading: THREE.SmoothShading,  transparent: true } );
+var defaultMaterial = new THREE.MeshPhongMaterial(  );
+
+defaultMaterial.emissive = defaultColour;
+defaultMaterial.shininess = 100;
+defaultMaterial.shading = THREE.SmoothShading;
+
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
 
@@ -133,14 +141,14 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _onGeometrySet = function(geometry){
-        try{
-            geometry.computeTangents();
-            console.log("Vertex tangents")
-
-        }catch(err){
-            geometry.computeVertexNormals();
-            console.log("Vertex normals")
-        }
+        //try{
+        //    geometry.computeTangents();
+        //    console.log("Vertex tangents")
+        //
+        //}catch(err){
+        //    geometry.computeVertexNormals();
+        //    console.log("Vertex normals")
+        //}
 
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
@@ -254,10 +262,14 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return this._contoller
         },
         addToScene:function(){
+            if(!this._private._mesh || !this._private.scene.getScene()) return;
             console.log("Sprite : Scen e = ",this._private.scene.getScene());
             console.log("Sprite : this._private._mesh = ",this._private._mesh);
-
-            this._private.scene.getScene().add(this._private._mesh);
+            var _this = this;
+            //TODO: get rid of the crude timeOut and replace with a Promise.
+           // setTimeout(function(){
+                _this._private.scene.getScene().add(_this._private._mesh);
+           // }, 1000)
             this._private.scene.listen(_scope.FRAME_EVENT, function(){
                 this._contoller.call(this)
                 //if( this.getMesh() ) this.getMesh().rotation.x +=3

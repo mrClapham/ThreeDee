@@ -58,7 +58,7 @@ background-color: #222222;
                     this.getMesh().rotation.y +=.05
                     this.getMesh().bumpScale +=.5
                 }
-                console.log("ThreeDSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
+                console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
                 this.listen(this.SPRITE_HIT_CHANGED, function(e){
                     //console.log("Fancy controller ",e);
                     console.log("Fancy controller target", e.detail.target.getHit());
@@ -71,8 +71,8 @@ background-color: #222222;
 
             var _model = "models/LeePerrySmith.js";
             var _monkeyModel = "models/monkey1.js";
-            var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
-            var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
+            var _planeMaterials = new THREE.MeshPhongMaterial( {color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading } );
+            var _planeMaterials2 = new THREE.MeshPhongMaterial( {color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
                 var texture1   = "models/map-SPEC.jpg"
@@ -114,16 +114,17 @@ background-color: #222222;
 
                 // Add the sprites...
 
-                var scprite_monkey = new ThreeDSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"},  scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
+                //var scprite_monkey = new ThreeDeeSprite(_monkeyModel, _planeMaterials2, {data:{name:"Monkey"},  scale:{x:.5, y:.5, z:.5}, position:{x:3,y:-1,z:0}, rotation:{x:0,y:0,z:0}});
 
-                // var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}}, fancyController);
-                var scprite_man = new ThreeDSprite(_model, _planeMaterials, {data:{name: "man"}, position:{x:obj.x,y:obj.y,z:obj.z}, bumpMap:texture1, bumpScale: .01}, fancyController);
+                // var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {data:{name: "man"}}, fancyController);
+                //var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {data:{name: "man"}, position:{x:obj.x,y:obj.y,z:obj.z}, bumpMap:texture1, bumpScale: .01}, fancyController);
+                var scprite_man = new ThreeDeeSprite(_model);
 
                 var _targ = document.getElementById("holder")
                 var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
 
 
-                three.addSprite(scprite_monkey)
+                //three.addSprite(scprite_monkey)
                 three.addSprite(scprite_man)
 
                 // String field
