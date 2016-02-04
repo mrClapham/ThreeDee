@@ -1,50 +1,39 @@
-var THREE = require('three')
+var THREE = require('three');
 
 var standardController = function(){
-    console.log("I have a standard controller");
+    //console.log("I have a standard controller");
 
     var _this = this
     this.listen(this.SPRITE_HIT_CHANGED, function(e){
         _onHitEvent.call(_this, e);
-
-    })
+    });
 
 //   if(sprite) this.sprite = sprite;
 //    console.log("SPRITE ", this.sprite.getMesh())
 //    if( this.sprite.getMesh() ) this.sprite.getMesh().rotation.x +=.5
     _onRolled.call(this);
 
-}
+};
 
 var _onHitEvent = function(e){
     this.getHit() ? _onMouseIn.call(this, e) : _onMouseOut.call(this, e) ;
-}
+};
 
 var _onMouseIn = function(e){
     console.log("_onMouseIn")
-//    var color = new THREE.Color( 1, 0, 0 );
-//    var material = new THREE.MeshPhongMaterial();
-//    material.emissive = color;
-//    material.shininess = 100;
-//    material.shading = THREE.SmoothShading;
-
     this.setMaterial( this.getHoverMaterial() );
-    // this.getMesh().rotation.z -= .04;
-
-//    this.getMesh().updateMatrix();
-}
+};
 
 var _onMouseOut = function(e){
     console.log("_onMouseOut")
     //this.setMaterial( this.getMaterial() );
     this.setMaterial(  this.getDefaultMaterial() );
-
-
-}
+};
 
 var _onRolled = function(){
-    console.log("I AM THE STANDARD ON ROLLED FUNCTION")
-}
+   // console.log("I AM THE STANDARD ON ROLLED FUNCTION")
+};
+
 var defaultColour = new THREE.Color( 1, 0, 0 );
 
 var defaultMaterial = new THREE.MeshPhongMaterial(  );
@@ -52,14 +41,15 @@ var defaultMaterial = new THREE.MeshPhongMaterial(  );
 defaultMaterial.emissive = defaultColour;
 defaultMaterial.shininess = 100;
 defaultMaterial.shading = THREE.SmoothShading;
+defaultMaterial.id = "defaultMaterial";
 
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
 
 
 ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
-
     var _scope = function(modelURL, material, opt_initialiser, opt_controller){
+
         this._private = {
             material:null,
             materialDefault:null,
@@ -84,12 +74,21 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         /* Statics */
 
-        this.SPRITE_HIT_CHANGED   = "spriteHitChanged"
+        this.SPRITE_HIT_CHANGED   = "spriteHitChanged";
 
         this._private._spriteEventDispatcher = document.createElement("div");
-
-        this._private.materialDefault = material ? material :  defaultMaterial;
-        this._private.material = this._private.materialDefault;
+        var _defMaterial;
+        console.log("TEH MATERIAL IS ", material)
+        if(material){
+            _defMaterial = material.clone()
+            console.log("A material has been set. ", _defMaterial)
+        }else{
+            _defMaterial = defaultMaterial
+            console.log("A material has NOT been set. ", _defMaterial)
+        }
+        this._private.materialDefault = defaultMaterial;
+       // this._private.materialDefault = material ? material :  defaultMaterial;
+        this._private.material = _defMaterial;
 
         this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
 
@@ -106,21 +105,23 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this._loader  = new THREE.JSONLoader();
         // was a default hover material set in the config?
         if(!this.getHoverMaterial()){
-
             var color = new THREE.Color( 1, 1, 0 );
             var material = new THREE.MeshPhongMaterial();
             material.emissive = color;
             material.shininess = 100;
             material.shading = THREE.SmoothShading;
 
-            this.setHoverMaterial(material);
+            this._private.materialHover = material;
         }
+        var _this = this
+       setTimeout(function(){ _initSprite.call(_this);}, 1000)
 
-        _init.call(this);
-    }
+
+    };
     // internal business logic
 
-    var _init = function(){
+    var _initSprite = function(){
+        console.log("_initSprite IS BEING CALLED ")
         if(this._private.skin) _initSkin.call(this);
         if(this._private.bumpMap) _initBumpmap.call(this);
         this._private.modelURL ?  _intModel.call(this) : _initDefaultModel.call(this);
@@ -129,26 +130,18 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _intModel = function(){
-        var scope = this
+        var scope = this;
         this._loader.load( this._private.modelURL, function(geometry){
             _onGeometrySet.call(scope, geometry)
-        })
-    }
+        });
+    };
 
     var _initDefaultModel = function(){
         this._private._mesh = mesh = new THREE.Mesh(defaultGeometry, this._private.material);
         _onGeometrySet.call(this, defaultGeometry)
-    }
+    };
 
     var _onGeometrySet = function(geometry){
-        //try{
-        //    geometry.computeTangents();
-        //    console.log("Vertex tangents")
-        //
-        //}catch(err){
-        //    geometry.computeVertexNormals();
-        //    console.log("Vertex normals")
-        //}
 
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
@@ -158,9 +151,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         // rotation transforms need to be applied individually...
         if(this._private._opt_initialiser.position){
-            this._private._x = this._private._opt_initialiser.position.x
-            this._private._y = this._private._opt_initialiser.position.y
-            this._private._z = this._private._opt_initialiser.position.z
+            this._private._x = this._private._opt_initialiser.position.x;
+            this._private._y = this._private._opt_initialiser.position.y;
+            this._private._z = this._private._opt_initialiser.position.z;
 
             mesh.position.x = this._private._x;
             mesh.position.y = this._private._y;
@@ -169,9 +162,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         // rotation transforms need to be applied individually...
         if(this._private._opt_initialiser.rotation){
-            this._private._x = this._private._opt_initialiser.rotation.x
-            this._private._y = this._private._opt_initialiser.rotation.y
-            this._private._z = this._private._opt_initialiser.rotation.z
+            this._private._x = this._private._opt_initialiser.rotation.x;
+            this._private._y = this._private._opt_initialiser.rotation.y;
+            this._private._z = this._private._opt_initialiser.rotation.z;
 
             mesh.rotation.x = this._private._xRotation;
             mesh.rotation.y = this._private._yRotation;
@@ -263,18 +256,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         },
         addToScene:function(){
             if(!this._private._mesh || !this._private.scene.getScene()) return;
-            console.log("Sprite : Scen e = ",this._private.scene.getScene());
-            console.log("Sprite : this._private._mesh = ",this._private._mesh);
             var _this = this;
-            //TODO: get rid of the crude timeOut and replace with a Promise.
-           // setTimeout(function(){
                 _this._private.scene.getScene().add(_this._private._mesh);
-           // }, 1000)
             this._private.scene.listen(_scope.FRAME_EVENT, function(){
-                this._contoller.call(this)
-                //if( this.getMesh() ) this.getMesh().rotation.x +=3
-                // if( this.getController() ) this.getController.call(this);
-
+                this._contoller.call(this);
             }.bind(this));
         },
         listen:function(event, opt_callback){
@@ -395,7 +380,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return  new CustomEvent(eventName, { 'detail': payload  });
 
         }
-    }
+    };
 
     //
 

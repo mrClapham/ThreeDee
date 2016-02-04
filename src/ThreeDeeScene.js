@@ -11,7 +11,7 @@ window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequest
  * Created by grahamclapham on 05/06/2014.
  * Dependencies ThreeJs (http://threejs.org/) and Three.js OrbitControls.js (https://github.com/mrdoob/three.js/blob/master/examples/js/controls/OrbitControls.js)
  */
-ThreeDScene = (function (opt_target, opt_initialiser){
+ThreeDeeScene = (function (opt_target, opt_initialiser){
 
     var _scope = function(){
         this._private = {
@@ -87,10 +87,10 @@ ThreeDScene = (function (opt_target, opt_initialiser){
     }
 ////
     var _onTargetSet =  function (){
-        _init.call(this)
+        _initScene.call(this)
     }
 /////
-    var _init = function(){
+    var _initScene = function(){
         //this.getRenderer().setClearColor(this.getBackgroundColour(),.0);
 
         this._private._dispatcher = document.createElement("div")
@@ -235,8 +235,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
         this._private._renderer.setSize(WIDTH, HEIGHT);
         this._private._camera.aspect = WIDTH / HEIGHT;
         this._private._camera.updateProjectionMatrix();
-    }
-
+    };
 
     // Renders the scene and updates the render as needed.
     /* ENUMS */
@@ -373,7 +372,7 @@ ThreeDScene = (function (opt_target, opt_initialiser){
 
 
 ///Static functions
-ThreeDScene.hexToRgb =  function (hex) {
+ThreeDeeScene.hexToRgb =  function (hex) {
     console.log("HEX INPUT ",hex)
 
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -382,10 +381,9 @@ ThreeDScene.hexToRgb =  function (hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-}
+};
 
-
-module.exports = {ThreeDScene:ThreeDScene, THREE:THREE};
+module.exports = {Scene:ThreeDeeScene, Sprite:ThreeDeeSprite, THREE:THREE};
 
 
 

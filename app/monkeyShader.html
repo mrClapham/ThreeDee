@@ -57,40 +57,24 @@
 
     function onLoaded() {
         var _targ = document.getElementById("holder")
-        var three = new ThreeDScene(_targ, {width: 1200, height: 900, orbit: true});
-        var _model = "models/LeePerrySmith.js";
+        console.log("ThreeDeeScene ",ThreeDeeScene)
+        console.log("Scene ",ThreeDeeScene.Scene)
+        var three =  new ThreeDeeScene.Scene(_targ, {width: 1200, height: 900, orbit: true});
         var _monkeyModel = "models/pointyMonkeyblend2.js";
-//        var _planeMaterials = new THREE.MeshPhongMaterial({
-//            color: 0xffffff,
-//            specular: 0xffffff,
-//            shininess: 3,
-//            shading: THREE.SmoothShading,
-//            transparent: true
-//        });
-//        var _planeMaterials2 = new THREE.MeshPhongMaterial({
-//            color: 0xffffff,
-//            specular: 0xffffff,
-//            shininess: 60,
-//            shading: THREE.SmoothShading,
-//            transparent: true
-//        });
 
-        var _planeMaterials = new THREE.MeshBasicMaterial( { color: 0x00ff00 } )
-        var _planeMaterials2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+        var _setMaterial = new THREE.MeshPhongMaterial();
+        _setMaterial.emissive = new THREE.Color(.5,.6,.7);
+        _setMaterial.shininess = 100;
+        _setMaterial.shading = THREE.SmoothShading;
+        _setMaterial.id = "set_basicMaterial";
+        _setMaterial.name = "passed material ";
 
-        var _basicMaterial = new THREE.MeshBasicMaterial({color: 0xff8800});
+        var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _setMaterial);
 
+        three.addSprite(scprite_monkey);
 
-        var scprite_monkey = new ThreeDeeSprite(_monkeyModel);
-//
-//        var scprite_monkey = new ThreeDeeSprite(_monkeyModel, _planeMaterials2, {
-//            data: {name: "Monkey"},
-//            scale: {x: 1, y: 1, z: 1},
-//            position: {x: 0, y: -1.5, z: 0},
-//            rotation: {x: 0, y: 0, z: 0}
-//        });
-
-        var scprite_man = new ThreeDeeSprite(_model);
+        //var _model = "models/LeePerrySmith.js";
+        //var scprite_man = new ThreeDeeSprite(_model);
 
 //        var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {
 //            skin: 'models/Map-COL.jpg',
@@ -99,9 +83,6 @@
 //            position: {x: 3, y: -1, z: -.2},
 //            rotation: {x: 0, y: 0, z: 0}
 //        }, fancyController);
-
-
-        three.addSprite(scprite_monkey)
         //three.addSprite(scprite_man)
 // GUI
 
