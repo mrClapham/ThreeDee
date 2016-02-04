@@ -27,7 +27,7 @@ var _onMouseIn = function(e){
 var _onMouseOut = function(e){
     console.log("_onMouseOut  ", this.getMaterial());
     console.log("UNHOVERED :",this._private.materialUnhovered)
-    this.setMaterial( this.getDefaultMaterial() );
+    this.setMaterial( this._private.materialUnhovered );
     //this.setMaterial(  this.getMaterial() );
 };
 
@@ -35,18 +35,18 @@ var _onRolled = function(){
    // console.log("I AM THE STANDARD ON ROLLED FUNCTION")
 };
 
-var defaultColour = new THREE.Color( 1, 0, 0 );
+var defaultColour = new THREE.Color( 1, 0, 1 );
 
-var defaultMaterial = new THREE.MeshPhongMaterial(  );
+var defaultMaterial = new THREE.MeshPhongMaterial();
 
 defaultMaterial.emissive = defaultColour;
 defaultMaterial.shininess = 100;
 defaultMaterial.shading = THREE.SmoothShading;
 defaultMaterial.id = "defaultMaterial";
 
+console.log("DDDDD >>>>>>>>>>>> defaultMaterial === ",defaultMaterial.type);
+
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
-
-
 
 ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     var _scope = function(modelURL, material, opt_initialiser, opt_controller){
@@ -81,7 +81,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this._private._spriteEventDispatcher = document.createElement("div");
         console.log("THE MATERIAL IS ", material)
         if(material){
-            this._private.materialUnhovered = material.clone()
+            this._private.materialUnhovered = material.clone();
             console.log(">>>>>>>>>>>>>>>>>>>> A material has been set. ", this._private.materialUnhovered)
         }else{
             this._private.materialUnhovered = defaultMaterial
@@ -144,7 +144,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     var _onGeometrySet = function(geometry){
 
         var mesh;
-        this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.materialDefault);
+        this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
         for(var prop in this._private._opt_initialiser){
             mesh[prop] = this._private._opt_initialiser[prop];
         }

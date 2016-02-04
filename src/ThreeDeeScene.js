@@ -121,7 +121,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             scope.documentMouseDown(e)
         }, false );
 
-    }
+    };
 //////
     var  _initCamera =function(){
         // Create a camera, zoom it out from the model a bit, and add it to the scene.
