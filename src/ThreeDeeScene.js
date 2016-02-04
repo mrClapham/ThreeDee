@@ -217,8 +217,14 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
 
         var __sprite = this._private._sprites[index]
 
-        var mesh = __sprite.getMesh()
-        var intersects = this._private._raycaster.intersectObject( mesh );
+        var mesh = __sprite.getMesh();
+        var intersects = []
+        try{
+            intersects = this._private._raycaster.intersectObject( mesh );
+        }catch(err){
+            console.log("Intersects eror: ", err);
+        }
+
 
         if ( intersects.length > 0 ) {
             var intersect = intersects[ 0 ];

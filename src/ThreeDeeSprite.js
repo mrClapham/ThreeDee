@@ -25,9 +25,10 @@ var _onMouseIn = function(e){
 };
 
 var _onMouseOut = function(e){
-    console.log("_onMouseOut")
-    //this.setMaterial( this.getMaterial() );
-    this.setMaterial(  this.getDefaultMaterial() );
+    console.log("_onMouseOut  ", this.getMaterial());
+    console.log("UNHOVERED :",this._private.materialUnhovered)
+    this.setMaterial( this.getDefaultMaterial() );
+    //this.setMaterial(  this.getMaterial() );
 };
 
 var _onRolled = function(){
@@ -53,6 +54,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this._private = {
             material:null,
             materialDefault:null,
+            materialUnhovered:null,
             materialHover:null,
             blenderModel:null,
             hit:false,
@@ -77,18 +79,18 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this.SPRITE_HIT_CHANGED   = "spriteHitChanged";
 
         this._private._spriteEventDispatcher = document.createElement("div");
-        var _defMaterial;
-        console.log("TEH MATERIAL IS ", material)
+        console.log("THE MATERIAL IS ", material)
         if(material){
-            _defMaterial = material.clone()
-            console.log("A material has been set. ", _defMaterial)
+            this._private.materialUnhovered = material.clone()
+            console.log(">>>>>>>>>>>>>>>>>>>> A material has been set. ", this._private.materialUnhovered)
         }else{
-            _defMaterial = defaultMaterial
-            console.log("A material has NOT been set. ", _defMaterial)
+            this._private.materialUnhovered = defaultMaterial
+            console.log("!!!!!!!!!!!!!!!!!! A material has NOT been set. ", this._private.materialUnhovered)
         }
         this._private.materialDefault = defaultMaterial;
        // this._private.materialDefault = material ? material :  defaultMaterial;
-        this._private.material = _defMaterial;
+        this._private.material = this._private.materialUnhovered;
+        console.log("  this._private.material "===  this._private.material)
 
         this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
 
@@ -113,9 +115,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
             this._private.materialHover = material;
         }
-        var _this = this
-       setTimeout(function(){ _initSprite.call(_this);}, 1000)
-
+       _initSprite.call(this)
 
     };
     // internal business logic
@@ -144,7 +144,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     var _onGeometrySet = function(geometry){
 
         var mesh;
-        this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
+        this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.materialDefault);
         for(var prop in this._private._opt_initialiser){
             mesh[prop] = this._private._opt_initialiser[prop];
         }
@@ -274,6 +274,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
                 this.getMesh().material = this.getMaterial();
             }catch(err){
                 //--
+                console.log("Error setting material ")
             }
         },
         getMaterial:function(){
