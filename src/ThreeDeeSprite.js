@@ -35,7 +35,7 @@ var _onRolled = function(){
    // console.log("I AM THE STANDARD ON ROLLED FUNCTION")
 };
 
-var defaultColour = new THREE.Color( 1, 0, 1 );
+var defaultColour = new THREE.Color( 0.5, 0, 1 );
 
 var defaultMaterial = new THREE.MeshPhongMaterial();
 
@@ -43,8 +43,6 @@ defaultMaterial.emissive = defaultColour;
 defaultMaterial.shininess = 100;
 defaultMaterial.shading = THREE.SmoothShading;
 defaultMaterial.id = "defaultMaterial";
-
-console.log("DDDDD >>>>>>>>>>>> defaultMaterial === ",defaultMaterial.type);
 
 var defaultGeometry = new THREE.SphereGeometry( 1, 32, 32 );
 
@@ -79,12 +77,12 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this.SPRITE_HIT_CHANGED   = "spriteHitChanged";
 
         this._private._spriteEventDispatcher = document.createElement("div");
-        console.log("THE MATERIAL IS ", material)
+        console.log("THE MATERIAL IS ", material);
         if(material){
-            this._private.materialUnhovered = material.clone();
+            this._private.materialUnhovered = material;
             console.log(">>>>>>>>>>>>>>>>>>>> A material has been set. ", this._private.materialUnhovered)
         }else{
-            this._private.materialUnhovered = defaultMaterial
+            this._private.materialUnhovered = defaultMaterial;
             console.log("!!!!!!!!!!!!!!!!!! A material has NOT been set. ", this._private.materialUnhovered)
         }
         this._private.materialDefault = defaultMaterial;

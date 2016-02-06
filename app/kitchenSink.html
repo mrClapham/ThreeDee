@@ -2,7 +2,7 @@
 <html>
 <head>
     <title></title>
-    <script src="components/threejs/build/three.min.js"></script>
+    <script src="../node_modules/three/three.min.js"></script>
 
     <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
     <script src="js/vendor/three/controls/OrbitControls.js"></script>
@@ -121,7 +121,7 @@ background-color: #222222;
                 var scprite_man = new ThreeDeeSprite(_model);
 
                 var _targ = document.getElementById("holder")
-                var three = new ThreeDScene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
+                var three = new ThreeDeeScene.Scene(_targ, {width:1200, height:900, orbit:false, fov:obj.setFov});
 
 
                 //three.addSprite(scprite_monkey)

@@ -2,10 +2,8 @@
 <html>
 <head>
     <title></title>
-    <script src="../node_modules/three/three.min.js"></script>
+    <!--<script src="../node_modules/three/three.min.js"></script>-->
 
-    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
-    <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <script type="text/javascript" src="js/vendor/dat.gui.min.js"></script>
     <!-- The Shaders go here -->
@@ -40,10 +38,10 @@
 </body>
 </html>
 <script type="text/javascript">
+    var THREE = ThreeDeeScene.THREE;
 
     var fancyController = function () {
         if (this.getMesh()) {
-            // console.log("THE CONTROLLER SPRITE IS ",this.getMesh())
             this.getMesh().rotation.y += .05
             this.getMesh().bumpScale += .5
         }
@@ -58,30 +56,48 @@
         var _targ = document.getElementById("holder")
 
         var three =  new ThreeDeeScene.Scene(_targ, {width: 1200, height: 900, orbit: true});
+
+        /// MONKEY 
         var _monkeyModel = "models/pointyMonkeyblend2.js";
 
-        var _defaultMaterial = new THREE.MeshPhongMaterial({ emmissive:0x00ffff ,ambient: 0x00ff00, color: 0x00ff00, specular: 0x555555, shininess: 30 });
+
+        var _defaultColour = new THREE.Color( 1, 0, 0.3 );
+
+        var _defaultMaterial = new THREE.MeshPhongMaterial();
+
+        _defaultMaterial.emissive = _defaultColour;
+        _defaultMaterial.shininess = 100;
+        _defaultMaterial.shading = THREE.SmoothShading;
+        _defaultMaterial.id = "defaultMaterial";
+
+
+
         _defaultMaterial.id = "defaultMaterial";
         _defaultMaterial.name = "defaultMaterial_name";
 
-        console.log("THE SHADER BEFORE IT IS PASSED = ", _defaultMaterial.type);
+
 
         var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
 
         three.addSprite(scprite_monkey);
 
-        //var _model = "models/LeePerrySmith.js";
-        //var scprite_man = new ThreeDeeSprite(_model);
 
-//        var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {
-//            skin: 'models/Map-COL.jpg',
-//            data: {name: "man"},
-//            scale: {x: .25, y: .25, z: .25},
-//            position: {x: 3, y: -1, z: -.2},
-//            rotation: {x: 0, y: 0, z: 0}
-//        }, fancyController);
-        //three.addSprite(scprite_man)
-// GUI
+        /// MAN
+
+        var _model = "models/LeePerrySmith.js";
+        var _manMaterial = new THREE.MeshLambertMaterial({color: 0xff00ff})
+        var sprite_man = new ThreeDeeSprite(_model);
+
+        var sprite_man = new ThreeDeeSprite(_model, null, {
+            skin: 'models/Map-COL.jpg',
+            data: {name: "man"},
+            scale: {x: .25, y: .25, z: .25},
+            position: {x: 3, y: -1, z: -.2},
+            rotation: {x: 0, y: 0, z: 0}
+        }, fancyController);
+        three.addSprite(sprite_man);
+
+        //GUI
 
         var _gui = new dat.GUI({autoPlace: false});
         var customContainer = document.getElementById("controllers")
@@ -116,7 +132,6 @@
 
 
         setLightColour.onChange(function (value) {
-            console.log("GUI ", value)
             // Fires on every change, drag, keypress, etc.
             three.setLightColour(rgbToRGB(Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2])));
         });
