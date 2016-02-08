@@ -352,6 +352,12 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         setData:function(value){
             this._private.data = value;
         },
+        getSkin:function(){
+
+        },
+        setSkin:function(value){
+
+        },
         getBumpScale:function(){
             return this._private.bumpScale;
         },

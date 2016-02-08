@@ -114,6 +114,7 @@
             , mainColor: [0, 128, 255]
             , setLightColour: [200, 128, 255]
             , setFov: 45
+            , showMaterial: false
         };
 
         // String field
@@ -124,6 +125,7 @@
 //                var setFov = _gui.add(obj, "setFov").min(3).max(50).step(1);
         var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
         var setLightColour = _gui.addColor(obj, "setLightColour");
+        var showMaterial = _gui.add(obj, "showMaterial");
 
         setAmbientLightColour.onChange(function (value) {
             // Fires on every change, drag, keypress, etc.
@@ -134,6 +136,10 @@
         setLightColour.onChange(function (value) {
             // Fires on every change, drag, keypress, etc.
             three.setLightColour(rgbToRGB(Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2])));
+        });
+
+        showMaterial.onChange(function(value){
+            value ? scprite_monkey.setSkin() : scprite_monkey.setSkin(null);
         });
 
 //                setFov.onChange(function(value) {
