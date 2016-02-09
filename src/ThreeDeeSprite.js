@@ -56,7 +56,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             materialHover:null,
             blenderModel:null,
             hit:false,
-            skin:null,
+            textureMap:null,
             _imgTexture:null,
             bumpMap:null,
             bumpScale:.02,
@@ -120,7 +120,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
     var _initSprite = function(){
         console.log("_initSprite IS BEING CALLED ")
-        if(this._private.skin) _initSkin.call(this);
+        if(this._private.textureMap) _initTextureMap.call(this);
         if(this._private.bumpMap) _initBumpmap.call(this);
         this._private.modelURL ?  _intModel.call(this) : _initDefaultModel.call(this);
 
@@ -197,11 +197,11 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
     }
 
-    var _initSkin = function(){
+    var _initTextureMap = function(){
         this._private._texturLoader = new THREE.TextureLoader();
         this._private._texturLoader.load(
             // resource URL
-            this._private.skin,
+            this._private.textureMap,
             // Function when resource is loaded
             function ( texture ) {
                 // do something with the texture
@@ -218,7 +218,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
                 console.log( 'An error happened' );
             }
         );
-        //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
+        //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.textureMap )
         this._private.material.map = this._private._imgTexture;
     }
 
@@ -352,10 +352,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         setData:function(value){
             this._private.data = value;
         },
-        getSkin:function(){
+        getTextureMap:function(){
 
         },
-        setSkin:function(value){
+        setTextureMap:function(value){
 
         },
         getBumpScale:function(){

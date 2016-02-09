@@ -69,30 +69,30 @@
         _defaultMaterial.shininess = 100;
         _defaultMaterial.shading = THREE.SmoothShading;
         _defaultMaterial.id = "defaultMaterial";
-
-
-
         _defaultMaterial.id = "defaultMaterial";
         _defaultMaterial.name = "defaultMaterial_name";
 
-
+/*
 
         var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
 
         three.addSprite(scprite_monkey);
-
+*/
 
         /// MAN
 
         var _model = "models/LeePerrySmith.js";
-        var _manMaterial = new THREE.MeshLambertMaterial({color: 0xff00ff})
-        var sprite_man = new ThreeDeeSprite(_model);
+        var _manMaterial = new THREE.MeshPhongMaterial({
+            color: 0xffffff
+            ,bumpMap:THREE.ImageUtils.loadTexture('models/Map-SPEC.jpg')
+            ,bumpScale  :  0.0025
+            ,map:THREE.ImageUtils.loadTexture('models/Map-COL.jpg')
+        });
 
-        var sprite_man = new ThreeDeeSprite(_model, null, {
-            skin: 'models/Map-COL.jpg',
+        var sprite_man = new ThreeDeeSprite(_model, _manMaterial, {
             data: {name: "man"},
             scale: {x: .25, y: .25, z: .25},
-            position: {x: 3, y: -1, z: -.2},
+            position: {x: -.5, y: -1, z: -.2},
             rotation: {x: 0, y: 0, z: 0}
         }, fancyController);
         three.addSprite(sprite_man);
@@ -139,7 +139,7 @@
         });
 
         showMaterial.onChange(function(value){
-            value ? scprite_monkey.setSkin() : scprite_monkey.setSkin(null);
+            value ? scprite_monkey.setTextureMap() : scprite_monkey.setTextureMap(null);
         });
 
 //                setFov.onChange(function(value) {
