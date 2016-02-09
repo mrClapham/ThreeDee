@@ -61,17 +61,9 @@
         var _monkeyModel = "models/pointyMonkeyblend2.js";
 
 
-        var _defaultColour = new THREE.Color( 1, 0, 0.3 );
+        var _defaultColour = new THREE.Color(.5, 1, 1 );
 
         var _defaultMaterial = new THREE.MeshPhongMaterial();
-
-        _defaultMaterial.emissive = _defaultColour;
-        _defaultMaterial.shininess = 100;
-        _defaultMaterial.shading = THREE.SmoothShading;
-        _defaultMaterial.id = "defaultMaterial";
-        _defaultMaterial.id = "defaultMaterial";
-        _defaultMaterial.name = "defaultMaterial_name";
-
 
 
         var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
@@ -117,12 +109,7 @@
         customContainer.appendChild(_gui.domElement);
 
         var obj = {
-            name: "Three Example"
-            , num: 23
-            , winner: true
-            , radius1: 300
-            , radius2: 100
-            , radius3: 40
+            name: "ThreeDee Example"
             , setAmbientLightColour: [255, 0, 255]
             , mainColor: [0, 128, 255]
             , setLightColour: [200, 128, 255]
@@ -152,7 +139,8 @@
         });
 
         showMaterial.onChange(function(value){
-            value ? scprite_monkey.setTextureMap("models/Map-SPEC.jpg") : scprite_monkey.setTextureMap("models/Map-SPEC.SPEC");
+            console.log("CHANGED TO ", value)
+            value === true ? sprite_man.setTextureMap("models/greenstripe.png") : sprite_man.setTextureMap("models/Map-COL.jpg");
         });
 
 //                setFov.onChange(function(value) {

@@ -28,6 +28,9 @@ var _onMouseOut = function(e){
     console.log("_onMouseOut  ", this.getMaterial());
     console.log("UNHOVERED :",this._private.materialUnhovered)
     this.setMaterial( this._private.materialUnhovered );
+
+    console.log("-------- this.getMaterial() ",this.getMaterial() )
+
     //this.setMaterial(  this.getMaterial() );
 };
 
@@ -197,6 +200,19 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _initTextureMap = function(){
+        console.log("_initTextureMap CALLED  ", this.getTextureMap())
+        var _this = this;
+        var tex = new THREE.TextureLoader();
+        tex.load(this.getTextureMap(), function(evt){
+            _this.getMaterial().map = evt;
+            _this.getMaterial().needsUpdate =  true;
+
+            console.log("NEEDS UPDATE :",_this.getMaterial() )
+        });
+
+
+
+        /*
         this._private._texturLoader = new THREE.TextureLoader();
         var _this = this;
         this._private._texturLoader.load(
@@ -220,6 +236,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             }
         );
         //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.textureMap )
+        */
     }
 
     var _initBumpmap = function(){
