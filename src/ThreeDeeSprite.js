@@ -77,7 +77,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this.SPRITE_HIT_CHANGED   = "spriteHitChanged";
 
         this._private._spriteEventDispatcher = document.createElement("div");
-        console.log("THE MATERIAL IS ", material);
         if(material){
             this._private.materialUnhovered = material;
             console.log(">>>>>>>>>>>>>>>>>>>> A material has been set. ", this._private.materialUnhovered)
@@ -195,35 +194,36 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         mesh.rotation.y = this._private._yRotation;
         mesh.rotation.z = this._private._zRotation;
 
-    }
+    };
 
     var _initTextureMap = function(){
         this._private._texturLoader = new THREE.TextureLoader();
+        var _this = this;
         this._private._texturLoader.load(
             // resource URL
             this._private.textureMap,
             // Function when resource is loaded
             function ( texture ) {
                 // do something with the texture
-                var material = new THREE.MeshBasicMaterial( {
+                var material = new THREE.MeshPhongMaterial( {
                     map: texture
                 } );
+                _this._private.material.map = this._private._imgTexture;
             },
             // Function called when download progresses
             function ( xhr ) {
                 console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
             },
             // Function called when download errors
-            function ( xhr ) {
-                console.log( 'An error happened' );
+            function ( err ) {
+                console.log( 'An error happened loading the texture ', err );
             }
         );
         //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.textureMap )
-        this._private.material.map = this._private._imgTexture;
     }
 
     var _initBumpmap = function(){
-        this._private._imgBump = THREE.ImageUtils.loadTexture( this._private.bumpMap )
+        this._private._imgBump = THREE.ImageUtils.TextureLoader( this._private.bumpMap )
         this._private.material.bumpScale = this._private.bumpScale;
         this._private.material.bumpMap = this._private._imgBump;
     }
@@ -353,10 +353,11 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             this._private.data = value;
         },
         getTextureMap:function(){
-
+            return this._private.textureMap;
         },
         setTextureMap:function(value){
-
+            this._private.textureMap = value;
+            _initTextureMap.call(this);
         },
         getBumpScale:function(){
             return this._private.bumpScale;

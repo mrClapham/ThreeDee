@@ -72,21 +72,34 @@
         _defaultMaterial.id = "defaultMaterial";
         _defaultMaterial.name = "defaultMaterial_name";
 
-/*
+
 
         var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
 
         three.addSprite(scprite_monkey);
-*/
+
 
         /// MAN
+
+
 
         var _model = "models/LeePerrySmith.js";
         var _manMaterial = new THREE.MeshPhongMaterial({
             color: 0xffffff
-            ,bumpMap:THREE.ImageUtils.loadTexture('models/Map-SPEC.jpg')
+            ,bumpMap:leePerryBump
             ,bumpScale  :  0.0025
-            ,map:THREE.ImageUtils.loadTexture('models/Map-COL.jpg')
+            ,map:leePerrySkin
+        });
+
+
+        var leePerrySkin = new THREE.TextureLoader();
+        leePerrySkin.load('models/Map-COL.jpg', function(evt){
+            _manMaterial.map = evt;
+        });
+
+        var leePerryBump = new THREE.TextureLoader();
+        leePerryBump.load('models/Map-SPEC.jpg', function(evt){
+            _manMaterial.bumpMap = evt;
         });
 
         var sprite_man = new ThreeDeeSprite(_model, _manMaterial, {
@@ -139,7 +152,7 @@
         });
 
         showMaterial.onChange(function(value){
-            value ? scprite_monkey.setTextureMap() : scprite_monkey.setTextureMap(null);
+            value ? scprite_monkey.setTextureMap("models/Map-SPEC.jpg") : scprite_monkey.setTextureMap("models/Map-SPEC.SPEC");
         });
 
 //                setFov.onChange(function(value) {
