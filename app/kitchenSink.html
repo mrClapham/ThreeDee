@@ -55,8 +55,8 @@ background-color: #222222;
 
             var fancyController = function(){
                 if( this.getMesh() ){
-                    this.getMesh().rotation.y +=.05
-                    this.getMesh().bumpScale +=.5
+                    this.getMesh().rotation.y +=.05;
+                    this.getMesh().bumpScale +=.5;
                 }
                 console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
                 this.listen(this.SPRITE_HIT_CHANGED, function(e){
@@ -75,8 +75,8 @@ background-color: #222222;
             var _planeMaterials2 = new THREE.MeshPhongMaterial( {color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
-                var texture1   = "models/map-SPEC.jpg"
-                var texture2   = "models/texture1.png"
+                var texture1   = "models/map-SPEC.jpg";
+                var texture2   = "models/texture1.png";
 
 
 
@@ -102,7 +102,7 @@ background-color: #222222;
                     , setAmbientLightColour: [ 255, 0, 255 ]
                     , mainColor: [ 0, 128, 255 ]
                     , setLightColour : [ 200, 128, 255 ]
-                    , setFov : 145
+                    , setFov : 30
                     , setNear : 0.1
                     , setFar : 2000
                     , setCameraX : 5

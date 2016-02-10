@@ -39,7 +39,6 @@
 </html>
 <script type="text/javascript">
     var THREE = ThreeDeeScene.THREE;
-
     var fancyController = function () {
         if (this.getMesh()) {
             this.getMesh().rotation.y += .05
@@ -54,35 +53,27 @@
 
     function onLoaded() {
         var _targ = document.getElementById("holder")
-
         var three =  new ThreeDeeScene.Scene(_targ, {width: 1200, height: 900, orbit: true});
 
         /// MONKEY 
         var _monkeyModel = "models/pointyMonkeyblend2.js";
-
-
-        var _defaultColour = new THREE.Color(.5, 1, 1 );
-
         var _defaultMaterial = new THREE.MeshPhongMaterial();
 
+        var monkeyTexture = new THREE.TextureLoader();
+        monkeyTexture.load('models/stripe2.jpg', function(evt){
+            _defaultMaterial.map = evt;
+            _defaultMaterial.wrapS = THREE.MirroredRepeatWrapping //THREE.ClampToEdgeWrapping  THREE.RepeatWrapping and THREE.MirroredRepeatWrapping
+        });
 
-        var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
-
-        three.addSprite(scprite_monkey);
-
+        var sprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
+        three.addSprite(sprite_monkey);
 
         /// MAN
-
-
-
         var _model = "models/LeePerrySmith.js";
         var _manMaterial = new THREE.MeshPhongMaterial({
             color: 0xffffff
-            ,bumpMap:leePerryBump
             ,bumpScale  :  0.0025
-            ,map:leePerrySkin
         });
-
 
         var leePerrySkin = new THREE.TextureLoader();
         leePerrySkin.load('models/Map-COL.jpg', function(evt){
@@ -103,7 +94,6 @@
         three.addSprite(sprite_man);
 
         //GUI
-
         var _gui = new dat.GUI({autoPlace: false});
         var customContainer = document.getElementById("controllers")
         customContainer.appendChild(_gui.domElement);
@@ -119,10 +109,6 @@
 
         // String field
         _gui.add(obj, "name");
-        // Number field with slider
-
-
-//                var setFov = _gui.add(obj, "setFov").min(3).max(50).step(1);
         var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
         var setLightColour = _gui.addColor(obj, "setLightColour");
         var showMaterial = _gui.add(obj, "showMaterial");
@@ -131,7 +117,6 @@
             // Fires on every change, drag, keypress, etc.
             three.setAmbientLightColour(rgbToRGB(Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2])));
         });
-
 
         setLightColour.onChange(function (value) {
             // Fires on every change, drag, keypress, etc.
@@ -143,9 +128,6 @@
             value === true ? sprite_man.setTextureMap("models/greenstripe.png") : sprite_man.setTextureMap("models/Map-COL.jpg");
         });
 
-//                setFov.onChange(function(value) {
-//                    three.setFov(value);
-//                });
     }
     function componentToHex(c) {
         var hex = c.toString(16);
