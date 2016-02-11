@@ -56,13 +56,13 @@
         var three =  new ThreeDeeScene.Scene(_targ, {width: 1200, height: 900, orbit: true});
 
         /// MONKEY 
-        var _monkeyModel = "models/pointyMonkeyblend2.js";
+        var _monkeyModel = "models/newmonkey.json";
         var _defaultMaterial = new THREE.MeshPhongMaterial();
 
         var monkeyTexture = new THREE.TextureLoader();
         monkeyTexture.load('models/stripe2.jpg', function(evt){
             _defaultMaterial.map = evt;
-            _defaultMaterial.wrapS = THREE.MirroredRepeatWrapping //THREE.ClampToEdgeWrapping  THREE.RepeatWrapping and THREE.MirroredRepeatWrapping
+           // _defaultMaterial.wrapS = THREE.MirroredRepeatWrapping //THREE.ClampToEdgeWrapping  THREE.RepeatWrapping and THREE.MirroredRepeatWrapping
         });
 
         var sprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
@@ -126,6 +126,7 @@
         showMaterial.onChange(function(value){
             console.log("CHANGED TO ", value)
             value === true ? sprite_man.setTextureMap("models/greenstripe.png") : sprite_man.setTextureMap("models/Map-COL.jpg");
+            value === true ? sprite_monkey.setTextureMap("models/greenstripe.png") : sprite_monkey.setTextureMap("models/Map-COL.jpg");
         });
 
     }
