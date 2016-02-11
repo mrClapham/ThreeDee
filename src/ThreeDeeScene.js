@@ -51,7 +51,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             //_projector          : new THREE.Projector(),
             _raycaster          : new THREE.Raycaster(),
             _bufferGeometry     : new THREE.BufferGeometry(),
-            _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true}),
+            _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true, shadowMapEnabled:true}),
             _orbitControl       : null,
             orbit               : true, // is the scene controlled by an mouse controlled orbiter?
             _dispatcher         : null,
