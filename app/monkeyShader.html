@@ -57,7 +57,7 @@
 
         /// MONKEY 
         var _monkeyModel = "models/newmonkey.json";
-        var _defaultMaterial = new THREE.MeshPhongMaterial();
+        var _defaultMaterial = new THREE.MeshPhongMaterial({map:THREE.ImageUtils.loadTexture("models/Map-COL.jpg")});
 
         var monkeyTexture = new THREE.TextureLoader();
         monkeyTexture.load('models/stripe2.jpg', function(evt){

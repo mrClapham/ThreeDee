@@ -1,0 +1,184 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.5.11
+surface LGRustyMetal
+param	point	Vector	0 0 0 		 %read{6,6} %write{0,0} %derivs
+param	float	Diffuse	1 		 %read{57,57} %write{2147483647,-1}
+param	float	Roughness	0.1 		 %read{56,56} %write{2147483647,-1}
+param	float	Scale	1 		 %read{6,6} %write{2147483647,-1} %derivs
+param	float	RustAmt	0.2 		 %read{34,34} %write{2147483647,-1}
+param	color	RustColor	0.43700001 0.083999999 0 		 %read{52,52} %write{2147483647,-1}
+param	float	RustDiffuse	1 		 %read{52,52} %write{2147483647,-1}
+param	float	RustBump	0.035 		 %read{29,29} %write{2147483647,-1} %derivs
+oparam	closure color	BSDF			 %read{2147483647,-1} %write{1,61}
+global	point	P	 %read{0,32} %write{2147483647,-1} %derivs
+global	normal	N	 %read{1,56} %write{2147483647,-1} %derivs
+local	point	Nrust	 %read{51,51} %write{33,33}
+local	point	PP	 %read{7,39} %write{6,25} %derivs
+local	float	i	 %read{9,25} %write{9,25}
+local	float	sum	 %read{9,36} %write{2,25}
+local	float	a	 %read{9,25} %write{3,25}
+local	float	alimit	 %read{14,14} %write{8,8}
+local	float	rustiness	 %read{47,59} %write{38,48}
+local	closure color	Cmetal	 %read{9,60} %write{4,57}
+local	closure color	Crust	 %read{9,58} %write{5,53}
+const	string	$const1	"diffuse"		 %read{1,51} %write{2147483647,-1}
+const	int	$const2	0		 %read{2,49} %write{2147483647,-1}
+const	int	$const3	1		 %read{3,54} %write{2147483647,-1}
+temp	float	$tmp1	 %read{8,8} %write{7,7}
+const	int	$const4	8		 %read{11,11} %write{2147483647,-1}
+temp	int	$tmp2	 %read{12,12} %write{11,11}
+temp	int	$tmp3	 %read{9,25} %write{9,25}
+temp	int	$tmp4	 %read{15,15} %write{14,14}
+temp	int	$tmp5	 %read{16,16} %write{15,15}
+temp	float	$tmp6	 %read{21,21} %write{20,20}
+temp	float	$tmp7	 %read{18,18} %write{17,17}
+temp	float	$tmp8	 %read{19,19} %write{18,18}
+const	float	$const6	2		 %read{18,40} %write{2147483647,-1}
+temp	float	$tmp9	 %read{20,20} %write{19,19}
+const	float	$const7	1		 %read{19,59} %write{2147483647,-1}
+temp	float	$tmp10	 %read{22,22} %write{21,21}
+temp	float	$tmp11	 %read{27,27} %write{26,26} %derivs
+temp	float	$tmp12	 %read{28,28} %write{27,27} %derivs
+temp	float	$tmp13	 %read{29,29} %write{28,28} %derivs
+temp	float	$tmp14	 %read{31,31} %write{29,29} %derivs
+temp	normal	$tmp15	 %read{31,31} %write{30,30} %derivs
+temp	normal	$tmp16	 %read{32,32} %write{31,31} %derivs
+temp	point	$tmp17	 %read{33,33} %write{32,32} %derivs
+temp	float	$tmp18	 %read{38,38} %write{34,34}
+temp	float	$tmp19	 %read{38,38} %write{37,37}
+const	float	$const8	0		 %read{37,45} %write{2147483647,-1}
+const	string	$const9	"clamp"		 %read{35,43} %write{2147483647,-1}
+temp	float	$tmp20	 %read{37,37} %write{36,36}
+temp	float	$tmp21	 %read{46,46} %write{45,45}
+temp	float	$tmp22	 %read{44,44} %write{42,42}
+temp	float	$tmp23	 %read{40,40} %write{39,39}
+temp	float	$tmp24	 %read{41,41} %write{40,40}
+temp	float	$tmp25	 %read{42,42} %write{41,41}
+const	float	$const10	0.079999998		 %read{44,46} %write{2147483647,-1}
+temp	float	$tmp26	 %read{45,45} %write{44,44}
+temp	float	$tmp27	 %read{47,47} %write{46,46}
+temp	int	$tmp28	 %read{50,50} %write{49,49}
+temp	closure color	$tmp29	 %read{53,53} %write{51,51}
+temp	color	$tmp30	 %read{53,53} %write{52,52}
+temp	int	$tmp31	 %read{55,55} %write{54,54}
+temp	closure color	$tmp32	 %read{57,57} %write{56,56}
+const	string	$const11	"microfacet_beckmann"		 %read{56,56} %write{2147483647,-1}
+temp	closure color	$tmp33	 %read{61,61} %write{58,58}
+temp	float	$tmp34	 %read{60,60} %write{59,59}
+temp	closure color	$tmp35	 %read{61,61} %write{60,60}
+code Vector
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:51
+#         float Diffuse = 1.0, 
+	assign		Vector P 	%filename{"Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl"} %line{51} %argrw{"wr"}
+code BSDF
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:59
+# {
+	closure		BSDF $const1 N 	%filename{"Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl"} %line{59} %argrw{"wrr"}
+code ___main___
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:64
+#   float alimit;                /* Limit sum to do simple antialiasing */
+	assign		sum $const2 	%filename{"Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl"} %line{64} %argrw{"wr"}
+	assign		a $const3 	%argrw{"wr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:67
+#   closure color Crust = 0; /* Computed colors of metal & rust */
+	assign		Cmetal $const2 	%line{67} %argrw{"wr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:68
+# 
+	assign		Crust $const2 	%line{68} %argrw{"wr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:74
+#   alimit = sqrt (area(PP));
+	mul		PP Scale Vector 	%line{74} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:75
+#   for (i = 0;  i < MAXOCTAVES  &&  a > alimit;  i += 1) {
+	area		$tmp1 PP 	%line{75} %argrw{"wr"} %argderivs{1}
+	sqrt		alimit $tmp1 	%argrw{"wr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:76
+#       sum += a * abs(snoise(PP));
+	for		$tmp3 11 17 25 26 	%line{76} %argrw{"r"}
+	assign		i $const2 	%argrw{"wr"}
+	lt		$tmp2 i $const4 	%argrw{"wrr"}
+	neq		$tmp3 $tmp2 $const2 	%argrw{"wrr"}
+	if		$tmp3 17 17 	%argrw{"r"}
+	gt		$tmp4 a alimit 	%argrw{"wrr"}
+	neq		$tmp5 $tmp4 $const2 	%argrw{"wrr"}
+	assign		$tmp3 $tmp5 	%argrw{"wr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:77
+#       PP *= 2;
+	noise		$tmp7 PP 	%line{77} %argrw{"wr"}
+	mul		$tmp8 $const6 $tmp7 	%argrw{"wrr"}
+	sub		$tmp9 $tmp8 $const7 	%argrw{"wrr"}
+	abs		$tmp6 $tmp9 	%argrw{"wr"}
+	mul		$tmp10 a $tmp6 	%argrw{"wrr"}
+	add		sum sum $tmp10 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:78
+#       a /= 2;
+	mul		PP PP $const6 	%line{78} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:79
+#     }
+	div		a a $const6 	%line{79} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:76
+#       sum += a * abs(snoise(PP));
+	add		i i $const7 	%line{76} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:82
+# 
+	noise		$tmp11 PP 	%line{82} %argrw{"wr"}
+	mul		$tmp12 $const6 $tmp11 	%argrw{"wrr"}
+	sub		$tmp13 $tmp12 $const7 	%argrw{"wrr"}
+	mul		$tmp14 RustBump $tmp13 	%argrw{"wrr"}
+	normalize	$tmp15 N 	%argrw{"wr"}
+	mul		$tmp16 $tmp14 $tmp15 	%argrw{"wrr"}
+	add		$tmp17 P $tmp16 	%argrw{"wrr"}
+	calculatenormal	Nrust $tmp17 	%argrw{"wr"} %argderivs{1}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:87
+#   rustiness *= clamp (abs(snoise(PP)), 0, .08) / 0.08;
+	sub		$tmp18 $const7 RustAmt 	%line{87} %argrw{"wrr"}
+	functioncall	$const9 38 	%argrw{"r"}
+# Applications/blender-2.76b-OSX_10.6-x86_64/blender.app/Contents/Resources/2.76/scripts/addons/cycles/shader/stdosl.h:144
+#     normal name (normal x) BUILTIN;             \
+	min		$tmp20 sum $const7 	%filename{"Applications/blender-2.76b-OSX_10.6-x86_64/blender.app/Contents/Resources/2.76/scripts/addons/cycles/shader/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp19 $tmp20 $const8 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:87
+#   rustiness *= clamp (abs(snoise(PP)), 0, .08) / 0.08;
+	step		rustiness $tmp18 $tmp19 	%filename{"Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl"} %line{87} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:88
+#   rustiness *= rustiness;
+	noise		$tmp23 PP 	%line{88} %argrw{"wr"}
+	mul		$tmp24 $const6 $tmp23 	%argrw{"wrr"}
+	sub		$tmp25 $tmp24 $const7 	%argrw{"wrr"}
+	abs		$tmp22 $tmp25 	%argrw{"wr"}
+	functioncall	$const9 46 	%argrw{"r"}
+# Applications/blender-2.76b-OSX_10.6-x86_64/blender.app/Contents/Resources/2.76/scripts/addons/cycles/shader/stdosl.h:144
+# #define PERCOMP1(name)                          \
+	min		$tmp26 $tmp22 $const10 	%filename{"Applications/blender-2.76b-OSX_10.6-x86_64/blender.app/Contents/Resources/2.76/scripts/addons/cycles/shader/stdosl.h"} %line{144} %argrw{"wrr"}
+	max		$tmp21 $tmp26 $const8 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:88
+#   rustiness *= rustiness;
+	div		$tmp27 $tmp21 $const10 	%filename{"Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl"} %line{88} %argrw{"wrr"}
+	mul		rustiness rustiness $tmp27 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:89
+# 
+	mul		rustiness rustiness rustiness 	%line{89} %argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:94
+#       Crust = RustColor *RustDiffuse * diffuse(Nrust);
+	gt		$tmp28 rustiness $const2 	%line{94} %argrw{"wrr"}
+	if		$tmp28 54 54 	%argrw{"r"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:95
+#     }
+	closure		$tmp29 $const1 Nrust 	%line{95} %argrw{"wrr"}
+	mul		$tmp30 RustColor RustDiffuse 	%argrw{"wrr"}
+	mul		Crust $tmp29 $tmp30 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:100
+# 
+	lt		$tmp31 rustiness $const3 	%line{100} %argrw{"wrr"}
+	if		$tmp31 58 58 	%argrw{"r"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:102
+#     }
+	closure		$tmp32 $const11 N Roughness 	%line{102} %argrw{"wrrr"}
+	mul		Cmetal $tmp32 Diffuse 	%argrw{"wrr"}
+# Users/grahamclapham/Documents/Graham_sandbox/ThreeDee/app/models/../../shaders/LGRustyMetal/LGRustyMetal.osl:109
+#     
+	mul		$tmp33 Crust rustiness 	%line{109} %argrw{"wrr"}
+	sub		$tmp34 $const7 rustiness 	%argrw{"wrr"}
+	mul		$tmp35 Cmetal $tmp34 	%argrw{"wrr"}
+	add		BSDF $tmp33 $tmp35 	%argrw{"wrr"}
+	end

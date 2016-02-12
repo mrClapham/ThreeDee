@@ -148,7 +148,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         for(var prop in this._private._opt_initialiser){
             mesh[prop] = this._private._opt_initialiser[prop];
         }
-
         // rotation transforms need to be applied individually...
         if(this._private._opt_initialiser.position){
             this._private._x = this._private._opt_initialiser.position.x;
