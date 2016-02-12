@@ -198,16 +198,41 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     }
 
     var _initSkin = function(){
+        console.log("INIT SKIN HAS BEEN CALLED");
+        var _this = this
         this._private._texturLoader = new THREE.TextureLoader();
         this._private._texturLoader.load(
             // resource URL
             this._private.skin,
             // Function when resource is loaded
             function ( texture ) {
+                console.log("THE SKIN HAS BEEN LOADED")
                 // do something with the texture
                 var material = new THREE.MeshBasicMaterial( {
                     map: texture
                 } );
+
+                var  _newMaterial =  _this.getMaterial().clone();
+
+                _newMaterial.map = texture;
+                _newMaterial.needsUpdate = true;
+                _this._private.material = _newMaterial;
+
+                //
+                //
+                //_this._private.material.map = material;
+                //_this._private.material.needsUpdate = true;
+                //
+                //_this.getMaterial().map = texture;
+                //_this.getMaterial().needsUpdate = true;
+                //
+                //_this.getDefaultMaterial().map = texture;
+                //_this.getDefaultMaterial().needsUpdate = true;
+                //
+                //_this.getHoverMaterial().map = texture;
+                //_this.getHoverMaterial().needsUpdate = true;
+
+
             },
             // Function called when download progresses
             function ( xhr ) {

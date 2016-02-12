@@ -77,22 +77,21 @@
 
 
 
-        var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
-
-        three.addSprite(scprite_monkey);
+//        var scprite_monkey = new ThreeDeeScene.Sprite(_monkeyModel, _defaultMaterial);
+//        three.addSprite(scprite_monkey);
 
 
         /// MAN
 
         var _model = "models/LeePerrySmith.js";
-        var _manMaterial = new THREE.MeshLambertMaterial({color: 0xff00ff})
+        var _manMaterial = new THREE.MeshLambertMaterial({color: 0xffffff})
         var sprite_man = new ThreeDeeSprite(_model);
 
         var sprite_man = new ThreeDeeSprite(_model, null, {
             skin: 'models/Map-COL.jpg',
             data: {name: "man"},
             scale: {x: .25, y: .25, z: .25},
-            position: {x: 3, y: -1, z: -.2},
+            position: {x: 1, y: -.3, z: -.2},
             rotation: {x: 0, y: 0, z: 0}
         }, fancyController);
         three.addSprite(sprite_man);

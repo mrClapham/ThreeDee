@@ -2,10 +2,6 @@
 <html>
 <head>
     <title></title>
-    <script src="../node_modules/three/three.min.js"></script>
-
-    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
-    <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <script type="text/javascript" src="js/vendor/dat.gui.min.js"></script>
     <!-- The Shaders go here -->
@@ -52,7 +48,7 @@ background-color: #222222;
 </body>
 </html>
         <script type="text/javascript">
-
+var THREE = ThreeDeeScene.THREE;
             var fancyController = function(){
                 if( this.getMesh() ){
                     this.getMesh().rotation.y +=.05
@@ -102,7 +98,7 @@ background-color: #222222;
                     , setAmbientLightColour: [ 255, 0, 255 ]
                     , mainColor: [ 0, 128, 255 ]
                     , setLightColour : [ 200, 128, 255 ]
-                    , setFov : 145
+                    , setFov : 45
                     , setNear : 0.1
                     , setFar : 2000
                     , setCameraX : 5
@@ -157,8 +153,6 @@ background-color: #222222;
 
                 setAmbientLightColour.onChange(function(value) {
                     // Fires on every change, drag, keypress, etc.
-                    console.log("GUI AmbientCol",value)
-                    console.log("RGB ===========", ThreeDScene.hexToRgb(value) );
 
                     three.setAmbientLightColour(rgbToRGB( Math.round(value[0]), Math.round(value[1]), Math.round(value[2]) ));
                 });
