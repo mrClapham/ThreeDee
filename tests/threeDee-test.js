@@ -4,8 +4,10 @@ describe("A suite", function() {
     });
 });
 
+
+
 describe("A ThreeDee scene may be instatiated", function() {
-    var _three = new ThreeDScene();
+    var _three = new ThreeDeeScene();
     it("A ThreeDScene should be able to ne instatiated.", function() {
         expect(_three).not.toBe(null);
     });
@@ -13,7 +15,7 @@ describe("A ThreeDee scene may be instatiated", function() {
 
 
 describe("Api", function() {
-    var _three = new ThreeDScene();
+    var _three = new ThreeDeeScene();
     var _targ = document.createElement('div');
     _three.setTarget(_targ)
     it("getTarget should return the element set by setTarget(value).", function() {
@@ -22,4 +24,3 @@ describe("Api", function() {
 
 
 });
-

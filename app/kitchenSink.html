@@ -2,6 +2,10 @@
 <html>
 <head>
     <title></title>
+    <script src="../node_modules/three/three.min.js"></script>
+
+    <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
+    <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <script type="text/javascript" src="js/vendor/dat.gui.min.js"></script>
     <!-- The Shaders go here -->
@@ -48,11 +52,11 @@ background-color: #222222;
 </body>
 </html>
         <script type="text/javascript">
-var THREE = ThreeDeeScene.THREE;
+
             var fancyController = function(){
                 if( this.getMesh() ){
-                    this.getMesh().rotation.y +=.05
-                    this.getMesh().bumpScale +=.5
+                    this.getMesh().rotation.y +=.05;
+                    this.getMesh().bumpScale +=.5;
                 }
                 console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED "+ this.SPRITE_HIT_CHANGED)
                 this.listen(this.SPRITE_HIT_CHANGED, function(e){
@@ -71,8 +75,8 @@ var THREE = ThreeDeeScene.THREE;
             var _planeMaterials2 = new THREE.MeshPhongMaterial( {color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading } );
             var _basicMaterial = new THREE.MeshBasicMaterial( { color:0xff8800 } );
 
-                var texture1   = "models/map-SPEC.jpg"
-                var texture2   = "models/texture1.png"
+                var texture1   = "models/map-SPEC.jpg";
+                var texture2   = "models/texture1.png";
 
 
 
@@ -98,7 +102,7 @@ var THREE = ThreeDeeScene.THREE;
                     , setAmbientLightColour: [ 255, 0, 255 ]
                     , mainColor: [ 0, 128, 255 ]
                     , setLightColour : [ 200, 128, 255 ]
-                    , setFov : 45
+                    , setFov : 30
                     , setNear : 0.1
                     , setFar : 2000
                     , setCameraX : 5
@@ -147,13 +151,11 @@ var THREE = ThreeDeeScene.THREE;
                 var setCameraZ = _gui.add(obj, "setCameraZ").min(-20).max(20).step(1);
 
 
-
                 var setLightColour = _gui.addColor(obj, "setLightColour");
                 var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
 
                 setAmbientLightColour.onChange(function(value) {
                     // Fires on every change, drag, keypress, etc.
-
                     three.setAmbientLightColour(rgbToRGB( Math.round(value[0]), Math.round(value[1]), Math.round(value[2]) ));
                 });
 

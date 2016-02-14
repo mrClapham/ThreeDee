@@ -1,18 +1,10 @@
 var THREE = require('three');
 
 var standardController = function(){
-    //console.log("I have a standard controller");
-
     var _this = this
     this.listen(this.SPRITE_HIT_CHANGED, function(e){
         _onHitEvent.call(_this, e);
     });
-
-//   if(sprite) this.sprite = sprite;
-//    console.log("SPRITE ", this.sprite.getMesh())
-//    if( this.sprite.getMesh() ) this.sprite.getMesh().rotation.x +=.5
-    _onRolled.call(this);
-
 };
 
 var _onHitEvent = function(e){
@@ -20,26 +12,15 @@ var _onHitEvent = function(e){
 };
 
 var _onMouseIn = function(e){
-    console.log("_onMouseIn")
     this.setMaterial( this.getHoverMaterial() );
 };
 
 var _onMouseOut = function(e){
-    console.log("_onMouseOut  ", this.getMaterial());
-    console.log("UNHOVERED :",this._private.materialUnhovered)
     this.setMaterial( this._private.materialUnhovered );
-    //this.setMaterial(  this.getMaterial() );
 };
-
-var _onRolled = function(){
-   // console.log("I AM THE STANDARD ON ROLLED FUNCTION")
-};
-
-var defaultColour = new THREE.Color( 0.5, 0, 1 );
 
 var defaultMaterial = new THREE.MeshPhongMaterial();
 
-defaultMaterial.emissive = defaultColour;
 defaultMaterial.shininess = 100;
 defaultMaterial.shading = THREE.SmoothShading;
 defaultMaterial.id = "defaultMaterial";
@@ -56,7 +37,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             materialHover:null,
             blenderModel:null,
             hit:false,
-            skin:null,
+            textureMap:null,
             _imgTexture:null,
             bumpMap:null,
             bumpScale:.02,
@@ -77,19 +58,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this.SPRITE_HIT_CHANGED   = "spriteHitChanged";
 
         this._private._spriteEventDispatcher = document.createElement("div");
-        console.log("THE MATERIAL IS ", material);
-        if(material){
-            this._private.materialUnhovered = material;
-            console.log(">>>>>>>>>>>>>>>>>>>> A material has been set. ", this._private.materialUnhovered)
-        }else{
-            this._private.materialUnhovered = defaultMaterial;
-            console.log("!!!!!!!!!!!!!!!!!! A material has NOT been set. ", this._private.materialUnhovered)
-        }
-        this._private.materialDefault = defaultMaterial;
-       // this._private.materialDefault = material ? material :  defaultMaterial;
-        this._private.material = this._private.materialUnhovered;
-        console.log("  this._private.material "===  this._private.material)
 
+        this._private.materialDefault = defaultMaterial;
+        this._private.materialUnhovered = material ? material : defaultMaterial;
+        this._private.material = this._private.materialUnhovered;
         this._private._opt_initialiser = opt_initialiser ? opt_initialiser : {};
 
         for(var value in this._private._opt_initialiser){
@@ -101,7 +73,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         this._contoller = opt_controller ? opt_controller :  standardController;
         this._contoller.call(this);
         this._private.modelURL = modelURL ? modelURL : null;
-        //    this._private._material = material;
+
         this._loader  = new THREE.JSONLoader();
         // was a default hover material set in the config?
         if(!this.getHoverMaterial()){
@@ -119,13 +91,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     // internal business logic
 
     var _initSprite = function(){
-        console.log("_initSprite IS BEING CALLED ")
-        if(this._private.skin) _initSkin.call(this);
+        if(this._private.textureMap) _initTextureMap.call(this);
         if(this._private.bumpMap) _initBumpmap.call(this);
         this._private.modelURL ?  _intModel.call(this) : _initDefaultModel.call(this);
-
-        // this._private._hitEvent =  new CustomEvent(_scope.SPRITE_HIT_CHANGED, { 'detail': this.getData() , target:this });
-    }
+    };
 
     var _intModel = function(){
         var scope = this;
@@ -140,14 +109,12 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _onGeometrySet = function(geometry){
-
         var mesh;
         this._private._mesh = mesh = new THREE.Mesh(geometry, this._private.material);
         for(var prop in this._private._opt_initialiser){
             mesh[prop] = this._private._opt_initialiser[prop];
         }
-
-        // rotation transforms need to be applied individually...
+        // position transforms need to be applied individually...
         if(this._private._opt_initialiser.position){
             this._private._x = this._private._opt_initialiser.position.x;
             this._private._y = this._private._opt_initialiser.position.y;
@@ -179,10 +146,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         try{
             this.addToScene();
         }catch(err){
-            ///
             console.log(err)
         }
-    }
+    };
 
     var _updatePosition = function(){
         var mesh = this._private._mesh
@@ -190,68 +156,26 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         mesh.position.y = this._private._y;
         mesh.position.z = this._private._z;
         //
-
         mesh.rotation.x = this._private._xRotation;
         mesh.rotation.y = this._private._yRotation;
         mesh.rotation.z = this._private._zRotation;
+    };
 
-    }
+    var _initTextureMap = function(){
+        var _this = this;
+        var tex = new THREE.TextureLoader();
+        tex.load(this.getTextureMap(), function(evt){
+            _this.getMaterial().map = evt;
+            _this.getMaterial().needsUpdate =  true;
+        });
 
-    var _initSkin = function(){
-        console.log("INIT SKIN HAS BEEN CALLED");
-        var _this = this
-        this._private._texturLoader = new THREE.TextureLoader();
-        this._private._texturLoader.load(
-            // resource URL
-            this._private.skin,
-            // Function when resource is loaded
-            function ( texture ) {
-                console.log("THE SKIN HAS BEEN LOADED")
-                // do something with the texture
-                var material = new THREE.MeshBasicMaterial( {
-                    map: texture
-                } );
-
-                var  _newMaterial =  _this.getMaterial().clone();
-
-                _newMaterial.map = texture;
-                _newMaterial.needsUpdate = true;
-                _this._private.material = _newMaterial;
-
-                //
-                //
-                //_this._private.material.map = material;
-                //_this._private.material.needsUpdate = true;
-                //
-                //_this.getMaterial().map = texture;
-                //_this.getMaterial().needsUpdate = true;
-                //
-                //_this.getDefaultMaterial().map = texture;
-                //_this.getDefaultMaterial().needsUpdate = true;
-                //
-                //_this.getHoverMaterial().map = texture;
-                //_this.getHoverMaterial().needsUpdate = true;
-
-
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log( 'An error happened' );
-            }
-        );
-        //this._private._imgTexture = THREE.ImageUtils.loadTexture( this._private.skin )
-        this._private.material.map = this._private._imgTexture;
-    }
+    };
 
     var _initBumpmap = function(){
-        this._private._imgBump = THREE.ImageUtils.loadTexture( this._private.bumpMap )
+        this._private._imgBump = THREE.ImageUtils.TextureLoader( this._private.bumpMap )
         this._private.material.bumpScale = this._private.bumpScale;
         this._private.material.bumpMap = this._private._imgBump;
-    }
+    };
 
     var _onSceneSet = function(){
         //  Due to the asynchronous way the models load this mesh may not yet be defined.
@@ -259,18 +183,23 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         try{
             this.addToScene();
         }catch(e){
-            //
+            //---
         }
-    }
+    };
 
     var _onHitChanged = function(){
         console.log("I'VE BEEN HIT ", this.getData().name);
         this.getDispatcher().dispatchEvent( this.getEvent(this.SPRITE_HIT_CHANGED, {data:this.getData(), target:this}) );
-    }
+    };
 
     /* Methods */
     _scope.prototype = {
+        /**
+         * Sets the Scene which the Sprite belongs to.
+         * @param value
+         */
         setScene:function(value){
+            console.log("THE SCEN CONSTRUCTOR = ",value)
             this._private.scene = value;
             _onSceneSet.call(this);
         },
@@ -303,7 +232,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         getMaterial:function(){
             return this._private.material;
         },
-
         setDefaultMaterial:function(value){
             this._private.materialDefault = value;
         },
@@ -377,6 +305,13 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         setData:function(value){
             this._private.data = value;
         },
+        getTextureMap:function(){
+            return this._private.textureMap;
+        },
+        setTextureMap:function(value){
+            this._private.textureMap = value;
+            _initTextureMap.call(this);
+        },
         getBumpScale:function(){
             return this._private.bumpScale;
         },
@@ -398,9 +333,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return this._private._spriteEventDispatcher
         },
         getEvent:function(eventName, payload){
-            //var evt = new CustomEvent(this.SPRITE_HIT_CHANGED, {'target':{'test':'hellooo'}, 'detail': { data: this.getData() }  });
-            // console.log("EVENT DISP", evt)
-            //return  evt
             return  new CustomEvent(eventName, { 'detail': payload  });
 
         }
@@ -414,4 +346,4 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 })();
 
 
-module.exports = ThreeDeeSprite
+module.exports = ThreeDeeSprite;

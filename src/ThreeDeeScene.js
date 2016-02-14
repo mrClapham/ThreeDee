@@ -1,6 +1,6 @@
-var ThreeDeeSprite = require("./ThreeDeeSprite")
-var THREE = require('three')
-var OrbitControls = require('three-orbit-controls')(THREE)
+var ThreeDeeSprite = require("./ThreeDeeSprite");
+var THREE = require('three');
+var OrbitControls = require('three-orbit-controls')(THREE);
 
 
 /*Get requestAnimationFrame working for all browsers */
@@ -51,7 +51,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             //_projector          : new THREE.Projector(),
             _raycaster          : new THREE.Raycaster(),
             _bufferGeometry     : new THREE.BufferGeometry(),
-            _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true}),
+            _renderer           : new THREE.WebGLRenderer({antialias:true, alpha:true, shadowMapEnabled:true}),
             _orbitControl       : null,
             orbit               : true, // is the scene controlled by an mouse controlled orbiter?
             _dispatcher         : null,
@@ -199,32 +199,18 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
     }
 
     var _hitTest = function(index){
-
-
-        /*
-
-         var vector = point.clone().unproject( camera );
-         var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( camera.matrixWorld );
-         raycaster.set( vector, direction );
-         var intersects = raycaster.intersectObjects( objects );
-
-         */
         this._private._vector = new THREE.Vector3( this._private._mouse.x, this._private._mouse.y, 1 );
-       //  console.log("Mouse Y -- ", this._private._mouse.y)
         var direction = new THREE.Vector3( 0, 0, -1 ).transformDirection( this._private._camera.matrixWorld );
-       // this._private._projector.unprojectVector( this._private._vector, this._private._camera );
         this._private._raycaster.setFromCamera( this._private._mouse, this._private._camera );
-
         var __sprite = this._private._sprites[index]
 
         var mesh = __sprite.getMesh();
-        var intersects = []
+        var intersects = [];
         try{
             intersects = this._private._raycaster.intersectObject( mesh );
         }catch(err){
             console.log("Intersects eror: ", err);
         }
-
 
         if ( intersects.length > 0 ) {
             var intersect = intersects[ 0 ];
@@ -232,8 +218,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         }else{
             __sprite.setHit(false)
         }
-    }
-
+    };
 
     var _onWindowResize = function(){
         var WIDTH = window.innerWidth,

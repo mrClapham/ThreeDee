@@ -4,6 +4,7 @@
   "main": "./src/ThreeDeeScene.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
+    "build-dist": "webpack --config dist.config.js",
     "build-demo": "webpack --config demo.config.js"
   },
   "dependencies": {
