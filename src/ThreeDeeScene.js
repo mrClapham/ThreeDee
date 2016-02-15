@@ -76,19 +76,20 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         if(arguments[0] && arguments[0].nodeType === 1){
             this.setTarget(arguments[0]);
         }
-    }
-
+    };
 
     var _onConfigSet = function(){
+        console.log("ON CONFIG SET ------")
         for(var value in arguments[0]){
             //Underscore properties are not to be changed.
             if(String(value).charAt(0) != '_') this._private[value] = arguments[0][value];
+            console.log("THE VALUE ",value," -- ",arguments[0][value])
         }
-    }
+    };
 ////
     var _onTargetSet =  function (){
         _initScene.call(this)
-    }
+    };
 /////
     var _initScene = function(){
         //this.getRenderer().setClearColor(this.getBackgroundColour(),.0);
@@ -104,12 +105,14 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         _initMaterials.call(this);
         _initAnimation.call(this);
         _initSprites.call(this);
+        console.log("FULLSCREEN IS SET TO ", this.getFullScreen());
         if(this.getFullScreen()){
             _initWindowResize.call(this);
             _onWindowResize.call(this);
         }else{
-            this.getRenderer().setSize(this.getWidth() , this.getHeight());
-            this._private._aspect = this.getWidth() / this.getHeight()
+            this.getRenderer().setSize(this.getWidth(), this.getHeight());
+            this._private._camera.aspect = this.getWidth() / this.getHeight();
+            this._private._camera.updateProjectionMatrix();
         }
 
         var scope = this
@@ -221,6 +224,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
     };
 
     var _onWindowResize = function(){
+        console.log("_onWindowResize --------------------------- ");
         var WIDTH = window.innerWidth,
             HEIGHT = window.innerHeight;
         this._private._renderer.setSize(WIDTH, HEIGHT);
