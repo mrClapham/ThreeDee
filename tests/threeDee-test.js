@@ -4,11 +4,9 @@ describe("A suite", function() {
     });
 });
 
-
-
-describe("A ThreeDee scene may be instatiated", function() {
+describe("A ThreeDee scene may be instantiated", function() {
     var _three = new ThreeDeeScene();
-    it("A ThreeDScene should be able to ne instatiated.", function() {
+    it("A ThreeDScene should be able to be instantiated.", function() {
         expect(_three).not.toBe(null);
     });
 });
