@@ -273,11 +273,34 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             }
             return _hovered
         },
-
+        checkNumberValid:function(value){
+            if(isNaN(parseFloat(value))){
+                throw new Error("The value you passed should be a number")
+            }else{
+                return parseFloat(value);
+            }
+        },
+        chekDomElementIsValid:function(d){
+           return typeof d.innerHTML && typeof d.innerHTML === "string" ? true : false;
+        },
         getTarget:function(){return this._private.target},
-        setTarget:function(value){ this._private.target = value, _onTargetSet.apply(this)},
+        setTarget:function(value){
+            if(this.chekDomElementIsValid(value) ){
+                this._private.target = value;
+                _onTargetSet.apply(this);
+            }else{
+                throw new Error("The value passed must be a DOM element")
+            }
+        },
         getWidth:function(){return this._private.width},
+        setWidth:function(value){
+            this._private.width = this.checkNumberValid(value);
+        },
+
         getHeight:function(){return this._private.height},
+        setHeight:function(value){
+            this._private.height = this.checkNumberValid(value);
+        },
         getCamera:function(){return this._private._camera},
 
         getCameraX:function(){return this._private.cameraX},
