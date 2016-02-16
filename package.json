@@ -1,6 +1,6 @@
 {
   "name": "threedeescene",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./src/ThreeDeeScene.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
