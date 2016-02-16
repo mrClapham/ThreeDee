@@ -1,12 +1,14 @@
 {
-  "name": "three_d",
+  "name": "threedeescene",
   "version": "0.0.1",
   "main": "./src/ThreeDeeScene.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "build-dist": "webpack --config dist.config.js",
     "build-demo": "webpack --config demo.config.js",
-    "build-watch" : "webpack --watch --config dist.config.js"
+    "build-watch": "webpack --watch --config dist.config.js",
+    "postinstall": "npm run build && npm run build-dist && build-demo",
+    "start": "node server.js"
   },
   "dependencies": {
     "babel-cli": "6.4.0",
@@ -30,5 +32,23 @@
     "karma-jasmine": "^0.3.6",
     "karma-webpack": "^1.7.0",
     "semantic-release": "4.3.5"
-  }
+  },
+  "description": "A wrapper for Three.js assisting the creation of Three.js apps",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrClapham/ThreeDeeScene.git"
+  },
+  "keywords": [
+    "Threejs",
+    "WebGl"
+  ],
+  "author": "Graham Clapham <clapham.graham@gmail.com> (http://www.grahamclapham.co.uk/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrClapham/ThreeDeeScene/issues"
+  },
+  "homepage": "https://github.com/mrClapham/ThreeDeeScene#readme"
 }
