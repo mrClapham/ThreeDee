@@ -7,7 +7,7 @@
     "build-dist": "webpack --config dist.config.js",
     "build-demo": "webpack --config demo.config.js",
     "build-watch": "webpack --watch --config dist.config.js",
-    "test": "./node_modules/.bin/karma start --single-run --browsers firefox",
+    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox",
     "postinstall": "npm run build && npm run build-dist && npm run build-demo",
     "start": "node server.js",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
