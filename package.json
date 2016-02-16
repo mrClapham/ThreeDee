@@ -7,7 +7,7 @@
     "build-dist": "webpack --config dist.config.js",
     "build-demo": "webpack --config demo.config.js",
     "build-watch": "webpack --watch --config dist.config.js",
-    "postinstall": "npm run build && npm run build-dist && build-demo",
+    "postinstall": "npm run build && npm run build-dist && npm run build-demo",
     "start": "node server.js"
   },
   "dependencies": {
