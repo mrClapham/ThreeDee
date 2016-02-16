@@ -112,5 +112,4 @@ describe("The frustum API", function(){
         expect(_three.getFov()).toEqual(40);
     });
 
-
 });
