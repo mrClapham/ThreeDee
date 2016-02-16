@@ -110,9 +110,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             _initWindowResize.call(this);
             _onWindowResize.call(this);
         }else{
-            this.getRenderer().setSize(this.getWidth(), this.getHeight());
-            this._private._camera.aspect = this.getWidth() / this.getHeight();
-            this._private._camera.updateProjectionMatrix();
+            _setFixedSize.call(this);
         }
 
         var scope = this
@@ -124,6 +122,12 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             scope.documentMouseDown(e)
         }, false );
 
+    };
+
+    var _setFixedSize = function(){
+        this.getRenderer().setSize(this.getWidth(), this.getHeight());
+        this._private._camera.aspect = this.getWidth() / this.getHeight();
+        this._private._camera.updateProjectionMatrix();
     };
 //////
     var  _initCamera =function(){
@@ -190,7 +194,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
 
     var _initWindowResize = function(){
         var _this = this
-        window.addEventListener('resize', function() {
+        this._private._windowListener = window.addEventListener('resize', function() {
             if(_this.getFullScreen()) _onWindowResize.call(_this)
         });
     }
@@ -232,6 +236,11 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         this._private._camera.updateProjectionMatrix();
     };
 
+    var _onSizeChanged = function(){
+        this.setFullScreen(false);
+        _setFixedSize.call(this);
+    };
+
     // Renders the scene and updates the render as needed.
     /* ENUMS */
 
@@ -244,7 +253,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             requestAnimationFrame(this.animate.bind(this));
         },
         listen:function(event, opt_callback){
-            this._private._dispatcher.addEventListener(event, opt_callback)
+            this._private._dispatcher.addEventListener(event, opt_callback);
         },
         addSprite:function(value){
             var alreadyAdded = false;
@@ -299,46 +308,48 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         getWidth:function(){return this._private.width},
         setWidth:function(value){
             this._private.width = this.checkNumberValid(value);
+            _onSizeChanged.call(this)
         },
 
         getHeight:function(){return this._private.height},
         setHeight:function(value){
             this._private.height = this.checkNumberValid(value);
+            _onSizeChanged.call(this)
         },
         getCamera:function(){return this._private._camera},
 
         getCameraX:function(){return this._private.cameraX},
         setCameraX:function(value){
-            this._private.cameraX = value
+            this._private.cameraX = this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getCameraY:function(){return this._private.cameraY},
         setCameraY:function(value){
-            this._private.cameraY = value
+            this._private.cameraY = this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getCameraZ:function(){return this._private.cameraZ},
         setCameraZ:function(value){
-            this._private.cameraZ = value
+            this._private.cameraZ = this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getRenderer:function(){return this._private._renderer},
         getFov:function(){return this._private.fov},
         setFov:function(value){
-            this._private.fov = value;
+            this._private.fov = this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
         getNear:function(){ return this._private.near},
         setNear:function(value){
-            this._private.near = value;
+            this._private.near =  this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
         getFar:function(){ return this._private.far},
         setFar:function(value){
-            this._private.far = value
+            this._private.far =  this.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
@@ -385,8 +396,6 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
     return _scope
 
 })();
-
-
 
 
 ///Static functions
