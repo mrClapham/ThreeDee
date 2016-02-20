@@ -9,7 +9,7 @@
     "build-watch": "webpack --watch --config dist.config.js",
     "test": "./node_modules/.bin/karma start --single-run --browsers Firefox",
     "postinstall": "npm run build && npm run build-dist && npm run build-demo",
-    "start": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "babel-cli": "6.4.0",
