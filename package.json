@@ -1,13 +1,13 @@
 {
   "name": "threedeescene",
   "main": "./src/ThreeDeeScene.js",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.4",
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "build-dist": "webpack --config dist.config.js",
     "build-demo": "webpack --config demo.config.js",
     "build-watch": "webpack --watch --config dist.config.js",
-    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox",
+    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome",
     "postinstall": "npm run build && npm run build-dist && npm run build-demo",
     "start": "node server.js"
   },
