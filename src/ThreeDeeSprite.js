@@ -172,9 +172,14 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _initBumpmap = function(){
-        this._private._imgBump = THREE.ImageUtils.TextureLoader( this._private.bumpMap )
-        this._private.material.bumpScale = this._private.bumpScale;
-        this._private.material.bumpMap = this._private._imgBump;
+
+        var _this = this;
+        var tex = new THREE.TextureLoader();
+        tex.load(this.getBumpMap(), function(evt){
+            _this.getMaterial().bumpScale = _this.getBumpScale();
+            _this.getMaterial().bumpMap = evt;
+            _this.getMaterial().needsUpdate =  true;
+        });
     };
 
     var _onSceneSet = function(){
@@ -258,7 +263,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             _updatePosition.call(this);
         },
         getX:function(){
-            return this._x;
+            return this._private._x;
         },
         setY:function(value){
             this._private._y = value;
@@ -266,7 +271,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         },
         getY:function(){
-            return this._y;
+            return this._private._y;
         },
         setZ:function(value){
             this._private._z = value;
@@ -274,7 +279,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         },
         getZ:function(){
-            return this._z;
+            return this._private._z;
         },
 
         setXrotation:function(value){

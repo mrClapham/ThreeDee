@@ -8,7 +8,7 @@ var _three = new ThreeDeeScene();
 var _targ = document.createElement('div');
 
 describe("A ThreeDee scene may be instantiated", function() {
-    it("A ThreeDScene should be able to be instantiated.", function() {
+    it("A ThreeDeeScene should be able to be instantiated.", function() {
         expect(_three).not.toBe(null);
     });
 });
@@ -101,6 +101,7 @@ describe("The camera API", function(){
             expect(function(){_three.setCameraY("Five")}).toThrow("The value you passed should be a number");
             expect(function(){_three.setCameraZ("Five")}).toThrow("The value you passed should be a number");
         });
+
     });
 });
 
@@ -108,8 +109,80 @@ describe("The frustum API", function(){
     it("The field of view should be modifiable via the API", function(){
         _three.setFov(30);
         expect(_three.getFov()).toEqual(30);
-        _three.setFov('40');
-        expect(_three.getFov()).toEqual(40);
+    });
+
+    it("The field of view should be able to be set and got via the API as a floating point number.", function(){
+        _three.setFov(20.3);
+        expect(_three.getFov()).toEqual(20.3);
+    });
+
+    it("Setting the Field of View with a numeric String should allow a number to be returned via the getter", function(){
+        _three.setFov("25");
+        expect(_three.getFov()).toEqual(25);
+    });
+
+    it("Setting the Field of View with a non numeric String should throw an Error", function(){
+        expect(function(){
+            _three.setFov("two hundred");
+        }).toThrowError("The value you passed should be a number");
+    });
+
+});
+
+describe("The near and far clipping", function(){
+
+});
+
+describe("ColorHelpers", function(){
+    var _colorHelpers = ColorHelpers;
+    it("ColorHelpers and its methods should exist.", function(){
+        expect(_colorHelpers).toBeTruthy()
+        expect(typeof _colorHelpers.componentToHex === 'function').toBeTruthy();
+        expect(typeof _colorHelpers.rgbToZeroX === 'function').toBeTruthy();
+        expect(typeof _colorHelpers.rgbToRGB === 'function').toBeTruthy();
+
+    });
+    it("ColorHelper should convert correctly", function(){
+
+        expect( _colorHelpers.componentToHex(255)).toEqual("ff");
+        expect( _colorHelpers.componentToHex(0)).toEqual("00");
+        expect( _colorHelpers.componentToHex(100)).toEqual("64");
+
+        expect( _colorHelpers.rgbToZeroX(100, 200, 255)).toEqual("0x64c8ff");
+        expect( _colorHelpers.rgbToHex(100, 200, 255)).toEqual("#64c8ff");
+        expect( _colorHelpers.rgbToRGB(100, 200, 255)).toEqual("rgb(100,200,255)");
+        expect( _colorHelpers.hexToRGB("#64c8ff")).toEqual("rgb(100,200,255)");
+    })
+});
+
+describe("ThreeDeeSprite", function(){
+    var _sprite = new ThreeDeeSprite();
+    it("Sprite should instantiate", function(){
+        expect(_sprite).toBeTruthy();
+    });
+
+    describe("ThreeDeeSprite API", function(){
+        var _sprite2 = new ThreeDeeSprite();
+        it("Setting X, Y or Z should return the same value via the getter.", function(){
+            _sprite2.setX(5);
+            _sprite2.setY(6);
+            _sprite2.setZ(7);
+            expect(_sprite2.getX()).toEqual(5);
+            expect(_sprite2.getY()).toEqual(6);
+            expect(_sprite2.getZ()).toEqual(7);
+        });
+
+        it("Setting X, Y or Z rotation should return the same value via the getter.", function(){
+            _sprite2.setXrotation(5);
+            _sprite2.setYrotation(6);
+            _sprite2.setZrotation(7);
+            expect(_sprite2.getXrotation()).toEqual(5);
+            expect(_sprite2.getYrotation()).toEqual(6);
+            expect(_sprite2.getZrotation()).toEqual(7);
+        });
+
+
+
     });
 
 });

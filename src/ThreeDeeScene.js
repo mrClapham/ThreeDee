@@ -1,7 +1,7 @@
 var ThreeDeeSprite = require("./ThreeDeeSprite");
 var THREE = require('three');
 var OrbitControls = require('three-orbit-controls')(THREE);
-
+var ColorHelpers = require('./ColorHelpers');
 
 /*Get requestAnimationFrame working for all browsers */
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
@@ -113,7 +113,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             _setFixedSize.call(this);
         }
 
-        var scope = this
+        var scope = this;
         document.addEventListener( 'mousemove', function(e){
             scope.documentMouseMove(e)
         }, false );
@@ -410,7 +410,7 @@ ThreeDeeScene.hexToRgb =  function (hex) {
     } : null;
 };
 
-module.exports = {Scene:ThreeDeeScene, Sprite:ThreeDeeSprite, THREE:THREE};
+module.exports = {Scene:ThreeDeeScene, Sprite:ThreeDeeSprite, THREE:THREE, ColorHelpers:ColorHelpers};
 
 
 
