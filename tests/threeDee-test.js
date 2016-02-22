@@ -181,6 +181,15 @@ describe("ThreeDeeSprite", function(){
             expect(_sprite2.getZrotation()).toEqual(7);
         });
 
+        it("Setting X, Y or Z rotation with a string should return the same value as a number, via the getter.", function(){
+            _sprite2.setXrotation("5");
+            _sprite2.setYrotation("6");
+            _sprite2.setZrotation("7");
+            expect(_sprite2.getXrotation()).toEqual(5);
+            expect(_sprite2.getYrotation()).toEqual(6);
+            expect(_sprite2.getZrotation()).toEqual(7);
+        });
+
 
 
     });

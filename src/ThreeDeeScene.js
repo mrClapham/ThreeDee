@@ -2,6 +2,7 @@ var ThreeDeeSprite = require("./ThreeDeeSprite");
 var THREE = require('three');
 var OrbitControls = require('three-orbit-controls')(THREE);
 var ColorHelpers = require('./ColorHelpers');
+var Helpers = require('./Helpers')
 
 /*Get requestAnimationFrame working for all browsers */
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
@@ -286,19 +287,10 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             }
             return _hovered
         },
-        checkNumberValid:function(value){
-            if(isNaN(parseFloat(value))){
-                throw new Error("The value you passed should be a number")
-            }else{
-                return parseFloat(value);
-            }
-        },
-        chekDomElementIsValid:function(d){
-           return typeof d.innerHTML && typeof d.innerHTML === "string" ? true : false;
-        },
+
         getTarget:function(){return this._private.target},
         setTarget:function(value){
-            if(this.chekDomElementIsValid(value) ){
+            if(Helpers.chekDomElementIsValid(value) ){
                 this._private.target = value;
                 _onTargetSet.apply(this);
             }else{
@@ -307,49 +299,49 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         },
         getWidth:function(){return this._private.width},
         setWidth:function(value){
-            this._private.width = this.checkNumberValid(value);
+            this._private.width = Helpers.checkNumberValid(value);
             _onSizeChanged.call(this)
         },
 
         getHeight:function(){return this._private.height},
         setHeight:function(value){
-            this._private.height = this.checkNumberValid(value);
+            this._private.height = Helpers.checkNumberValid(value);
             _onSizeChanged.call(this)
         },
         getCamera:function(){return this._private._camera},
 
         getCameraX:function(){return this._private.cameraX},
         setCameraX:function(value){
-            this._private.cameraX = this.checkNumberValid(value);
+            this._private.cameraX = Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getCameraY:function(){return this._private.cameraY},
         setCameraY:function(value){
-            this._private.cameraY = this.checkNumberValid(value);
+            this._private.cameraY = Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getCameraZ:function(){return this._private.cameraZ},
         setCameraZ:function(value){
-            this._private.cameraZ = this.checkNumberValid(value);
+            this._private.cameraZ = Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
         getRenderer:function(){return this._private._renderer},
         getFov:function(){return this._private.fov},
         setFov:function(value){
-            this._private.fov = this.checkNumberValid(value);
+            this._private.fov = Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
         getNear:function(){ return this._private.near},
         setNear:function(value){
-            this._private.near =  this.checkNumberValid(value);
+            this._private.near =  Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
         getFar:function(){ return this._private.far},
         setFar:function(value){
-            this._private.far =  this.checkNumberValid(value);
+            this._private.far =  Helpers.checkNumberValid(value);
             _refreshCamera.call(this);
         },
 
@@ -392,23 +384,11 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         setFullScreen:function(value){ this._private.fullscreen = value}
     }
 
-
     return _scope
 
 })();
 
 
-///Static functions
-ThreeDeeScene.hexToRgb =  function (hex) {
-    console.log("HEX INPUT ",hex)
-
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-    } : null;
-};
 
 module.exports = {Scene:ThreeDeeScene, Sprite:ThreeDeeSprite, THREE:THREE, ColorHelpers:ColorHelpers};
 

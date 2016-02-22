@@ -1,4 +1,5 @@
-var THREE = require('three');
+var THREE = require('three'),
+    Helpers = require('./Helpers')
 
 var standardController = function(){
     var _this = this
@@ -276,28 +277,27 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         setZ:function(value){
             this._private._z = value;
             _updatePosition.call(this);
-
         },
         getZ:function(){
             return this._private._z;
         },
 
         setXrotation:function(value){
-            this._private._xRotation = value;
+            this._private._xRotation = Helpers.checkNumberValid(value);
             _updatePosition.call(this);
         },
         getXrotation:function(value){
             return this._private._xRotation;
         },
         setYrotation:function(value){
-            this._private._yRotation = value;
+            this._private._yRotation = Helpers.checkNumberValid(value);;
             _updatePosition.call(this);
         },
         getYrotation:function(value){
             return this._private._yRotation;
         },
         setZrotation:function(value){
-            this._private._zRotation = value;
+            this._private._zRotation = Helpers.checkNumberValid(value);;
             _updatePosition.call(this);
         },
         getZrotation:function(value){
