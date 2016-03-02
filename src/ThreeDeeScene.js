@@ -129,7 +129,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         this._private._tracker.style.position   = 'fixed';
         this._private._tracker.style.top        = '100px';
         this._private._tracker.style.left       = '30px';
-        this._private._tracker.style.backgroundColor       = '#ff00ff';
+        this._private._tracker.style.border       = '1px solid #ff00ff';
         this.getTarget().appendChild(this._private._tracker);
     };
 
@@ -280,28 +280,24 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             event.preventDefault();
             var el = this.getTarget();
             var style  = el.currentStyle || window.getComputedStyle(el);
-            var _xOffset = this.stripPx(style["padding-left"]) + this.stripPx(style["margin-left"]) + this.stripPx(style["left"]);
-            var _yOffset = this.stripPx(style["padding-top"]) + this.stripPx(style["margin-top"]) + this.stripPx(style["top"]);
+            var _xOffset = this.stripPx(style["padding-left"]) // + this.stripPx(style["margin-left"]) + this.stripPx(style["left"]);
+            var _yOffset = this.stripPx(style["padding-top"]) // + this.stripPx(style["margin-top"]) + this.stripPx(style["top"]);
             var _rect = this.getTarget().getBoundingClientRect();
 
-            _xMouseRelativePos = (event.clientX - _xOffset);
-            _yMouseRelativePos = (event.clientY - _yOffset);
-
-            _xOffset = _rect.left;
-            _yOffset = _rect.top;
+            var _rect = this.getTarget().getBoundingClientRect();
 
 
-            var xMouseCalc = ( (_xMouseRelativePos ) / window.innerWidth ) * 2 - 1;
-            var yMouseCalc = - ( (_yMouseRelativePos  ) / window.innerHeight ) * 2 + 1;
+            var xMouseCalc = ( ( event.clientX - _rect.left - _xOffset ) / window.innerWidth ) * 2 - 1;
+            var yMouseCalc = - ( (  event.clientY - _rect.top - _yOffset  ) / window.innerHeight ) * 2 + 1;
 
             this._private._mouse.x = xMouseCalc;
             this._private._mouse.y = yMouseCalc;
 
-            this._private._tracker.style.top = _yMouseRelativePos+"px";
-            this._private._tracker.style.left = _xMouseRelativePos+"px";
+            this._private._tracker.style.top = (event.clientY - _rect.top)+"px";
+            this._private._tracker.style.left = (event.clientX - _rect.left)+"px";
 
-            var _rect = this.getTarget().getBoundingClientRect();
-            console.log("RECTANGLE ::: ", _rect);
+            //console.log("RECTANGLE ::: ", _rect);
+            console.log("_xOffset ::: ", _xOffset);
 
             _onDocumentMouseMove.call(this);
         },
