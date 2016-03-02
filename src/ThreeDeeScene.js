@@ -284,8 +284,8 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             var _yOffset = this.stripPx(style["padding-top"]) + this.stripPx(style["margin-top"]) + this.stripPx(style["top"]);
             var _rect = this.getTarget().getBoundingClientRect();
 
-            _xMouseRelativePos = (event.clientX + _xOffset);
-            _yMouseRelativePos = (event.clientY + _yOffset);
+            _xMouseRelativePos = (event.clientX - _xOffset);
+            _yMouseRelativePos = (event.clientY - _yOffset);
 
             _xOffset = _rect.left;
             _yOffset = _rect.top;
