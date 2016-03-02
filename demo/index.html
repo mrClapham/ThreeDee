@@ -23,8 +23,11 @@
 
         #holder {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 10px;
+            left: 20px;
+            padding: 40px;
+            margin: 60px;
+            background-color: #009926;
         }
     </style>
 </head>
@@ -46,7 +49,7 @@
             this.getMesh().rotation.y += .05
             this.getMesh().bumpScale += .5
         }
-        console.log("ThreeDSprite.SPRITE_HIT_CHANGED " + this.SPRITE_HIT_CHANGED)
+        console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED " + this.SPRITE_HIT_CHANGED)
         this.listen(this.SPRITE_HIT_CHANGED, function (e) {
             console.log("Fancy controller ", e);
             console.log("Fancy controller target", e.detail.target.getHit());
@@ -56,7 +59,7 @@
 
     function onLoaded() {
         var _targ = document.getElementById("holder")
-        var three = new ThreeDScene(_targ, {width: 1200, height: 900, orbit: true});
+        var three = new ThreeDeeScene.Scene(_targ, {width: 1200, height: 900, orbit: true});
         var _model = "../app/models/LeePerrySmith.js";
         var _monkeyModel = "../app/models/pointyMonkeyblend2.js";
         var _planeMaterials = new THREE.MeshPhongMaterial({

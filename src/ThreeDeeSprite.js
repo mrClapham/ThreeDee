@@ -194,7 +194,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _onHitChanged = function(){
-        console.log("I'VE BEEN HIT ", this.getData().name);
+        console.log("I'VE BEEN HIT >>>> ", this.getData().name);
         this.getDispatcher().dispatchEvent( this.getEvent(this.SPRITE_HIT_CHANGED, {data:this.getData(), target:this}) );
     };
 
