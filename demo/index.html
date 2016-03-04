@@ -4,7 +4,7 @@
     <title></title>
 
     <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
-    <script type="text/javascript" src="../node_modules/three/three.min.js"></script>
+    <!--<script type="text/javascript" src="../node_modules/three/three.min.js"></script>-->
     <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <script type="text/javascript" src="../app/js/vendor/dat.gui.min.js"></script>
     <!-- The Shaders go here -->
@@ -42,6 +42,7 @@
 </body>
 </html>
 <script type="text/javascript">
+    var THREE = ThreeDeeScene.THREE
 
     var fancyController = function () {
         if (this.getMesh()) {

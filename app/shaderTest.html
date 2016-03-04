@@ -134,9 +134,6 @@ void main() {
 
 
 <div id="controllers">
-    <!--<label>Far</label><input id="far" type="text" value="5"/>-->
-    <!--<label>Camera x</label> <input id="cameraX" type="text" value="15"/>-->
-    <!--<button id="submitValues">update</button>-->
     <button id="bumpChange">bumpChange</button>
     <button id="bumpChangeMinus">bumpChangeMinus</button>
 
@@ -161,8 +158,9 @@ void main() {
 
 
             function onLoaded(){
-            var _targ = document.getElementById("holder")
-            var three = new ThreeDScene(_targ, {width:1200, height:900, fov:25});
+                var THREE = ThreeDeeScene.THREE;
+            var _targ = document.getElementById("holder");
+            var three = new ThreeDeeScene.Scene(_targ, {width:1200, height:900, fov:25});
             var _model = "models/LeePerrySmith.js";
             var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
             var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
@@ -183,14 +181,14 @@ void main() {
                     bumpScale: .1
                 }
 
-            var scprite_head1 = new ThreeDSprite(_model, _planeMaterials, spriteObject);
+            var scprite_head1 = new ThreeDeeSprite(_model, _planeMaterials, spriteObject);
 
-            var scprite2_shader = new ThreeDSprite(null, _ShaderMaterial, {scale:{x:1.5, y:1.5, z:.5}, position:{x:7,y:3,z:-18}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite3 = new ThreeDSprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:2,y:-6,z:-18}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite4 = new ThreeDSprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:-4,y:2,z:-18}, rotation:{x:10,y:13,z:12}}, fancyController);
-            var scprite5 = new ThreeDSprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:-3,z:-18}}, fancyController);
+            var scprite2_shader = new ThreeDeeScene.Sprite(null, _ShaderMaterial, {scale:{x:1.5, y:1.5, z:.5}, position:{x:7,y:3,z:-18}, rotation:{x:10,y:13,z:12}});
+            var scprite3 = new ThreeDeeScene.Sprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:2,y:-6,z:-18}, rotation:{x:10,y:13,z:12}});
+            var scprite4 = new ThreeDeeScene.Sprite(_model, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:-4,y:2,z:-18}, rotation:{x:10,y:13,z:12}});
+            var scprite5 = new ThreeDeeScene.Sprite(null, null, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:9,z:-2}, rotation:{x:10,y:-3,z:-18}}, fancyController);
 
-                three.listen(ThreeDScene.CLICKED, function(e){
+                three.listen(ThreeDeeScene.CLICKED, function(e){
                     console.log(e);
                 })
 
