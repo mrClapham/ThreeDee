@@ -40,9 +40,15 @@
     var THREE = ThreeDeeScene.THREE;
 
     var fancyController = function(){
-        if( this.getMesh() ){
-            this.getMesh().rotation.y +=.05
-        }
+        var turnMe = function(){
+            if( this.getMesh() ){
+                this.getMesh().rotation.y +=.05
+            }
+        }.bind(this);
+
+        var Int = setInterval(function(){
+            turnMe();
+        }, 10);
     };
 
     function onLoaded(){
@@ -56,35 +62,23 @@
             data:{name:"This is the new name"},
             skin: 'models/Map-COL.jpg',
             //bumpMap:"models/Map-SPEC.png",
-            bumpMap:"models/texture1.png",
+            bumpMap:"models/snakeskin.jpg",
             bumpScale: .05
         }
 
         var scprite = new ThreeDeeScene.Sprite(_model, _planeMaterials, spriteObject);
-        var scprite2 = new ThreeDeeScene.Sprite(null, _planeMaterials, {scale:{x:.5, y:.5, z:.5}, position:{x:0,y:3,z:-2}, rotation:{x:10,y:13,z:12}}, fancyController);
+        var scprite2 = new ThreeDeeScene.Sprite(null, _planeMaterials, {scale:{x:.5, y:.5, z:.5}, position:{x:.3,y:1,z:1}, rotation:{x:10,y:13,z:12}}, fancyController);
 
         three.listen(ThreeDeeScene.CLICKED, function(e){
             console.log(e);
         });
 
-        three.addSprite(scprite)
-        three.addSprite(scprite2)
-
+        three.addSprite(scprite);
+        three.addSprite(scprite2);
 
         document.getElementById('changeBump').addEventListener('click', function(){
-            //bumpMap:"models/Map-SPEC.png",
-            scprite.getBumpMap() == "models/map-SPEC.jpg"  ?  scprite.setBumpMap("models/texture1.png") : scprite.setBumpMap("models/map-SPEC.jpg")
-        })
-
-//                updateScene = function(){
-//
-//                    var _far = document.getElementById('far').value
-//                    var _cameraX = document.getElementById('cameraX').value
-//
-//                    three.setFar(_far)
-//                    three.setCameraX(_cameraX)
-//                }
-
+            scprite.getBumpMap() == "models/map-SPEC.jpg"  ?  scprite.setBumpMap("models/snakeskin.jpg") : scprite.setBumpMap("models/map-SPEC.jpg")
+        });
 
     }
 

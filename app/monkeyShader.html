@@ -18,6 +18,8 @@
 
         body {
             background-color: #454545;
+            padding: 0;
+            margin: 0;
         }
 
         #holder {
@@ -53,7 +55,7 @@
 
     function onLoaded() {
         var _targ = document.getElementById("holder")
-        var three =  new ThreeDeeScene.Scene(_targ, {fullscreen:false, width: 500, height: 800, orbit: true});
+        var three =  new ThreeDeeScene.Scene(_targ, {fullscreen:true, orbit: true});
 
         /// MONKEY 
         var _monkeyModel = "models/green_monkey.json";

@@ -2,8 +2,6 @@
 <html>
 <head>
     <title></title>
-    <script src="components/threejs/build/three.min.js"></script>
-    <script src="js/vendor/three/controls/OrbitControls.js"></script>
     <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <style>
         .controllers{
@@ -47,8 +45,9 @@
 
 
     function onLoaded(){
+        var THREE = ThreeDeeScene.THREE;
         var _targ = document.getElementById("holder")
-        var three = new ThreeDScene(_targ, {width:1200, height:900});
+        var three = new ThreeDeeScene.Scene(_targ, {width:1200, height:900});
         var _model = "models/LeePerrySmith.js";
         var _planeMaterials = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xdddddd, specular: 0x009900, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
         var _planeMaterials2 = new THREE.MeshPhongMaterial( { ambient: 0x030303, color: 0xffff44, specular: 0x003300, shininess: 30, shading: THREE.SmoothShading,  transparent: true } );
@@ -62,7 +61,7 @@
             bumpScale: .1
         };
 
-        var scprite = new ThreeDSprite(_model, _planeMaterials, spriteObject);
+        var scprite = new ThreeDeeScene.Sprite(_model, _planeMaterials, spriteObject);
 
         var inty = setInterval(function(){addSprite()}, 1)
         var i =0;
@@ -70,7 +69,7 @@
 
             if(i<50000){
                 for(var j = 0; j<10; j++){
-                    var sp = new ThreeDSprite(null, _basicMaterial, {scale:{x:.25, y:.25, z:.25}, position:{x:-200+(Math.random()*200),y:-200+(Math.random()*200),z:-200+(Math.random()*200)}});
+                    var sp = new ThreeDeeScene.Sprite(null, _basicMaterial, {scale:{x:.25, y:.25, z:.25}, position:{x:-200+(Math.random()*200),y:-200+(Math.random()*200),z:-200+(Math.random()*200)}});
                     three.addSprite(sp)
                     i ++
                 }
