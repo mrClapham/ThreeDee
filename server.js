@@ -5,11 +5,11 @@ var   express = require('express')
 var app = express();
 
 app.set('title','ThreeDee');
-app.use(express.static(path.join(__dirname, 'app')));
+app.use(express.static(path.join(__dirname, 'demo')));
 
 /* serves main page - run webpack to create the files in ./dist */
 app.get('/', function (req, res) {
-    res.sendFile("monkeyShader.html", {"root": __dirname});
+    res.sendFile("index.html", {"root": __dirname});
 });
 
 /* process.env.PORT is used in case you want to push to Heroku, for example, here the port will be dynamically allocated */
