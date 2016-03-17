@@ -1,10 +1,10 @@
 module.exports = {
     entry: './src/ThreeDeeScene.js',
     output: {
-        path: __dirname+"/demo",
+        path: __dirname+"/app/js/",
         filename: 'ThreeDeeScene.js',
         libraryTarget: 'umd',
-        library: 'ThreeDeeScene'
+        library: 'ThreeDeeScene'        
     },
     module: {
         loaders: [{

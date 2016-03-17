@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>ThreeDeeScene</title>
     <!--<script src="../node_modules/three/three.min.js"></script>-->
 
-    <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
-    <script type="text/javascript" src="js/vendor/dat.gui.min.js"></script>
+    <script type="text/javascript" src="js/ThreeDeeScene.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.min.js"></script>
     <!-- The Shaders go here -->
+
+
 
     <style>
         #controllers {
@@ -57,7 +59,7 @@
         var _targ = document.getElementById("holder")
         var three =  new ThreeDeeScene.Scene(_targ, {fullscreen:true, orbit: true});
 
-        /// MONKEY 
+        /// MONKEY
         var _monkeyModel = "models/green_monkey.json";
         var _defaultMaterial = new THREE.MeshPhongMaterial({map:THREE.ImageUtils.loadTexture("models/Map-COL.jpg")});
 
