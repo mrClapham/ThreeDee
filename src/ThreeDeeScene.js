@@ -210,7 +210,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         try{
             intersects = this._private._raycaster.intersectObject( mesh );
         }catch(err){
-            console.log("Intersects eror: ", err);
+            console.log("Intersects error: ", err);
         }
 
         if ( intersects.length > 0 ) {
@@ -274,7 +274,6 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             var _rect = this.getTarget().getBoundingClientRect();
             var xMouseCalc = ( ( event.clientX - _rect.left - _xOffset ) / window.innerWidth ) * 2 - 1;
             var yMouseCalc = - ( (  event.clientY - _rect.top - _yOffset  ) / window.innerHeight ) * 2 + 1;
-
             this._private._mouse.x = xMouseCalc;
             this._private._mouse.y = yMouseCalc;
 
@@ -359,7 +358,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         getLightColour:function(){return this._private.lightColour},
         setLightColour:function(value){
             this._private.lightColour = value;
-            console.log("New light col : ",value)
+            //console.log("New light col : ",value)
             try{
                 this._private._light.color = new THREE.Color(value)
             }catch(err){
@@ -369,7 +368,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         getAmbientLightColour:function(){return this._private.ambientColour},
         setAmbientLightColour:function(value){
             this._private.ambientColour = value;
-            console.log("New ambient col : ",value)
+            //console.log("New ambient col : ",value)
             try{
                 this._private._lightAmbient.color = new THREE.Color(value)
             }catch(err){
