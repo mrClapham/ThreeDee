@@ -5,10 +5,10 @@
 
     <!--<script src="js/vendor/three/loaders/ColladaLoader.js"></script>-->
     <!--<script type="text/javascript" src="../node_modules/three/three.min.js"></script>-->
-    <script type="text/javascript" src="ThreeDeeScene.js"></script>
+    <script type="text/javascript" src="../dist/ThreeDeeScene.js"></script>
     <!--<script type="text/javascript" src="../app/js/vendor/dat.gui.min.js"></script>-->
     <!-- The Shaders go here -->
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <style>
         #controllers {
             position: absolute;
@@ -41,13 +41,34 @@
 
 </div>
 <div class="offset"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-8">
+            <h2 class="big-header">Hello, world! I an the home page.</h2>
+        </div>
+    </div>
+    <div id="terrain"></div>
+    <div class="row" >
+        <div class="col-xs-6 col-md-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+        <div class="col-xs-6 col-md-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+        <div class="col-xs-6 col-md-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+    </div>
+
+
+</div>
 <div id="holder">
 </div>
 
 </body>
 </html>
 <script type="text/javascript">
-    var THREE = ThreeDeeScene.THREE
+    var THREE = ThreeDeeScene.THREE;
 
     var fancyController = function () {
         if (this.getMesh()) {
@@ -104,43 +125,7 @@
         three.addSprite(scprite_man)
 // GUI
 
-        var _gui = new dat.GUI({autoPlace: false});
-        var customContainer = document.getElementById("controllers")
-        customContainer.appendChild(_gui.domElement);
 
-        var obj = {
-            name: "Three Example"
-            , num: 23
-            , winner: true
-            , radius1: 300
-            , radius2: 100
-            , radius3: 40
-            , setAmbientLightColour: [255, 0, 255]
-            , mainColor: [0, 128, 255]
-            , setLightColour: [200, 128, 255]
-            , setFov: 45
-        };
-
-        // String field
-        _gui.add(obj, "name");
-        // Number field with slider
-
-
-//                var setFov = _gui.add(obj, "setFov").min(3).max(50).step(1);
-        var setAmbientLightColour = _gui.addColor(obj, "setAmbientLightColour");
-        var setLightColour = _gui.addColor(obj, "setLightColour");
-
-        setAmbientLightColour.onChange(function (value) {
-            // Fires on every change, drag, keypress, etc.
-            three.setAmbientLightColour(rgbToRGB(Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2])));
-        });
-
-
-        setLightColour.onChange(function (value) {
-            console.log("GUI ", value)
-            // Fires on every change, drag, keypress, etc.
-            three.setLightColour(rgbToRGB(Math.floor(value[0]), Math.floor(value[1]), Math.floor(value[2])));
-        });
 
 //                setFov.onChange(function(value) {
 //                    three.setFov(value);
