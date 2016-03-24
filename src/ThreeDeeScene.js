@@ -25,6 +25,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             backgroundColour   : 0xcccccc,
             _aspect            : null,
             _scene             : null,
+            _playing           : true,
             //LIGHTS
             _light             : null,
             lightColour        : 0xffffff,
@@ -240,6 +241,9 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
     /* Methods */
     _scope.prototype = {
         animate:function(){
+            console.log( this.getPlaying() )
+
+            if(!this.getPlaying()) return;
             this._private._renderer.render(this._private._scene, this._private._camera);
             //this.cube.rotation.y += 0.1;
             this._private._dispatcher.dispatchEvent(this._private._frameEvent )
@@ -377,7 +381,16 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         },
         getScene:function(){return this._private._scene},
         getFullScreen:function(){return this._private.fullscreen},
-        setFullScreen:function(value){ this._private.fullscreen = value}
+        setFullScreen:function(value){ this._private.fullscreen = value},
+        setPlaying:function(value){
+            this._private._playing = value;
+            if(value){
+                this.animate.call(this);
+            }
+        },
+        getPlaying:function(){
+            return this._private._playing;
+        }
     };
     return _scope
 
