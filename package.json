@@ -1,7 +1,7 @@
 {
   "name": "threedeescene",
   "main": "./src/ThreeDeeScene.js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "build-dist": "webpack --config dist.config.js",
