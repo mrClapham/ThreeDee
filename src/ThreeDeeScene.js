@@ -241,8 +241,6 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
     /* Methods */
     _scope.prototype = {
         animate:function(){
-            console.log( this.getPlaying() )
-
             if(!this.getPlaying()) return;
             this._private._renderer.render(this._private._scene, this._private._camera);
             //this.cube.rotation.y += 0.1;
