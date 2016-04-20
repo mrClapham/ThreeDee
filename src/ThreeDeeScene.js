@@ -211,7 +211,7 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
         try{
             intersects = this._private._raycaster.intersectObject( mesh );
         }catch(err){
-            console.log("Intersects error: ", err);
+            // console.log("Intersects error: ", err);
         }
 
         if ( intersects.length > 0 ) {
@@ -364,17 +364,17 @@ ThreeDeeScene = (function (opt_target, opt_initialiser){
             try{
                 this._private._light.color = new THREE.Color(value)
             }catch(err){
-                console.log(err)
+               // console.log(err)
             }
         },
         getAmbientLightColour:function(){return this._private.ambientColour},
         setAmbientLightColour:function(value){
             this._private.ambientColour = value;
-            //console.log("New ambient col : ",value)
+            // console.log("New ambient col : ",value)
             try{
                 this._private._lightAmbient.color = new THREE.Color(value)
             }catch(err){
-                console.log(err)
+                // console.log(err)
             }
         },
         getScene:function(){return this._private._scene},

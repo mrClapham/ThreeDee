@@ -68,7 +68,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         for(var value in this._private._opt_initialiser){
             //Underscore properties are not to be changed.
             if(String(value).charAt(0) != '_') this._private[value] = this._private._opt_initialiser[value];
-            console.log("Setting config to ", this._private[value])
         }
 
         this._contoller = opt_controller ? opt_controller :  standardController;
@@ -147,7 +146,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         try{
             this.addToScene();
         }catch(err){
-            console.log(err)
+            //console.log(err)
         }
     };
 
@@ -194,7 +193,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _onHitChanged = function(){
-        console.log("I'VE BEEN HIT >>>> ", this.getData().name);
         this.getDispatcher().dispatchEvent( this.getEvent(this.SPRITE_HIT_CHANGED, {data:this.getData(), target:this}) );
     };
 
@@ -205,7 +203,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
          * @param value
          */
         setScene:function(value){
-            console.log("THE SCEN CONSTRUCTOR = ",value)
             this._private.scene = value;
             _onSceneSet.call(this);
         },
@@ -232,7 +229,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
                 this.getMesh().material = this.getMaterial();
             }catch(err){
                 //--
-                console.log("Error setting material ")
+               // console.log("Error setting material ")
             }
         },
         getMaterial:function(){
