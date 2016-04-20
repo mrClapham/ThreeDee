@@ -174,14 +174,29 @@ void main() {
 
 
                 var spriteObject = {
-                    position:{x:1,y:2,z:-18},
+                    scale: {x: .25, y: .25, z: .25},
+                    position: {x: -.5, y: 0, z: -.2},
+                    rotation: {x: 0, y: 0, z: 0},
                     data:{name:"This is the new name"},
                     skin: 'models/Map-COL.jpg',
                     bumpMap:"models/camo.png",
                     bumpScale: .1
-                }
+                };
+                var spritController1 = function(evt){
+                    var _this = this;
+                    var turn = function(){
+                        _this.setZrotation(_this.getZrotation() + .02)
+                    };
+                    this.timer = null;
 
-            var scprite_head1 = new ThreeDeeSprite(_model, _planeMaterials, spriteObject);
+                    this.listen(this.SPRITE_HIT_CHANGED, function (e) {
+                        console.log("Fancy controller _this ", _this.setZrotation(_this.getZrotation() + .02));
+                        console.log("Fancy controller target", e.detail.target.getHit());
+                        e.detail.target.getHit() ? this.timer = setInterval(turn, 10) : clearInterval(this.timer)
+                    })
+                };
+
+            var scprite_head1 = new ThreeDeeSprite(_model, _planeMaterials, spriteObject, spritController1);
 
             var scprite2_shader = new ThreeDeeScene.Sprite(null, _ShaderMaterial, {scale:{x:1.5, y:1.5, z:.5}, position:{x:7,y:3,z:-18}, rotation:{x:10,y:13,z:12}});
             var scprite3 = new ThreeDeeScene.Sprite(null, _planeMaterials2, {scale:{x:.5, y:.5, z:.5}, position:{x:2,y:-6,z:-18}, rotation:{x:10,y:13,z:12}});
@@ -192,11 +207,11 @@ void main() {
                     console.log(e);
                 })
 
-                three.addSprite(scprite_head1)
-                three.addSprite(scprite2_shader)
-//                three.addSprite(scprite3)
-                three.addSprite(scprite4)
-                three.addSprite(scprite5)
+                three.addSprite(scprite_head1);
+//                three.addSprite(scprite2_shader);
+////                three.addSprite(scprite3)
+//                three.addSprite(scprite4);
+//                three.addSprite(scprite5);
 
 
 

@@ -48,6 +48,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             _xRotation:0,
             _yRotation:0,
             _zRotation:0,
+            scale:{x:1, y:1, z:1},
             _imgBump:null,
             _spriteEventDispatcher: null,
             _texturLoader: null,
@@ -68,7 +69,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         for(var value in this._private._opt_initialiser){
             //Underscore properties are not to be changed.
             if(String(value).charAt(0) != '_') this._private[value] = this._private._opt_initialiser[value];
-            console.log("Setting config to ", this._private[value])
         }
 
         this._contoller = opt_controller ? opt_controller :  standardController;
@@ -139,27 +139,41 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         // ...and scale transforms need to be applied individually too
         if(this._private._opt_initialiser.scale){
-            mesh.scale.x = this._private._opt_initialiser.scale.x;
-            mesh.scale.y = this._private._opt_initialiser.scale.y;
-            mesh.scale.z = this._private._opt_initialiser.scale.z;
+
+            this._private.scale.x = this._private._opt_initialiser.scale.x;
+            this._private.scale.y = this._private._opt_initialiser.scale.y;
+            this._private.scale.z = this._private._opt_initialiser.scale.z;
+
+            mesh.scale.x = this._private.scale.x;
+            mesh.scale.y = this._private.scale.y;
+            mesh.scale.z = this._private.scale.z;
         }
 
         try{
             this.addToScene();
         }catch(err){
-            console.log(err)
+            //console.log(err)
         }
     };
 
     var _updatePosition = function(){
-        var mesh = this._private._mesh
-        mesh.position.x = this._private._x;
-        mesh.position.y = this._private._y;
-        mesh.position.z = this._private._z;
+        var mesh = this._private._mesh;
         //
         mesh.rotation.x = this._private._xRotation;
         mesh.rotation.y = this._private._yRotation;
         mesh.rotation.z = this._private._zRotation;
+        //
+        mesh.position._x = this._private._x;
+        mesh.position._y = this._private._y;
+        mesh.position._z = this._private._z;
+
+
+        mesh.scale.x = this._private.scale.x;
+        mesh.scale.y = this._private.scale.y;
+        mesh.scale.z = this._private.scale.z;
+        //
+        console.log("Update positions ", mesh.position.y = this._private._y);
+
     };
 
     var _initTextureMap = function(){
@@ -194,7 +208,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
     };
 
     var _onHitChanged = function(){
-        console.log("I'VE BEEN HIT >>>> ", this.getData().name);
         this.getDispatcher().dispatchEvent( this.getEvent(this.SPRITE_HIT_CHANGED, {data:this.getData(), target:this}) );
     };
 
@@ -205,7 +218,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
          * @param value
          */
         setScene:function(value){
-            console.log("THE SCEN CONSTRUCTOR = ",value)
             this._private.scene = value;
             _onSceneSet.call(this);
         },
@@ -232,7 +244,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
                 this.getMesh().material = this.getMaterial();
             }catch(err){
                 //--
-                console.log("Error setting material ")
+               // console.log("Error setting material ")
             }
         },
         getMaterial:function(){
