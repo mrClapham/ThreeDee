@@ -128,9 +128,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
 
         // rotation transforms need to be applied individually...
         if(this._private._opt_initialiser.rotation){
-            this._private._x = this._private._opt_initialiser.rotation.x;
-            this._private._y = this._private._opt_initialiser.rotation.y;
-            this._private._z = this._private._opt_initialiser.rotation.z;
+            this._private._xRotation = this._private._opt_initialiser.rotation.x;
+            this._private._yRotation = this._private._opt_initialiser.rotation.y;
+            this._private._zRotation = this._private._opt_initialiser.rotation.z;
 
             mesh.rotation.x = this._private._xRotation;
             mesh.rotation.y = this._private._yRotation;
@@ -163,10 +163,9 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         mesh.rotation.y = this._private._yRotation;
         mesh.rotation.z = this._private._zRotation;
         //
-        mesh.position._x = this._private._x;
-        mesh.position._y = this._private._y;
-        mesh.position._z = this._private._z;
-
+        mesh.position.x = this._private._x;
+        mesh.position.y = this._private._y;
+        mesh.position.z = this._private._z;
 
         mesh.scale.x = this._private.scale.x;
         mesh.scale.y = this._private.scale.y;
