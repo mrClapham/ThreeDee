@@ -82,7 +82,7 @@
             console.log("Fancy controller ", e);
             console.log("Fancy controller target", e.detail.target.getHit());
         })
-    }
+    };
 
 
     function onLoaded() {
@@ -113,6 +113,14 @@
             position: {x: 0, y: -1.5, z: 0},
             rotation: {x: 0, y: 0, z: 0}
         });
+
+        function listenCallback(e){
+            console.log("LISTEN CALLBACK ", e.detail.target.getHit());
+        }
+
+        scprite_monkey.listen(scprite_monkey.SPRITE_HIT_CHANGED, listenCallback)
+
+
         var scprite_man = new ThreeDeeSprite(_model, _planeMaterials, {
             skin: '../app/models/Map-COL.jpg',
             data: {name: "man"},

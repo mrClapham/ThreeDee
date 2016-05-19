@@ -148,14 +148,12 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             mesh.scale.y = this._private.scale.y;
             mesh.scale.z = this._private.scale.z;
         }
-
         try{
             this.addToScene();
         }catch(err){
             //console.log(err)
         }
     };
-
     var _updatePosition = function(){
         var mesh = this._private._mesh;
         //
@@ -172,7 +170,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         mesh.scale.z = this._private.scale.z;
         //
     };
-
     var _initTextureMap = function(){
         var _this = this;
         var tex = new THREE.TextureLoader();
@@ -182,9 +179,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         });
 
     };
-
     var _initBumpmap = function(){
-
         var _this = this;
         var tex = new THREE.TextureLoader();
         tex.load(this.getBumpMap(), function(evt){
@@ -193,7 +188,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             _this.getMaterial().needsUpdate =  true;
         });
     };
-
     var _onSceneSet = function(){
         //  Due to the asynchronous way the models load this mesh may not yet be defined.
         //  If so the mesh should be added during the callback from the loader (this._loader.load... etc)
@@ -230,7 +224,10 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             }.bind(this));
         },
         listen:function(event, opt_callback){
-            this._private._spriteEventDispatcher.addEventListener(event, opt_callback)
+            this.getDispatcher().addEventListener(event, function(e){
+                opt_callback(e);
+            });
+            return this.getDispatcher().removeEventListener(event, opt_callback);
         },
         getMesh:function(){
             return this._private._mesh
@@ -278,7 +275,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         setY:function(value){
             this._private._y = value;
             _updatePosition.call(this);
-
         },
         getY:function(){
             return this._private._y;
@@ -290,7 +286,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         getZ:function(){
             return this._private._z;
         },
-
         setXrotation:function(value){
             this._private._xRotation = Helpers.checkNumberValid(value);
             _updatePosition.call(this);
@@ -312,7 +307,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         getZrotation:function(value){
             return this._private._zRotation;
         },
-
         getData:function(){
             return   this._private.data;
         },
@@ -348,7 +342,6 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
         },
         getEvent:function(eventName, payload){
             return  new CustomEvent(eventName, { 'detail': payload  });
-
         }
     };
 
