@@ -227,7 +227,7 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             this.getDispatcher().addEventListener(event, function(e){
                 opt_callback(e);
             });
-            return this.getDispatcher().removeEventListener(event, opt_callback);
+            return {unlisten:function(){this.getDispatcher().removeEventListener(event, opt_callback)}};
         },
         getMesh:function(){
             return this._private._mesh
