@@ -344,13 +344,12 @@ ThreeDeeSprite = (function(modelURL, material, opt_initialiser, opt_controller){
             return  new CustomEvent(eventName, { 'detail': payload  });
         }
     };
-
     //
-
     return _scope
 
-
 })();
+
+ThreeDeeSprite.SPRITE_HIT_CHANGED  = "spriteHitChanged";
 
 
 module.exports = ThreeDeeSprite;

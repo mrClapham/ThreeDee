@@ -45,18 +45,18 @@
     var THREE = ThreeDeeScene.THREE;
     var fancyController = function () {
         if (this.getMesh()) {
-            this.getMesh().rotation.y += .05
-            this.getMesh().bumpScale += .5
+            this.getMesh().rotation.y += .05;
+            this.getMesh().bumpScale += .5;
         }
-        console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED " + this.SPRITE_HIT_CHANGED)
-        this.listen(this.SPRITE_HIT_CHANGED, function (e) {
+        console.log("ThreeDeeSprite.SPRITE_HIT_CHANGED " + ThreeDeeSprite.SPRITE_HIT_CHANGED);
+        this.listen(ThreeDeeSprite.SPRITE_HIT_CHANGED, function (e) {
             console.log("Fancy controller ", e);
             console.log("Fancy controller target", e.detail.target.getHit());
         })
     };
 
     function onLoaded() {
-        var _targ = document.getElementById("holder")
+        var _targ = document.getElementById("holder");
         var three =  new ThreeDeeScene.Scene(_targ, {fullscreen:true, orbit: true});
 
         /// MONKEY
@@ -99,7 +99,7 @@
 
         //GUI
         var _gui = new dat.GUI({autoPlace: false});
-        var customContainer = document.getElementById("controllers")
+        var customContainer = document.getElementById("controllers");
         customContainer.appendChild(_gui.domElement);
 
         var obj = {
@@ -128,7 +128,7 @@
         });
 
         showMaterial.onChange(function(value){
-            console.log("CHANGED TO ", value)
+            console.log("CHANGED TO ", value);
             value === true ? sprite_man.setTextureMap("models/greenstripe.png") : sprite_man.setTextureMap("models/Map-COL.jpg");
             value === true ? sprite_monkey.setTextureMap("models/greenstripe.png") : sprite_monkey.setTextureMap("models/Map-COL.jpg");
         });
